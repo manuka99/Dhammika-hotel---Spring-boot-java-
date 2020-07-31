@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="item: ${notDeleted}">
+									Could not delete Role with Role ID: <strong>[[${item}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="item: ${deletedItems}">
+									Role with role ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] products was
+									deleted successfully.
+								</p>
+								<p th:each="item: ${deletedItems}">
+									Role with role ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div id="contectChangeArea">
+
+
+
+							<div th:if="${roles != null}" id="dataTableFood">
+
+								<!-- Table with panel -->
+								<div class="card card-cascade narrower">
+
+									<!--Card image-->
+									<div
+										class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+										<div>
+											<a type="button" onclick="listRoleTools()"
+												class="btn btn-outline-white material-tooltip-main btn-rounded btn-sm px-2"
+												data-toggle="tooltip" data-placement="bottom"
+												data-original-title="Refresh content"> <i
+												class="fas fa-sync"></i>
+											</a>
+											<button type="button"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="fas fa-columns mt-0"></i>
+											</button>
+										</div>
+
+										<a href="" class="white-text mx-3">Role Management</a>
+
+										<div>
+											<button type="button" onclick="editRoleTool()"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="fas fa-pencil-alt mt-0"></i>
+											</button>
+											<button type="button" onclick="deleteRoleTool()"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="far fa-trash-alt mt-0"></i>
+											</button>
+											<button type="button" data-toggle="modal"
+												data-target="#roleAddModal" data-backdrop="static"
+												data-keyboard="false"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="fas fa-info-circle mt-0"></i>
+											</button>
+										</div>
+
+									</div>
+									<!--/Card image-->
+
+									<div class="px-4">
+
+										<div class="table-wrapper">
+											<!--Table-->
+											<div id="adadadaedrervvv" class="table-responsive">
+												<table id="dtMaterialDesignExample"
+													class="table table-hover mb-0">
+
+													<!--Table head-->
+													<thead>
+														<tr>
+															<th class="th-sm">#</th>
+															<th class="th-lg text-nowrap"><strong>Role
+																	ID</strong></th>
+															<th class="th-lg text-nowrap"><strong>Role
+																	name</strong></th>
+															<th class="th-lg text-nowrap"><strong>Role
+																	Description</strong></th>
+															<th class="th-lg text-nowrap"><strong>No.
+																	of users</strong></th>
+														</tr>
+													</thead>
+													<!--Table head-->
+
+													<!--Table body-->
+													<tbody>
+														<tr th:each="role, roleStatus :  ${roles}">
+															<th scope="row"><input class="form-check-input"
+																type="checkbox" th:id="${role.roleID}"
+																th:value="${role.roleID}" name="items"> <label
+																class="form-check-label label-table"
+																th:for="${role.roleID}"><strong>[[${roleStatus.index + 1}]]</strong></label></th>
+															<td><strong>[[${role.roleID}]]</strong></td>
+															<td>[[${role.name}]]</td>
+															<td class="text-nowrap">[[${role.description}]]</td>
+															<td>[[${role.users.size()}]]</td>
+														</tr>
+													</tbody>
+													<!--Table body-->
+												</table>
+												<!--Table-->
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+								<!-- Table with panel -->
+							</div>
+
+
+
+							<div id="roleAddModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div class="modal fade" id="roleAddModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="addRoleName" class="form-control">
+																<label class="active" for="addRoleName">Role
+																	Name</label>
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="addRoleDescription"
+																		class="form-control"> <label class="active"
+																		for="addRoleDescription">Role Description</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="AddPanelRolesTool()">Add Role</button>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+													<div id="addRoleError"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+							<div  id="roleEditModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div th:if="${role != null}" class="modal fade" id="roleEditModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+															<div class="md-form">
+																<input th:value="${role.roleID}" type="text"
+																	id="roleiii" class="form-control" disabled> <label
+																	class="active" for="roleiii">Role ID</label>
+															</div>
+														</h2>
+														<h2 class="h2-responsive product-name">
+															<div class="md-form">
+																<input th:value="${role.name}" type="text" id="roleName"
+																	class="form-control"> <label class="active"
+																	for="roleName">Role Name</label> <input
+																	th:value="${role.roleID}" type="hidden" id="roleID"
+																	class="form-control">
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input th:value="${role.description}" type="text"
+																		id="roleDescription" class="form-control"> <label
+																		class="active" for="roleDescription">Role
+																		Description</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="updateRolesTool()">Update Role</button>
+																</div>
+															</div>
+														</div>
+
+														<div id="editRoleUpdateError"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var successRoleAdd = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Role was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var successRoleUpdate = '<div ' +
+						' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+							'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Role was updated successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+								'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addRoleErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Role was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var updateRoleErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Role was not updated.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function AddPanelRolesTool() {
+
+					var name = $('#addRoleName').val();
+					var description = $('#addRoleDescription').val();
+
+					$.ajax({
+
+						url : "/panel/roles/addRole",
+						data : {
+							'name' : name,
+							'description' : description
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successRoleAdd);
+								listRoleTools();
+							}
+
+							else
+								$('#addRoleError').append(addRoleErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#addRoleError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				function listRoleTools() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/roles",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteRoleTool() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/roles/deleteRole",
+						data : {
+							'rids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listRoleTools();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function editRoleTool() {
+
+					$('#loaderTable').slideDown();
+
+					var id = "";
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						id = $(this).val();
+					});
+
+					console.log(id);
+
+					$.ajax({
+
+						url : "/panel/roles",
+						data : {
+							'roleID' : id
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#roleEditModalDiv');
+							$('#roleEditModalDiv').html(result);
+
+							$('#roleEditModal').modal({
+								backdrop : 'static',
+								keyboard : false
+							});
+
+							$('#loaderTable').fadeOut();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					});
+				};
+
+				function updateRolesTool() {
+
+					var roleID = $('#roleID').val();
+					var name = $('#roleName').val();
+					var description = $('#roleDescription').val();
+
+					$.ajax({
+
+						url : "/panel/roles/updateRole",
+						data : {
+							'roleID' : roleID,
+							'name' : name,
+							'description' : description
+						},
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successRoleUpdate);
+								listRoleTools();
+
+							}
+
+							else
+								$('#editRoleUpdateError').append(
+										updateRoleErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editRoleUpdateError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+
+								$('#DeleteCategory').attr('disabled', false);
+								$('#editCategory').attr('disabled', true);
+
+								if (ch_list.length == 1)
+									$('#editCategory').attr('disabled', false);
+
+							}
+
+							else {
+								$('#DeleteCategory').attr('disabled', true);
+								$('#editCategory').attr('disabled', true);
+							}
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

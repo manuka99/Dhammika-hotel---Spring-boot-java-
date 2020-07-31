@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Scripts Hotel</title>
+</head>
+<body>
+
+	<div th:fragment="scripts">
+
+		<!-- SCRIPTS -->
+		<!-- JQuery -->
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/jquery-3.4.1.min.js|"></script>
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/jquery.min.js|"></script>
+		<!-- Bootstrap tooltips -->
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/popper.min.js|"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/bootstrap.min.js|">
+			
+		</script>
+		<!-- MDB core JavaScript -->
+		<script type="text/javascript" th:src="|/Design/mdPro/js/mdb.min.js|"></script>
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/modules/toastr.js|"></script>
+		<script th:src="|/Design/mdPro/js/modules/addons/datatables.js|"></script>
+		<script th:src="|/Design/mdPro/js/modules/addons/datatables.min.js|"></script>
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/mdb-file-upload.min.js|"></script>
+
+
+
+	</div>
+
+
+	<div th:fragment="scripts-bottom">
+
+		<script type="text/javascript">
+			$('.file-upload').file_upload();
+		</script>
+
+		<script th:src="|/Design/myScripts/js/userProfile.js|"
+			type="text/javascript">
+			
+		</script>
+
+		<script>
+			ordersTableScriptChanging();
+		</script>
+
+		<script type="text/javascript">
+			/* WOW.js init */
+			new WOW().init();
+			// Tooltips Initialization
+			$(function() {
+				$('[data-toggle="tooltip"]').tooltip()
+			})
+
+			// Material Select Initialization
+			$(document).ready(function() {
+				$('.mdb-select').material_select();
+			});
+
+			// SideNav Initialization
+			$(".button-collapse").sideNav();
+		</script>
+		<script>
+			//to display real time notifications
+			unreadNotifications();
+			function unreadNotifications() {
+				console.log("loaded");
+
+				var noOfNoti = $('#unreadNotifications').text();
+
+				$.ajax({
+
+					url : "/user/notificationsCount",
+					success : function(data, textStatus, jqXHR) {
+
+						if (isNaN(data) == false) {
+
+							$('#unreadNotifications').text(data);
+							
+							if(data > noOfNoti)
+							toastr.success('You have new notifications');
+
+						}
+
+					}
+
+				});
+				setTimeout(unreadNotifications, 10000);
+			};
+		</script>
+		<script>
+			cartSize();
+
+			function cartSize() {
+
+				$.ajax({
+
+					url : "/user/cartSize",
+					success : function(data, textStatus, jqXHR) {
+
+						if (isNaN(data) == false) {
+
+							$('#cartItemsCount').text(data);
+
+						}
+
+					}
+
+				});
+
+			};
+		</script>
+
+		<script>
+			function ResendActivationCode() {
+
+				$
+						.ajax({
+
+							url : "/user/resendVerificationCode",
+							success : function(data) {
+
+								console.log(data);
+								if (data === true)
+									alert('Verification code sent successfully');
+
+								else
+									alert('There was a error in sending the verification code');
+
+							}
+
+						})
+
+			};
+		</script>
+
+	</div>
+
+</body>
+</html>

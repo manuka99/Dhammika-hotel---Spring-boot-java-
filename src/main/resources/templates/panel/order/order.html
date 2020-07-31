@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="contectChangeArea" class="">
+
+							<div class="row">
+								<div class="container">
+									<section class="mb-4">
+
+										<div class="card">
+											<div class="card-body d-flex justify-content-between">
+												<h4 class="h4-responsive mt-3 font-weight-bold">
+													Order ID <span
+														class="text-uppercase font-weight-bold text-info">#[[${order.orderID}]]</span>
+												</h4>
+												<input type="hidden" id="orderID"
+													th:value="${order.orderID}" class="form-control" disabled>
+
+												<div>
+													<a class="btn btn-success waves-effect waves-light"
+														data-toggle="modal" data-target="#orderEditModal"
+														data-backdrop="static" data-keyboard="false"><i
+														class="fas fa-print left"></i> Edit</a> <a
+														class="btn btn-primary waves-effect waves-light" href="#"><i
+														class="fas fa-print left"></i> Print</a>
+												</div>
+
+											</div>
+										</div>
+
+									</section>
+
+									<section class="mb-4">
+
+										<div class="card">
+											<div class="card-body">
+
+												<!-- Grid row -->
+												<div class="row">
+
+													<!-- Grid column -->
+													<div class="col-md-6 text-left">
+
+														<p>
+															<strong>Order Type: [[${order.orderType}]]</strong>
+														</p>
+
+														<p>
+															<strong>Order Placed date:</strong>
+															[[${order.placedDate}]]
+														</p>
+														<p>
+															<strong>Order Expected date:</strong>
+															[[${order.expectedDate}]]
+														</p>
+														<p>
+															<strong>Order Status:</strong> [[${order.status}]]
+														</p>
+														<p th:if="${order.deliveredDate != null}">
+															<strong>Order Delivered Date:</strong>
+															[[${order.deliveredDate}]]
+														</p>
+														<p>
+															<strong>Payment Status:</strong> [[${order.payment}]]
+														</p>
+
+													</div>
+													<!-- Grid column -->
+
+													<!-- Grid column -->
+													<div class="col-md-6 text-right">
+
+														<h4 class="h4-responsive">
+															<strong><span
+																class="blue-text text-nowrap font-weight-bold"><a
+																	th:href="@{'/panel/accounts/user?userID='+ ${order.user.userID}}">[[${order.user.username}]]</a></span></strong>
+														</h4>
+
+														<p></p>
+														<p>
+															<strong>Shipping Address</strong>
+														</p>
+														<p>[[${order.shippingAddress}]]</p>
+
+													</div>
+													<!-- Grid column -->
+
+												</div>
+												<!-- Grid row -->
+
+											</div>
+										</div>
+
+									</section>
+
+
+
+									<section class="mb-5">
+
+										<div class="card">
+											<div class="card-body">
+
+												<div class="table-responsive">
+													<table class="table">
+														<thead>
+															<tr>
+																<th class="font-weight-bold text-nowrap">#</th>
+																<th class="font-weight-bold text-nowrap">Item ID</th>
+																<th class="font-weight-bold text-nowrap">Item Name</th>
+																<th class="font-weight-bold text-nowrap">Quantity</th>
+																<th class="font-weight-bold text-nowrap">Unit Price</th>
+																<th class="font-weight-bold text-nowrap">Tax</th>
+																<th class="font-weight-bold text-nowrap">Total
+																	Product Price</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="product, status : ${order.order_Items}">
+																<td class="font-weight-bold">[[${status.index +
+																	1}]]</td>
+																<td class="font-weight-bold"><a
+																	th:href="@{'/panel/products/product?productID=' + ${product.product.productID}}"
+																	target="_blanck"><span class="text-primary">[[${product.product.productID}]]</span></a></td>
+																<td>[[${product.product.name}]]</td>
+																<td>[[${product.quantity}]]</td>
+																<td>Rs.[[${product.product.price}]]</td>
+																<td>Rs.[[${product.product.tax}]]</td>
+																<td>Rs.[[${product.product.price *
+																	product.quantity}]]</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<div class=" ">
+													<div class="">
+
+														<h5 class="mb-4"></h5>
+
+														<ul class="list-group list-group-flush">
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																<strong>Sub Total of the Products</strong><span>Rs.[[${order.subTotal}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																<strong>Tax and Vat</strong> <span>Rs.[[${order.tax}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																<strong> Shipping Fee</strong><span>Rs.[[${order.shippingFee}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+																<div>
+																	<strong>Total value of the order</strong> <strong>
+																		<p class="mb-0">(including VAT, TAX and Shipping)</p>
+																	</strong>
+																</div> <span><strong>Rs.[[${order.total}]]</strong></span>
+															</li>
+															<li th:if="${order.transactionID != null}"
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																<strong>Transaction ID</strong><span>${order.transactionID}</span>
+
+															</li>
+														</ul>
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</section>
+
+								</div>
+							</div>
+
+
+
+							<div id="roleAddModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div class="modal fade" id="orderEditModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+															<h6>Order Status:</h6>
+															<select id="orderStatusSelect"
+																class="browser-default custom-select">
+																<option value="Processing"
+																	th:selected="${order.status eq 'Processing'}">Processing</option>
+																<option value="Shipped"
+																	th:selected="${order.status eq 'Shipped'}">Shipped</option>
+																<option value="Delivered"
+																	th:selected="${order.status eq 'Delivered'}">Delivered</option>
+																<option value="Cancelled"
+																	th:selected="${order.status eq 'Cancelled'}">Cancelled</option>
+															</select><br>
+														</h2>
+														<h4 class="h4-responsive">
+															<h6>Order Payment:</h6>
+															<select id="orderPaymentSelect"
+																class="browser-default custom-select">
+																<option value="Not Paid"
+																	th:selected="${order.payment eq 'Not Paid'}">Not
+																	Paid</option>
+																<option value="Paid"
+																	th:selected="${order.payment eq 'Paid'}">Paid</option>
+																<option value="Not Refunded"
+																	th:selected="${order.payment eq 'Not Refunded'}">Not
+																	Refunded</option>
+																<option value="Refunded"
+																	th:selected="${order.payment eq 'Refunded'}">Refunded</option>
+															</select>
+														</h4>
+														<br>
+														<h2 class="h2-responsive product-name">
+															<div class="md-form">
+																<input type="date" id="deledate"
+																	th:value="${order.deliveredDate}" class="form-control">
+																<label class="active" for="deledate">Delivery
+																	Date </label>
+															</div>
+														</h2>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="updateOrderPanel()">Update</button>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+													<div id="editOrderError"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var orderID = $('#orderID').val();
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var successOrderUpdate = '<div ' +
+						' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+							'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Order was updated successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+								'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var updateOrderErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Order was not updated.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function listOrder() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/orders/order",
+						data : {
+							'orderID' : orderID
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function updateOrderPanel() {
+
+					var status = $("#orderStatusSelect option:selected").val();
+					var payment = $("#orderPaymentSelect option:selected")
+							.val();
+					var dDate = $('#deledate').val();
+
+					$.ajax({
+
+						url : "/panel/orders/order/orderUpdated",
+						data : {
+							'status' : status,
+							'payment' : payment,
+							'orderID' : orderID,
+							'dDate' : dDate
+						},
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages')
+										.append(successOrderUpdate);
+								listOrder();
+							}
+
+							else
+								$('#editOrderError')
+										.append(updateOrderErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+				};
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

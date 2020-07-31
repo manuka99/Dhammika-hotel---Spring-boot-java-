@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid card ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="item: ${notDeleted}">
+									Could not delete Fee with Fee ID: <strong>[[${item}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="item: ${deletedItems}">
+									Fee with Fee ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] Fees were
+									deleted successfully.
+								</p>
+								<p th:each="item: ${deletedItems}">
+									Fee with Fee ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+						<div id="contectChangeArea" class="table-responsive">
+
+							<div class="d-flex justify-content-center buttons-wrapper my-3">
+
+								<button class=" btn btn-rounded btn-sm btn-success"
+									type="button" onclick="listFees()">
+									<i class="fas fa-sync"></i> Refresh
+								</button>
+
+								<button data-toggle="modal" data-target="#feeAddModal"
+									data-backdrop="static" data-keyboard="false"
+									class=" btn btn-rounded btn-sm btn-primary" type="button">
+									<i class="fas fa-plus"> </i> &nbsp;New
+								</button>
+
+								<button onclick="editFee()" id="editFee"
+									class=" btn btn-rounded btn-sm btn-blue-grey" type="button"
+									disabled>
+									<i class="fas fa-pencil-alt mt-0"></i>&nbsp; Edit
+								</button>
+
+								<button onclick="deleteFees()" id="DeleteFee"
+									class=" btn btn-rounded btn-sm btn-danger" type="button"
+									disabled>
+									<i class="far fa-trash-alt mt-0"></i>&nbsp; Delete
+								</button>
+
+							</div>
+
+							<table th:if="${fees != null}" id="dtMaterialDesignExample"
+								class="table table-hover table-bordered  text-center">
+								<thead>
+									<tr>
+										<th class="th-sm text-nowrap"><strong>#</strong></th>
+										<th class="th-sm text-nowrap"><strong>Fee ID</strong></th>
+										<th class="th-sm text-nowrap"><strong>Products
+												Total</strong></th>
+										<th class="th-lg text-nowrap"><strong>Fee </strong></th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr th:each="fee,status : ${fees}">
+										<td scope="row"><input class="form-check-input"
+											type="checkbox" th:id="${fee.id}" th:value="${fee.id}"
+											name="type"> <label
+											class="form-check-label label-table" th:for="${fee.id}"><strong>[[${status.index
+													+ 1}]]</strong></label></td>
+										<td>[[${fee.id}]]</td>
+										<td>[[${fee.total}]]</td>
+										<td>[[${fee.fee}]]</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+
+
+							<div id="feeAddModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div class="modal fade" id="feeAddModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+															<div class="md-form">
+																<input type="text" id="addTotal" class="form-control">
+																<label class="active" for="addTotal">Product
+																	Total</label>
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="NewFee" class="form-control">
+																	<label class="active" for="NewFee">Delivery Fee
+																	</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary" onclick="AddNewFee()">Add
+																		Fee</button>
+																</div>
+															</div>
+
+														</div>
+
+														<div id="addFeeError"></div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<div id="feeEditModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div th:if="${fee != null}" class="modal fade" id="feeEditModal"
+									tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+															<div class="md-form">
+																<input type="text" id="feeID" th:value="${fee.id}"
+																	class="form-control" disabled> <label
+																	class="active" for="addTotal">Fee ID</label>
+															</div>
+														</h2>
+														<h2 class="h2-responsive product-name">
+															<div class="md-form">
+																<input type="text" id="editTotal"
+																	th:value="${fee.total}" class="form-control"> <label
+																	class="active" for="editTotal">Product Total</label>
+															</div>
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="editFeeValue"
+																		th:value="${fee.fee}" class="form-control"> <label
+																		class="active" for="editFee">Delivery Fee </label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary" onclick="updateFee()">Update
+																		Fee</button>
+																</div>
+															</div>
+
+														</div>
+
+														<div id="editFeeError"></div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+			
+			var timeoutms = 8000;
+			
+				var successFeeAdd = '<div ' +
+			' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+				'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Delivery Fee was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+					'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var successFeeUpdate = '<div ' +
+					' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+						'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Delivery Fee was updated successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+							'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+						+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+					+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addFeeErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+						+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Delivery Fee was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+					+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var updateFeeErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+						+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Delivery Fee was not updated.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+					+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function AddNewFee() {
+
+					var total = $('#addTotal').val();
+					var fee = $('#NewFee').val();
+
+					$.ajax({
+
+						url : "/panel/delivery/addFee",
+						data : {
+							'fee' : fee,
+							'total' : total
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successFeeAdd);
+								listFees();
+							}
+
+							else
+								$('#addFeeError').append(addFeeErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#newDataMessages').append(connectError);
+								$('#addFeeError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				function listFees() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/delivery/fees",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteFees() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/delivery/deleteFee",
+						data : {
+							'dids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listFees();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function editFee() {
+
+					$('#loaderTable').slideDown();
+
+					var id = "";
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						id = $(this).val();
+					});
+
+					console.log(id);
+
+					$.ajax({
+
+						url : "/panel/delivery/fees",
+						data : {
+							'feeID' : id
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#feeEditModalDiv');
+							$('#feeEditModalDiv').html(result);
+
+							$('#feeEditModal').modal({
+								backdrop : 'static',
+								keyboard : false
+							});
+
+							$('#loaderTable').fadeOut();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					});
+				};
+
+				function updateFee() {
+
+					var id = $('#feeID').val();
+					var fee = $('#editFeeValue').val();
+					var total = $('#editTotal').val();
+
+					console.log(id + ' ' + fee + ' ' + total);
+
+					$.ajax({
+
+						url : "/panel/delivery/updateFee",
+						data : {
+							'feeID' : id,
+							'fee' : fee,
+							'total' : total
+						},
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successFeeUpdate);
+								listFees();
+							}
+
+							else
+								$('#editFeeError').append(updateFeeErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editFeeError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+
+								$('#DeleteFee').attr('disabled', false);
+								$('#editFee').attr('disabled', true);
+
+								if (ch_list.length == 1)
+									$('#editFee').attr('disabled', false);
+
+							}
+
+							else {
+								$('#DeleteFee').attr('disabled', true);
+								$('#editFee').attr('disabled', true);
+							}
+
+						});
+			</script>
+
+
+
+		</div>
+	</div>
+
+
+</body>
+</html>

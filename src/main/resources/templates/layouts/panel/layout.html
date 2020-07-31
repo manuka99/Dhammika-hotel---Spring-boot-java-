@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">Dhammika
+	Hotel</title>
+
+<!-- common styles -->
+<style th:replace="fragments/panel/style-common"></style>
+
+<!-- common scripts -->
+<script th:replace="fragments/panel/scripts-common :: scripts"></script>
+
+</head>
+<body>
+
+	<!-- header and nav -->
+	<div th:replace="fragments/panel/header :: header"></div>
+
+
+	<div layout:fragment="content">
+		<!-- Your Page Content Here -->
+	</div>
+
+
+
+	<!-- footer -->
+	<div th:replace="fragments/panel/footer :: footer"></div>
+
+<!-- common scripts bottom -->
+<script th:replace="fragments/panel/scripts-common :: scripts-bottom"></script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Scripts Panel</title>
+</head>
+<body>
+
+	<div th:fragment="scripts">
+		<!-- SCRIPTS -->
+		<!-- JQuery -->
+		<script th:src="|/Design/mdPro/js/jquery-3.4.1.min.js|"></script>
+		<!-- Bootstrap tooltips -->
+		<script type="text/javascript"
+			th:src="|/Design/panel/js/popper.min.js|"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script type="text/javascript"
+			th:src="|/Design/panel/js/bootstrap.js|"></script>
+		<!-- MDB core JavaScript -->
+		<script type="text/javascript" th:src="|/Design/panel/js/mdb.min.js|"></script>
+
+		<div class="hiddendiv common"></div>
+
+		<script th:src="|/Design/mdPro/js/modules/addons/datatables.min.js|"></script>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/mdb-file-upload.min.js|"></script>
+
+		<script type="text/javascript"
+			th:src="|/Design/myScripts/js/mtTinyMce.js|"></script>
+
+
+		<script type="text/javascript"
+			th:src="|/Design/summernote/summernote-lite.js|"></script>
+		<!-- Initializations -->
+
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/20.0.0/classic/ckeditor.js"></script>
+
+		<div class="drag-target" style="left: 0px;"></div>
+
+		<!-- Initializations -->
+		<script>
+			// SideNav Initialization
+			$(".button-collapse").sideNav();
+
+			var container = document.querySelector('.custom-scrollbar');
+			var ps = new PerfectScrollbar(container, {
+				wheelSpeed : 2,
+				wheelPropagation : true,
+				minScrollbarLength : 20
+			});
+
+			// Data Picker Initialization
+			$('.datepicker').pickadate();
+
+			// Material Select Initialization
+			$(document).ready(function() {
+				$('.mdb-select').material_select();
+			});
+
+			// Tooltips Initialization
+			$(function() {
+				$('[data-toggle="tooltip"]').tooltip()
+			});
+
+			$(document).ready(
+					function() {
+						// SideNav Button Initialization
+						$(".button-collapse").sideNav2();
+						// SideNav Scrollbar Initialization
+						var sideNavScrollbar = document
+								.querySelector('.custom-scrollbar');
+						var ps = new PerfectScrollbar(sideNavScrollbar);
+
+					});
+		</script>
+
+		<script th:src="|/Design/panel/js/darkmode.js|" type="text/javascript"></script>
+	</div>
+
+
+	<div th:fragment="scripts-bottom">
+
+		<script th:src="|/Design/myScripts/js/dataTableInit.js|"
+			type="text/javascript"></script>
+
+		<script type="text/javascript">
+			$.ajax({
+
+				url : "/panel/navigation",
+				success : function(data, textStatus, jqXHR) {
+
+					$('#headerRefresh22').html(data);
+
+				}
+
+			})
+		</script>
+		<script>
+			//to display real time notifications
+			unreadNotifications();
+			function unreadNotifications() {
+
+				var noOfNoti = $('#unreadNotifications').text();
+				console.log(noOfNoti);
+
+				$.ajax({
+
+					url : "/user/notificationsCount",
+					success : function(data, textStatus, jqXHR) {
+
+						if (isNaN(data) == false && data > noOfNoti) {
+
+							$('#unreadNotifications').text(data);
+
+							if (data > noOfNoti && noOfNoti != " " )
+								toastr.success('You have new notifications');
+
+						}
+
+					}
+
+				});
+				setTimeout(unreadNotifications, 10000);
+			};
+		</script>
+
+	</div>
+
+</body>
+</html>

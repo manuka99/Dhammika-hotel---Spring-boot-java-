@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid card">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="item: ${notDeleted}">
+									Could not delete Order with Order ID: <strong>[[${item}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="item: ${deletedItems}">
+									Order with Order ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] Orders were
+									deleted successfully.
+								</p>
+								<p th:each="item: ${deletedItems}">
+									Order with Order ID: <strong>[[${item}]] </strong> was deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+						<div id="contectChangeArea" class="">
+
+							<div class="d-flex justify-content-center buttons-wrapper my-3">
+
+								<button class=" btn btn-rounded btn-sm btn-success"
+									type="button" onclick="listAllOrders()">
+									<i class="fas fa-sync"></i> Refresh
+								</button>
+
+								<button onclick="deleteOrders()" id="DeleteOrder"
+									class=" btn btn-rounded btn-sm btn-danger" type="button"
+									disabled>
+									<i class="far fa-trash-alt mt-0"></i>&nbsp; Delete
+								</button>
+
+							</div>
+
+							<table th:if="${orders != null}" id="dtMaterialDesignExample"
+								class="table table-hover table-responsive table-striped text-center"
+								width="100%">
+								<thead>
+									<tr>
+										<th class="th-sm text-nowrap"><strong>#</strong></th>
+										<th class="th-sm text-nowrap"><strong>Order ID</strong></th>
+										<th class="th-sm text-nowrap"><strong>Order Type</strong></th>
+										<th class="th-lg text-nowrap"><strong>Order
+												Status</strong></th>
+										<th class="th-sm text-nowrap"><strong>Order
+												Payment</strong></th>
+										<th class="th-sm text-nowrap"><strong>Delivery
+												Address</strong></th>
+										<th class="th-sm text-nowrap"><strong>Placed
+												date</strong></th>
+										<th class="th-sm"><span class="text-nowrap"><strong>Expected
+													date</strong></span></th>
+										<th class="th-sm"><strong>Tax</strong></th>
+										<th class="th-sm text-nowrap"><strong>Shipping
+												Fee</strong></th>
+										<th class="th-lg text-nowrap"><strong>Sub total</strong></th>
+										<th class="th-sm"><strong>Total</strong></th>
+										<th class="th-sm text-nowrap"><strong>No. of
+												items</strong></th>
+										<th class="th-sm text-nowrap"><strong>Delivered
+												Date</strong></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="order, status : ${orders}">
+
+										<td scope="row" class="font-weight-bold"><input
+											class="form-check-input" type="checkbox"
+											th:id="${order.orderID}" th:value="${order.orderID}"
+											name="type"> <label
+											class="form-check-label label-table"
+											th:for="${order.orderID}"></label>[[${status.index + 1}]]</td>
+										<th class="th-sm"><strong><a
+												th:href="@{'/panel/orders/order?orderID=' + ${order.orderID}}"
+												target="_blank"><span
+													class="text-nowrap text-primary text-uppercase">[[${order.orderID}]]</span></a></strong></th>
+										<td>[[${order.orderType}]]</td>
+										<td>[[${order.status}]]</td>
+										<td>[[${order.payment}]]</td>
+										<td>[[${order.shippingAddress}]]</td>
+										<td><span class="text-nowrap">[[${order.placedDate}]]</span></td>
+										<td><span class="text-nowrap">[[${order.expectedDate}]]</span></td>
+										<td>[[${order.tax}]]</td>
+										<td>[[${order.shippingFee}]]</td>
+										<td>[[${order.subTotal}]]</td>
+										<td>[[${order.total}]]</td>
+										<td>[[${order.order_Items.size()}]]</td>
+										<td><span class="text-nowrap"
+											th:if="${order.deliveredDate == null}">Not Delivered
+												yet</span> <span class="text-nowrap"
+											th:if="${order.deliveredDate != null}">[[${order.deliveredDate}]]</span>
+
+
+										</td>
+									</tr>
+
+
+								</tbody>
+							</table>
+
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function listAllOrders() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/orders",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteOrders() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/orders/order/deleteOrder",
+						data : {
+							'oids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listAllOrders();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0)
+								$('#DeleteOrder').attr('disabled', false);
+
+							else
+								$('#DeleteOrder').attr('disabled', true);
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

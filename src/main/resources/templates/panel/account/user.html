@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] records were
+									deleted by [[${countSend}]] records.
+								</p>
+								<p th:each="userID: ${notDeleted}">
+									Could not delete user with user ID: <strong>[[${userID}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="userID: ${deletedProducts}">
+									User with user ID: <strong>[[${userID}]] </strong> was deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] users were
+									deleted successfully.
+								</p>
+								<p th:each="userID: ${deletedProducts}">
+									User with user ID: <strong>[[${userID}]] </strong> was deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div id="contectChangeArea">
+
+
+							<div class="row">
+								<!-- First column -->
+								<div class="col-lg-4 mb-4">
+
+									<!-- Card -->
+									<div class="card card-cascade narrower">
+
+										<!-- Card image -->
+										<div
+											class="view view-cascade gradient-card-header mdb-color lighten-3">
+											<h5 class="mb-0 font-weight-bold">User Roles</h5>
+										</div>
+										<!-- Card image -->
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div id="editUserRoleError"></div>
+											<div class="col-md-6">
+												<div id="addNewRoleOption">
+													<div class="form-check" th:each="role : ${roles}">
+														<input type="checkbox" class="form-check-input"
+															th:id="${role.roleID}" th:value="${role.roleID}"
+															name="addNewRoles"> <label
+															class="form-check-label" th:for="${role.roleID}">[[${role.name}]]
+														</label>
+													</div>
+												</div>
+											</div>
+
+											<p class="text-muted  text-center">
+												<br> Click <strong><a href="" target="blank_">here</a></strong>
+												to know more about roles.
+											</p>
+											<div class="row flex-center">
+												<button onclick="loadUserContent()"
+													class="btn btn-info btn-rounded btn-sm waves-effect waves-light">Refresh</button>
+												<br>
+												<button onclick="saveUpdateUserRole()"
+													class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">Update</button>
+											</div>
+										</div>
+										<!-- Card content -->
+
+									</div>
+									<!-- Card -->
+
+									<div style="height: 40px"></div>
+
+									<!-- Card -->
+									<div class="card card-cascade narrower">
+
+										<!-- Card image -->
+										<div
+											class="view view-cascade gradient-card-header mdb-color lighten-3">
+											<h5 class="mb-0 font-weight-bold">Advance Account
+												Settings</h5>
+										</div>
+										<!-- Card image -->
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div id="editUserAdvanceError"></div>
+											<div class="">
+												<span class="text-danger"><strong>* </strong></span><span><strong>
+														Email Verification Status:</strong></span>
+												<div id="addUserOption">
+													<select id="enabled" class="browser-default custom-select">
+														<option value="true" th:selected="${user.enabled == true}">Verified</option>
+														<option value="false"
+															th:selected="${user.enabled == false}">Not
+															Verified</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="mt-4">
+												<span class="text-danger"><strong>* </strong></span><span><strong>
+														Account Locked Status:</strong></span>
+												<div id="addUserOption">
+													<select id="nonLocked"
+														class="browser-default custom-select">
+														<option value="false"
+															th:selected="${user.notLocked == false}">Account
+															Locked</option>
+														<option value="true"
+															th:selected="${user.notLocked == true}">Account
+															Not Locked</option>
+													</select>
+												</div>
+											</div>
+
+											<p class="text-muted  text-center">
+												<br> Note: Once a account is <strong><a>Locked</a></strong>
+												user will not be able to login unless the account is
+												unlocked from the panel.
+											</p>
+
+											<div class="row flex-center">
+												<button onclick="loadUserContent()"
+													class="btn btn-info btn-rounded btn-sm waves-effect waves-light">Refresh</button>
+												<br>
+												<button onclick="updateAdvanceSettings()"
+													class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">Update</button>
+											</div>
+										</div>
+										<!-- Card content -->
+
+									</div>
+									<!-- Card -->
+
+								</div>
+								<!-- First column -->
+
+								<!-- Second column -->
+								<div class="col-lg-8 mb-4">
+
+									<!-- Card -->
+									<div class="card card-cascade narrower">
+
+										<!-- Card image -->
+										<div
+											class="view view-cascade gradient-card-header mdb-color lighten-2">
+
+											<div class="row">
+												<div class="col-md-8">
+													<h5 class="mb-0 font-weight-bold">User Profile -
+														[[${user.username}]]</h5>
+												</div>
+												<div class="col-md-4">
+													<button type="button" id="enableEditUser"
+														onclick="enableEditUser()"
+														class="btn btn-outline-white btn-rounded btn-sm">
+														<i class="fas fa-pencil-alt"></i>
+													</button>
+													<button type="button" id="disableEditUser"
+														onclick="disableEditUser()"
+														class="btn btn-outline-white btn-rounded btn-sm"
+														style="display: none">
+														<i class="fas fa-ban"></i>
+													</button>
+													<button type="button" id="saveUpdateUser"
+														onclick="saveUpdateUser()" style="display: none"
+														class="btn btn-outline-white btn-rounded btn-sm">
+														<i class="fas fa-save"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+
+										<!-- Card image -->
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade text-center">
+
+											<div class="progress-custom" id="loadetEditProfile"
+												style="display: none">
+												<div class="indeterminate-my"></div>
+											</div>
+											<div id="editUserError"></div>
+											<!-- Edit Form -->
+											<form>
+												<!-- First row -->
+
+												<div class="row">
+
+													<!-- First column -->
+													<div class="col-md-6">
+														<div class="md-form mb-0">
+															<input type="text" id="userID" th:value="${user.userID}"
+																class="form-control validate" value="Company, inc"
+																disabled> <label for="form1" class="active">User
+																ID</label>
+														</div>
+													</div>
+													<!-- Second column -->
+													<div class="col-md-6">
+														<div class="md-form mb-0">
+															<input type="text" id="username"
+																th:value="${user.username}"
+																class="form-control validate" disabled> <label
+																for="form2" class="active">Username</label>
+														</div>
+													</div>
+												</div>
+												<!-- First row -->
+
+												<!-- First row -->
+												<div class="row">
+													<!-- First column -->
+													<div class="col-md-6">
+														<div class="md-form mb-0">
+															<input type="text" id="fname" th:value="${user.fname}"
+																class="form-control mycClass" disabled> <label
+																for="form81" class="active">First name</label>
+														</div>
+													</div>
+
+													<!-- Second column -->
+													<div class="col-md-6">
+														<div class="md-form mb-0">
+															<input type="text" id="lname" th:value="${user.lname}"
+																class="form-control mycClass" disabled> <label
+																for="form82" class="active">Last name</label>
+														</div>
+													</div>
+												</div>
+												<!-- First row -->
+
+												<!-- Second row -->
+												<div class="row">
+
+													<!-- First column -->
+													<div class="col">
+														<div class="md-form mb-0">
+															<input type="email" id="email" th:value="${user.email}"
+																class="form-control mycClass" disabled> <label
+																for="form76" class="active">Email address</label>
+														</div>
+													</div>
+													<!-- Second column -->
+
+
+												</div>
+
+												<div class="row">
+
+													<!-- First column -->
+													<div class="col">
+														<div class="md-form mb-0">
+															<input type="number" id="phone" th:value="${user.phone}"
+																class="form-control mycClass" disabled> <label
+																for="form76" class="active">Phone</label>
+														</div>
+													</div>
+													<!-- Second column -->
+
+
+												</div>
+												<div class="row">
+
+													<!-- First column -->
+													<div class="col">
+														<div class="md-form mb-0">
+															<input type="date" id="dateOfBirth"
+																th:value="${user.dateOfBirth}"
+																class="form-control mycClass" disabled> <label
+																for="form76" class="active">Date of Birth</label>
+														</div>
+													</div>
+													<!-- Second column -->
+
+
+												</div>
+												<!-- Second row -->
+
+												<!-- Third row -->
+												<div class="row">
+
+													<!-- First column -->
+													<div class="col-md-12">
+														<div class="md-form mb-0">
+															<textarea type="text" id="address"
+																class="md-textarea form-control mycClass" rows="2"
+																disabled>[[${user.address}]]</textarea>
+															<label for="form78" class="active">Home address</label>
+														</div>
+													</div>
+												</div>
+												<!-- Third row -->
+
+
+
+											</form>
+											<!-- Edit Form -->
+
+										</div>
+										<!-- Card content -->
+
+									</div>
+									<!-- Card -->
+
+
+
+
+									<!-- Card -->
+									<div class="card card-cascade narrower mt-5">
+
+										<!-- Card image -->
+										<div
+											class="view view-cascade gradient-card-header mdb-color lighten-3">
+											<h5 class="mb-0 font-weight-bold">Account security</h5>
+										</div>
+										<!-- Card image -->
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div id="editUserPasswordError"></div>
+											<div class="">
+												<span class="text-danger"><strong>* </strong></span><span><strong>
+														Change Password</strong>
+													<button
+														class="btn btn-primary btn-sm btn-rounded py-2 px-2 "
+														onclick="generatePass()">Generate</button></span> <input
+													type="text" id="password"
+													placeholder="Enter or generate new password..."
+													class="form-control">
+
+
+											</div>
+
+											<div class="mt-4">
+												<span class="text-danger"><strong>* </strong></span><span><strong>
+														User notify methodology:</strong></span>
+												<div id="addUserOption">
+													<select id="notify" class="browser-default custom-select">
+														<option value="none" selected>None</option>
+														<option value="email">Send Email without login
+															credentials</option>
+														<option value="emailCredentials">Send Email with
+															login credentials</option>
+													</select>
+												</div>
+											</div>
+
+											<p class="text-muted  text-center">
+												<br> Note: Changing Users password should not be done
+												in practice and should be done only if it is an emergency
+												only. <strong><a> And make sure to select
+														appropriate notify methodology.</a></strong>
+											</p>
+
+											<div class="row flex-center">
+												<button onclick="loadUserContent()"
+													class="btn btn-info btn-rounded btn-sm waves-effect waves-light">Refresh</button>
+												<br>
+												<button onclick="updatePassword()"
+													class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">Update</button>
+											</div>
+										</div>
+										<!-- Card content -->
+
+									</div>
+									<!-- Card -->
+
+
+
+
+
+								</div>
+								<!-- Second column -->
+
+
+
+								<!-- Card -->
+								<div
+									class="card  container-fluid card-cascade narrower mb-5 mt-5">
+
+									<!-- Card image -->
+									<div
+										class="view view-cascade gradient-card-header mdb-color lighten-3">
+										<h5 class="mb-0 font-weight-bold">Customer Orders</h5>
+									</div>
+									<!-- Card image -->
+
+									<!-- Card content -->
+									<div class="card-body card-body-cascade">
+										<div id="editUserOrderError"></div>
+
+										<p class="text-muted  text-center"
+											th:if="${user.orders.size() == 0}">
+											<br> <strong><a>This user has not placed
+													any order yet. </a></strong>
+										</p>
+
+										<table th:if="${user.orders.size() != 0}"
+											id="paginationFirstLast"
+											class="table table-hover table-responsive text-center"
+											width="100%">
+											<thead>
+												<tr>
+													<th class="th-sm text-nowrap"><strong>#</strong></th>
+													<th class="th-sm text-nowrap"><strong>Order
+															ID</strong></th>
+													<th class="th-sm text-nowrap"><strong>Order
+															Type</strong></th>
+													<th class="th-lg text-nowrap"><strong>Order
+															Status</strong></th>
+													<th class="th-sm text-nowrap"><strong>Order
+															Payment</strong></th>
+													<th class="th-sm text-nowrap"><strong>Delivery
+															Address</strong></th>
+													<th class="th-sm text-nowrap"><strong>Placed
+															date</strong></th>
+													<th class="th-sm"><span class="text-nowrap"><strong>Expected
+																date</strong></span></th>
+													<th class="th-sm"><strong>Tax</strong></th>
+													<th class="th-sm text-nowrap"><strong>Shipping
+															Fee</strong></th>
+													<th class="th-lg text-nowrap"><strong>Sub
+															total</strong></th>
+													<th class="th-sm"><strong>Total</strong></th>
+													<th class="th-sm text-nowrap"><strong>No. of
+															items</strong></th>
+													<th class="th-sm text-nowrap"><strong>Delivered
+															Date</strong></th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="order, status : ${user.orders}">
+
+													<td>[[${status.index + 1}]]</td>
+													<th class="th-sm"><strong><a href=""
+															target="_blank"><span
+																class="text-nowrap text-primary text-uppercase">[[${order.orderID}]]</span></a></strong></th>
+													<td>[[${order.orderType}]]</td>
+													<td>[[${order.status}]]</td>
+													<td>[[${order.payment}]]</td>
+													<td>[[${order.shippingAddress}]]</td>
+													<td><span class="text-nowrap">[[${order.placedDate}]]</span></td>
+													<td><span class="text-nowrap">[[${order.expectedDate}]]</span></td>
+													<td>[[${order.tax}]]</td>
+													<td>[[${order.shippingFee}]]</td>
+													<td>[[${order.subTotal}]]</td>
+													<td>[[${order.total}]]</td>
+													<td>[[${order.order_Items.size()}]]</td>
+													<td><span class="text-nowrap"
+														th:if="${order.deliveredDate == null}">Not
+															Delivered yet</span> <span class="text-nowrap"
+														th:if="${order.deliveredDate != null}">[[${order.deliveredDate}]]</span>
+
+
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+									<!-- Card content -->
+
+								</div>
+								<!-- Card -->
+
+
+
+
+
+
+								<!-- Card -->
+								<div class="card  container-fluid card-cascade narrower mt-4">
+
+									<!-- Card image -->
+									<div
+										class="view view-cascade gradient-card-header mdb-color lighten-3">
+										<h5 class="mb-0 font-weight-bold">Customer Complains</h5>
+									</div>
+									<!-- Card image -->
+
+									<!-- Card content -->
+									<div class="card-body card-body-cascade">
+
+										<p class="text-muted  text-center"
+											th:if="${user.complains.size() == 0}">
+											<br> <strong><a>This user has not placed
+													any Complain yet. </a></strong>
+										</p>
+
+										<table th:if="${user.complains.size() != 0}"
+											id="complainsUsertable"
+											class="table table-hover table-responsive text-center"
+											width="100%">
+											<thead>
+												<tr>
+													<th class="th-lg text-nowrap"><strong>#</strong></th>
+													<th class="th-sm text-nowrap"><strong>Complain
+															ID</strong></th>
+													<th class="th-sm text-nowrap"><strong>Complain
+															Subject</strong></th>
+													<th class="th-lg text-nowrap"><strong>Complain
+															message</strong></th>
+													<th class="th-sm text-nowrap"><strong>Complain
+															placed Time</strong></th>
+													<th class="th-sm text-nowrap"><strong>No. of
+															responses for the complain<strong></th>
+												</tr>
+											</thead>
+											<tbody>
+
+												<tr th:each="complain, stat : ${user.complains}">
+
+													<td>[[${stat.index + 1}]]</td>
+													<th class="th-sm"><strong><a href=""
+															target="_blank"><span
+																class="text-nowrap text-primary text-uppercase">[[${complain.id}]]</span></a></strong></th>
+													<td>[[${complain.subject}]]</td>
+													<td>[[${complain.message}]]</td>
+													<td>[[${complain.time}]]</td>
+													<td>[[${complain.responses.size()}]]</td>
+												</tr>
+											</tbody>
+										</table>
+
+									</div>
+									<!-- Card content -->
+
+								</div>
+								<!-- Card -->
+
+
+							</div>
+
+
+							<script th:inline="javascript">
+								/*<![CDATA[*/
+								var userRoles = /*[[${userRoles}]]*/[];
+
+								$(userRoles)
+										.each(
+												function() {
+													document
+															.getElementById(this).checked = true;
+
+												});
+
+								/*]]>*/
+							</script>
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var userID = $('#userID').val();
+
+				var successSaved = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Changes saved successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var errorSaved = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Changes were not saved.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please try again latter.'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function loadUserContent() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/accounts/user",
+						data : {
+
+							'userID' : userID
+
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function saveUpdateUserRole() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/accounts/updateRole",
+						data : {
+							'rids[]' : ch_list,
+							'userID' : userID
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+								$('#editUserRoleError')
+										.append(successSaved);
+							}
+
+							else
+								$('#editUserRoleError').append(
+										errorSaved);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editUserRoleError').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function updateAdvanceSettings() {
+
+					var enabled = $("#enabled option:selected").val();
+					var nonLocked = $("#nonLocked option:selected").val();
+
+					console.log(enabled);
+					console.log(nonLocked);
+
+					$.ajax({
+
+						url : "/panel/accounts/updateAdvanceSettings",
+						data : {
+							'enabled' : enabled,
+							'nonLocked' : nonLocked,
+							'userID' : userID
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+								$('#editUserAdvanceError').append(
+										successSaved);
+							}
+
+							else
+								$('#editUserAdvanceError').append(
+										errorSaved);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editUserAdvanceError').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function updatePassword() {
+
+					var password = $("#password").val();
+					var notify = $("#notify option:selected").val();
+
+					$.ajax({
+
+						url : "/panel/accounts/updatePasword",
+						data : {
+							'password' : password,
+							'notify' : notify,
+							'userID' : userID
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+								$('#editUserPasswordError').append(
+										successSaved);
+
+							}
+
+							else
+								$('#editUserPasswordError').append(
+										errorSaved);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editUserPasswordError').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function saveUpdateUser() {
+
+					$('#loadetEditProfile').fadeIn();
+
+					var fname = $('#fname').val();
+					var lname = $('#lname').val();
+					var address = $('#address').val();
+					var dateOfBirth = $('#dateOfBirth').val();
+					var email = $('#email').val();
+					var phone = $('#phone').val();
+
+					$.ajax({
+
+						url : "/panel/accounts/updateUser",
+						data : {
+							'userID' : userID,
+							'fname' : fname,
+							'lname' : lname,
+							'address' : address,
+							'dateOfBirth' : dateOfBirth,
+							'email' : email,
+							'phone' : phone
+						},
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loadetEditProfile').fadeOut();
+
+							if (data == true) {
+								$('#editUserError').append(successSaved);
+							}
+
+							else
+								$('#editUserError').append(errorSaved);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loadetEditProfile').fadeOut();
+								$('#editUserError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				function generatePass() {
+
+					$('#password').val(generateRandomString(16));
+
+				};
+
+				function enableEditUser() {
+
+					$('form .mycClass').prop('disabled', false);
+					$('#enableEditUser').hide();
+					$('#disableEditUser').fadeIn();
+					$('#saveUpdateUser').fadeIn();
+
+				};
+
+				function disableEditUser() {
+
+					$('form .mycClass').prop('disabled', true);
+					$('#enableEditUser').fadeIn();
+					$('#disableEditUser').hide();
+					$('#saveUpdateUser').hide();
+
+				};
+			</script>
+
+
+
+		</div>
+	</div>
+
+
+</body>
+</html>

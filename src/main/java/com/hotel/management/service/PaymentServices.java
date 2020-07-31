@@ -1,0 +1,19 @@
+package com.hotel.management.service;
+
+import java.util.Map;
+
+import com.hotel.management.model.OrderDB;
+import com.paypal.api.payments.Payment;
+import com.paypal.base.rest.PayPalRESTException;
+
+public interface PaymentServices {
+
+	public String authorizePaypalPayment(OrderDB orderDetail) throws PayPalRESTException;
+
+	public Payment executePaypalPayment(String paymentId, String payerId) throws PayPalRESTException;
+
+	public Payment getPaypalPaymentDetails(String paymentId) throws PayPalRESTException;
+	
+	public Map<String, String> authorizePayherePayment(OrderDB orderDetail);
+
+}

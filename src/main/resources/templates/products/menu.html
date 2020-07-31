@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated card">
+
+	<div layout:fragment="content">
+
+
+		<div class="container mt-5 pt-3">
+			<div style="height: 60px;"></div>
+			<section>
+
+				<!-- Grid row -->
+				<div class="row">
+
+					<!-- Grid column -->
+					<div class="col-12">
+
+						<!-- Image -->
+						<div class="view  z-depth-1">
+
+							<img
+								src="Design/img/hotel-restaurant-pool-people-flames-fire-others.jpeg"
+								style="height: 280px; width: 480px" class="img-fluid"
+								alt="sample image">
+
+							<div class="mask rgba-stylish-slight">
+
+								<div
+									class="dark-grey-text text-right pt-lg-5 pt-md-1 mr-5 pr-md-4 pr-0">
+
+									<div>
+
+										<a> <span class="badge badge-danger">OFFER</span>
+
+										</a>
+
+										<h2 class="card-title font-weight-bold pt-md-3 pt-1">
+
+											<strong>10% off your total bill this WEEKEND! </strong>
+
+										</h2>
+
+										<p class="">We offer 10% off your total bill for DINING!
+											Enjoy this unbeatable offer</p>
+										<span class="clearfix d-none d-md-block text-muted"><small>(conditions
+												apply)</small></span> <a
+											class="btn mr-0 btn-primary btn-rounded clearfix d-none d-md-inline-block waves-effect waves-light">Reserve
+											Now</a>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+						<!-- Image -->
+
+					</div>
+					<!-- Grid column -->
+
+				</div>
+				<!-- Grid row -->
+
+			</section>
+
+			<div id="FoodItems">
+
+				<div class="row pt-5">
+
+
+					<div class="col-lg-3">
+
+						<div id="category" class="wow fadeIn animated"
+							data-wow-delay="0.1s"
+							style="visibility: visible; animation-name: fadeIn; animation-delay: 0.1s;">
+
+
+
+
+							<div class="">
+
+								<!-- Grid row -->
+								<div class="row">
+
+									<div class="col-md-6 col-lg-12 mb-5">
+
+										<!-- Panel -->
+										<h5 class="font-weight-bold dark-grey-text">
+											<strong>Order By</strong>
+										</h5>
+
+										<div class="divider"></div>
+
+										<div class="form-group">
+											<input class="form-check-input" name="group2000" type="radio"
+												id="defaultOrder" th:onclick="ListFoodSorter('name', 'asc')"
+												checked> <label for="defaultOrder"
+												class="form-check-label dark-grey-text">Default</label>
+										</div>
+
+
+										<div class="form-group">
+											<input class="form-check-input" name="group2000" type="radio"
+												id="priceasc" th:onclick="ListFoodSorter('price', 'asc')">
+											<label for="priceasc" class="form-check-label dark-grey-text">Price:
+												low to high</label>
+										</div>
+
+
+										<div class="form-group">
+											<input class="form-check-input" name="group2000" type="radio"
+												id="pricedesc" th:onclick="ListFoodSorter('price', 'desc')">
+											<label for="pricedesc"
+												class="form-check-label dark-grey-text">Price: high
+												to low</label>
+										</div>
+
+										<div class="form-group">
+											<input class="form-check-input" name="group2000" type="radio"
+												id="portionasc"
+												th:onclick="ListFoodSorter('portion', 'asc')"> <label
+												for="portionasc" class="form-check-label dark-grey-text">Portion:
+												low to high</label>
+										</div>
+
+										<div class="form-group">
+											<input class="form-check-input" name="group2000" type="radio"
+												id="portiondesc"
+												th:onclick="ListFoodSorter('portion', 'desc')"> <label
+												for="portiondesc" class="form-check-label dark-grey-text">Portion
+												: high to low</label>
+										</div>
+
+
+									</div>
+
+
+
+
+
+
+
+
+
+
+									<!-- Filter by category -->
+									<div class="col-md-6 col-lg-12 mb-5">
+
+										<h5 class="font-weight-bold dark-grey-text">
+											<strong>Category</strong>
+										</h5>
+
+										<div class="divider"></div>
+
+										<div class="form-group">
+
+											<input class="form-check-input" name="group1000" type="radio"
+												th:id="allFoodCat" th:onclick="foodByCategory(null)" checked>
+
+											<label th:for="allFoodCat"
+												class="form-check-label dark-grey-text">All Food
+												Items</label>
+
+										</div>
+
+										<div th:each="Category : ${ListCategory}">
+
+
+											<div class="form-group">
+
+												<input class="form-check-input" name="group1000"
+													type="radio" th:id="${Category.categoryID}"
+													th:value="${Category.name}"
+													th:onclick="foodByCategory([[${Category.categoryID}]])">
+
+												<label th:for="${Category.categoryID}"
+													class="form-check-label dark-grey-text">[[${Category.name}]]</label>
+
+											</div>
+
+										</div>
+
+
+
+										<!-- Radio group -->
+									</div>
+
+									<!-- Filter by category -->
+								</div>
+								<!-- Grid row -->
+
+								<!-- Grid row -->
+								<div class="row">
+
+									<!-- Filter by price -->
+									<div class="col-md-6 col-lg-12 mb-5">
+
+										<h5 class="font-weight-bold dark-grey-text">
+											<strong>Price</strong>
+										</h5>
+
+										<div class="divider"></div>
+
+										<form class="range-field mt-3">
+
+											<div class="slidecontainer">
+												<input type="range" min="0" step="0" max="10000" value="0"
+													class="slider" id="myRange" onchange="SlideMe()">
+											</div>
+
+										</form>
+
+										<!-- Grid row -->
+										<div class="row justify-content-center">
+
+											<!-- Grid column -->
+											<div class="col-md-6 text-left">
+
+												<p class="dark-grey-text">
+													<strong>Rs.<span id="slideFrom">0.00</span></strong>
+												</p>
+
+
+
+											</div>
+											<!-- Grid column -->
+
+											<!-- Grid column -->
+											<div class="col-md-6 text-right">
+
+												<p class="dark-grey-text">
+													<strong id="clientPrice">Rs.10000.00</strong>
+												</p>
+
+											</div>
+											<!-- Grid column -->
+
+										</div>
+										<!-- Grid row -->
+
+									</div>
+									<!-- Filter by price -->
+
+									<!-- Filter by rating -->
+									<div class="col-md-6 col-lg-12 mb-5">
+
+										<h5 class="font-weight-bold dark-grey-text">
+											<strong>Rating</strong>
+										</h5>
+
+										<div class="divider"></div>
+
+										<div class="row ml-1">
+
+											<!-- Rating -->
+											<ul class="rating mb-0">
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li>
+
+													<p class="ml-3 dark-grey-text">
+														<a>4 and more</a>
+													</p>
+
+												</li>
+
+											</ul>
+
+										</div>
+
+										<div class="row ml-1">
+
+											<!-- Rating -->
+											<ul class="rating mb-0">
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star grey-text"></i></li>
+
+												<li>
+
+													<p class="ml-3 dark-grey-text">
+														<a>3 - 3,99</a>
+													</p>
+
+												</li>
+
+											</ul>
+
+										</div>
+
+										<div class="row ml-1">
+
+											<!-- Rating -->
+											<ul class="rating">
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star blue-text"></i></li>
+
+												<li><i class="fas fa-star grey-text"></i></li>
+
+												<li><i class="fas fa-star grey-text"></i></li>
+
+												<li>
+
+													<p class="ml-3 dark-grey-text">
+														<a>3.00 and less</a>
+													</p>
+
+												</li>
+
+											</ul>
+
+										</div>
+
+									</div>
+									<!-- Filter by rating -->
+
+								</div>
+								<!-- Grid row -->
+
+							</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+						</div>
+
+
+					</div>
+
+
+
+					<div class="col-lg-9">
+
+
+						<div id="cardloader" style="display: none"
+							th:insert="/products/productLoader :: loader"></div>
+
+
+
+						<div id="cardFood" class="wow fadeIn animated"
+							data-wow-delay="0.5s"
+							style="visibility: visible; animation-name: fadeIn; animation-delay: 0.5s;">
+
+
+							<!-- Filter Area -->
+							<div class="row">
+
+								<div class="col-md-4 mt-3"></div>
+
+
+
+							</div>
+
+
+							<!-- Filter Area -->
+
+							<!-- Products Grid -->
+							<section class="section pt-4">
+
+
+								<!-- Grid row -->
+								<div class="row">
+
+
+
+
+									<!-- Grid column -->
+									<div class="col-lg-4 col-md-12 mb-5"
+										th:each="Food : ${listProducts}">
+
+										<!-- Card -->
+										<div class="">
+
+											<div class="view zoom z-depth-2 rounded">
+												<img class="img-fluid w-100"
+													th:src="|data:image/png;base64,${Food.image64String}|"
+													style="width: 220px; height: 220px; display: block; margin: auto;">
+												<div th:if="${Food.active eq false}"
+													class="mask pattern-4 flex-center waves-effect waves-light">
+													<p class="white-text">Not Available</p>
+												</div>
+											</div>
+
+											<div class="text-center pt-4">
+
+												<h5>
+													<strong><span class="text-capitalize"
+														th:text="${Food.name}"></span></strong>
+												</h5>
+												<h6>
+													<strong><span th:text="${Food.portion}"></span></strong>
+												</h6>
+												<h6 class="mb-3">
+													Rs.[[${Food.price}]] <br>( USD
+													[[${#numbers.formatDecimal(Food.price / usd, 0, 2)}]] )
+												</h6>
+
+
+
+												<a type="button" th:if="${Food.active eq true}"
+													th:onclick="addItemIDToCart([[${Food.productID}]])"
+													class="btn btn-blue btn-sm mr-1 waves-effect waves-light">
+													<i class="fas fa-shopping-cart pr-2"></i>Add to cart
+												</a>
+												<button type="button" th:if="${Food.active eq false}"
+													class="btn btn-blue btn-sm mr-1 waves-effect waves-light">
+													<i class="fas fa-shopping-cart pr-2"></i>
+													<del>Add to cart</del>
+												</button>
+
+
+												<a th:href="@{'/product?productID=' + ${Food.productID}}"
+													target="_blank"
+													class="btn btn-black btn-sm px-3 material-tooltip-main waves-effect waves-light"
+													data-toggle="tooltip" data-placement="top" title=""
+													data-original-title="view more details"><i
+													class="fas fa-info"></i></a>
+
+											</div>
+
+										</div>
+										<!-- Card -->
+
+									</div>
+									<!-- Grid column -->
+
+
+								</div>
+								<!-- Grid row -->
+
+								<!-- Grid row -->
+								<div class="row justify-content-center mb-4">
+
+									<div th:if="${totalPages > 1}">
+										<!-- Pagination -->
+										<nav class="mb-4">
+
+											<ul class="pagination pagination-circle pg-blue mb-0">
+
+
+
+												<!-- First -->
+												<li th:if="${currentPage != 1}"
+													class="page-item clearfix d-none d-md-block"><a
+													class="page-link waves-effect waves-effect"
+													th:onclick="ListFoodPagination([[${sortField}]], [[${sortDir}]], [[${catergoryID}]], [[${currentPage - 1}]])">Previous</a>
+
+												</li>
+
+
+
+
+												<!-- Numbers -->
+
+
+
+
+												<div th:each="i: ${#numbers.sequence(1, totalPages)}">
+													<li th:unless="${currentPage != i}"
+														class="page-item active"><a
+														class="page-link waves-effect waves-effect active">[[${i}]]</a></li>
+													<li class="page-item"><a th:if="${currentPage != i}"
+														th:onclick="ListFoodPagination([[${sortField}]], [[${sortDir}]], [[${catergoryID}]], [[${i}]])"
+														class="page-link waves-effect waves-effect">[[${i}]]</a></li>
+
+												</div>
+
+
+												<!-- First -->
+												<li class="page-item clearfix d-none d-md-block"><a
+													th:if="${currentPage < totalPages}"
+													th:onclick="ListFoodPagination([[${sortField}]], [[${sortDir}]], [[${catergoryID}]], [[${currentPage + 1}]])"
+													class="page-link waves-effect waves-effect">Next</a></li>
+
+
+											</ul>
+
+										</nav>
+									</div>
+									<!-- Pagination -->
+								</div>
+								<!-- Grid row -->
+							</section>
+							<!-- Products Grid -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+						</div>
+
+					</div>
+
+
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<script>
+		
+		var sortField = "";
+		var sortDir = "";
+		var catergoryID = "";
+		var price = 0;
+		
+		function intializerValues(sortField1, sortDir1, catergoryID1, price1){
+			
+			sortField = sortField1;
+			sortDir = sortDir1;
+			catergoryID = catergoryID1;
+			price = price1;
+			
+		/*
+			initialize the order sorter
+		*/
+		
+		document.getElementById("myRange").value = price;
+		document.getElementById("slideFrom").innerHTML = price;
+		
+		//check radio of catergory
+		document.getElementById(catergoryID).checked = true;
+		
+		checkRadio();
+		
+		};
+		
+		function checkRadio(){
+			
+			//alert('sortField: ' + sortField + 'sortDir: ' + sortDir);
+			
+			if(sortField === "price" && sortDir === "asc")
+				document.getElementById("priceasc").checked = true;
+				
+			else if(sortField === "price" && sortDir === "desc")
+				document.getElementById("pricedesc").checked = true;
+			
+			else if(sortField === "portion" && sortDir === "asc")
+				document.getElementById("portionasc").checked = true;
+			
+			else if(sortField === "portion" && sortDir === "desc")
+				document.getElementById("portiondesc").checked = true;
+			
+			else
+				document.getElementById("defaultOrder").checked = true;
+			
+		};
+		
+		
+		function ListFoodSorter(sortField0, sortDir0) {
+			
+			ListFoodPagination(sortField0, sortDir0, catergoryID , "1");
+			
+		};
+		
+		function foodByCategory(catergoryID0) {
+			
+			ListFoodPagination('name', 'asc', catergoryID0 , '1');
+			
+		};
+		
+		function ListFoodPagination(sortField0, sortDir0, catergoryID0 , page0) {
+			
+			//$('#conte').load('WEB-INF/views/home/CardLoader.jsp');
+			
+			var result = $('#cardloader').html();					
+			$('#cardFood').html(result);
+			
+			sortField = sortField0;
+		 	sortDir = sortDir0;
+		 	catergoryID = catergoryID0;
+			
+			$.ajax({
+
+				url : "/menu/page/" + page0,
+				data : {
+					'sortField' : sortField0,
+					'sortDir' : sortDir,
+					'catergoryID' : catergoryID,
+					'price': price
+
+				},
+				success : function(data, textStatus, jqXHR) {
+					
+					var result = $(data).find('#cardFood');					
+					$('#cardFood').html(result);
+					var url = '/menu/page/' + page0 + '?sortField=' + sortField0 + '&sortDir=' + sortDir0 + '&catergoryID=' + catergoryID0 + '&price=' + price;
+					history.pushState({}, "", url);
+					checkRadio();
+
+				}
+
+			})
+
+		};
+
+		function SlideMe() {
+			var slider = document.getElementById("myRange");
+			var output = document.getElementById("slideFrom");
+			output.innerHTML = slider.value;
+			price = slider.value;
+			ListFoodPagination(sortField, sortDir, catergoryID , "1")
+		};
+
+		function defaultSlider() {
+			document.getElementById("myRange").value = 0.00;
+			document.getElementById("slideFrom").innerHTML = "0.00";
+			price = 0;
+			console.log(sliderValue);
+		};
+
+		function addItemIDToCart(productID) {
+
+			$.ajax({
+
+				url : "/user/addToCart",
+				data : {
+					'productID' : productID
+				},
+
+				success : function(data) {
+		
+					if (data === 'added') {
+						cartSize();
+						toastr.success('Item was added');
+					}
+
+					else if (data === 'updated') {
+						cartSize();
+						toastr.success('Cart was updated');
+					}
+
+					else if (data === 'failed') {
+						toastr
+								.error('Maximum quantity of an item cannot exceeds 3 and should be at least 1');
+					}
+
+					else {
+						toastr.error('Sorry, you dont have access');
+					}
+
+				}
+
+			})
+
+		};
+	</script>
+
+		<script th:inline="javascript">
+	var sortField = [[${sortField}]];
+	var sortDir = [[${sortDir}]];
+	var catergoryID = [[${catergoryID}]];
+	var price = [[${price}]];
+	checkRadio();
+	intializerValues(sortField, sortDir, catergoryID, price);    
+	</script>
+
+	</div>
+
+</body>
+</html>

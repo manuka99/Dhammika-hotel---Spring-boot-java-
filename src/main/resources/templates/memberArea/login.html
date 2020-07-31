@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Login</title>
+
+</head>
+
+
+<body class="login-page"
+	style="background: #000428; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #004e92, #000428); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #004e92, #000428);">
+
+
+
+	<div layout:fragment="content">
+
+		<div class="container pt-3">
+
+
+			<div style="height: 40px;"></div>
+			<main>
+				<div id="contectChangeArea">
+					<div class="container my-5" id="ContentChange"
+						style="background: #000428; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #004e92, #000428); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #004e92, #000428);">
+
+
+
+
+
+
+						<div id="">
+
+
+							<div class="container login-page">
+
+
+								<div class="row">
+									<div class="col-xl-5 col-lg-6 col-md-10 col-sm-12 mx-auto mt-5">
+
+
+
+
+										<!-- Form with header -->
+										<div class="card wow fadeIn animated" data-wow-delay="0.3s"
+											style="visibility: visible; animation-name: fadeIn; animation-delay: 0.3s;">
+											<div class="card-body">
+
+
+												<!-- Header -->
+												<div class="form-header purple-gradient">
+													<h3 class="font-weight-500 my-2 py-1">
+														<i class="fas fa-user"></i> Log in:
+													</h3>
+												</div>
+
+												<form th:action="@{/login}" method="post">
+
+													<div th:if="${param.error}"
+														class="mt-2 alert alert-danger alert-dismissible fade show"
+														role="alert">
+														<strong>Error: </strong>Credentials did not match.
+														<button type="button" class="close" data-dismiss="alert"
+															aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+														<div style="height: 10px;"></div>
+													</div>
+
+													<div th:if="${param.logout}"
+														class="mt-2 mb-4 alert alert-success alert-dismissible fade show"
+														role="alert">
+														<strong>Success: </strong> You have been logged out.
+														<button type="button" class="close" data-dismiss="alert"
+															aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div style="height: 8px;"></div>
+
+
+													<div class="md-form ">
+														<i class="fas fa-envelope prefix white-text"></i> <input
+															type="text" id="orangeForm-email" name="username"
+															class="form-control"> <label
+															for="orangeForm-email" class="">Your email</label>
+													</div>
+
+													<div class="md-form">
+														<i class="fas fa-lock prefix white-text"></i> <input
+															type="password" name="password" id="orangeForm-pass"
+															class="form-control"> <label
+															for="orangeForm-pass" class="">Your password</label>
+													</div>
+
+													<div
+														class="d-flex justify-content-between align-items-center mb-2">
+
+														<div class="form-check pl-0 mb-3 blue-text">
+															<input type="checkbox" name="remember-me"
+																class="form-check-input filled-in" id="new"> <label
+																class="form-check-label small text-uppercase card-link-secondary"
+																for="new">Remember me</label>
+														</div>
+
+														<p>
+															<button type="button"
+																class="btn btn-sm btn-rounded btn-primary"
+																data-toggle="modal" data-target=".bd-example-modal-lg">Forgot
+																password?</button>
+														</p>
+
+													</div>
+
+
+													<div class="text-center">
+														<button
+															class="btn purple-gradient btn-lg waves-effect waves-light">Login
+															Now</button>
+														<hr class="mt-4">
+
+														<p class="blue-text">
+															<a role="button" th:href="@{/register}"
+																class="btn btn-sm btn-rounded btn-primary">Not a
+																member? Register</a>
+
+														</p>
+
+														<div
+															class="inline-ul text-center d-flex justify-content-center">
+															<a class="p-2 m-2 fa-lg tw-ic"><i
+																class="fab fa-twitter white-text"></i></a> <a
+																class="p-2 m-2 fa-lg li-ic"><i
+																class="fab fa-linkedin-in white-text"> </i></a> <a
+																class="p-2 m-2 fa-lg ins-ic"><i
+																class="fab fa-instagram white-text"> </i></a>
+														</div>
+													</div>
+												</form>
+
+											</div>
+										</div>
+										<!-- Form with header -->
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+
+
+
+
+
+						<div style="height: 80px;"></div>
+
+
+
+					</div>
+				</div>
+			</main>
+
+
+			<!-- Large modal -->
+			<div class="modal fade bd-example-modal-lg" tabindex="-1"
+				role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content"
+						style="background-image: linear-gradient(to right top, #d16ba5, #c675b8, #b87fc8, #a689d5, #9393de, #81a0ea, #6dacf2, #58b8f6, #3ccafd, #2cdcfe, #3cecf9, #5ffbf1);">
+
+						<!--Section: Content-->
+
+
+
+						<div class="col container my-4">
+
+							<!-- Default form login -->
+							<form class="text-center">
+
+								<h3 class="h3 mb-4">Password Recovery</h3>
+
+								<p>Provide us the email you entered when you signed up, our
+									server will send your email a system generated password so that
+									you can recover your account</p>
+
+
+								<!-- Email -->
+								<input type="email" id="email2" class="form-control mb-4"
+									placeholder="Enter your valid email to continue">
+
+
+								<!-- Sign in button -->
+								<div id="continueBttf" style="display: none">
+									<button class="btn btn-elegant btn-rounded btn-block my-4"
+										type="button" onclick="ForgotPasswordServlet()">Recover
+										Password</button>
+								</div>
+
+
+
+
+
+							</form>
+							<!-- Default form login -->
+
+
+						</div>
+
+
+
+
+
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+		</div>
+
+
+
+
+		<script>
+			$(document).ready(function() {
+
+				if (performance.navigation.type == 2) {
+					location.reload(true);
+				}
+				$('#currentUser').hide();
+				$('#ForgotPassword').hide();
+				$('#continueBttf').hide();
+
+				$.ajax({
+
+					url : "UserLoginValidation",
+
+					success : function(data) {
+
+						console.log(data);
+						if (data == 'invalid') {
+							//location.reload()
+						}
+
+						else if (data == 'alreadyloggedin') {
+							$('#loginform').slideUp();
+							$('#currentUser').show()
+
+						} else
+							$('#currentUser').hide()
+
+					}
+
+				})
+
+			});
+
+			$("#email2").on("input", function() {
+
+				email = $('#email2').val();
+
+				$.ajax({
+
+					url : "/register/emailCheck",
+					data : {
+						'email' : email
+
+					},
+
+					success : function(data) {
+
+						if (data == true)
+							$('#continueBttf').slideDown();
+
+						else
+							$('#continueBttf').slideUp();
+
+					}
+
+				})
+
+			});
+
+			function ForgotPasswordServlet() {
+
+				email = $('#email2').val();
+
+				//$('#conte').load('WEB-INF/views/home/CardLoader.jsp');
+
+				$.ajax({
+
+					url : "/forgot-password",
+					data : {
+						'email' : email
+					},
+
+					success : function(data) {
+
+						if (data == true)
+							alert('success check your email');
+						else
+							alert('Unexpected Error');
+
+					}
+
+				})
+
+			};
+		</script>
+	</div>
+</body>
+</html>

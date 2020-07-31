@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+
+
+						<div id="contectChangeArea" class="">
+
+							<div id="supportEmailPlatForm">
+
+
+
+								<!-- Section: Create Page -->
+								<section class="my-5">
+
+									<!-- Grid row -->
+									<div class="row">
+
+										<!-- Grid column -->
+										<div class="col-lg-8">
+
+											<!-- First card -->
+											<!--Accordion wrapper-->
+
+											<div class="accordion md-accordion accordion-1 mt-0 mb-5"
+												id="accordionEx23" role="tablist">
+
+												<div class="card"
+													th:each="response, status : ${contactUs.responses}">
+													<div class="card-header blue z-depth-1" role="tab"
+														id="heading98">
+														<h5 class="text-uppercase mb-0 py-1">
+															<a class="collapsed font-weight-bold white-text"
+																data-toggle="collapse" th:href="'#' + ${response.Id}"
+																aria-expanded="false" aria-controls="collapse98">
+																#[[${status.index + 1}]] Responded by
+																[[${response.user.username}]] @
+																[[${response.preetyTime}]] </a>
+														</h5>
+													</div>
+													<div th:id="${response.Id}" class="collapse"
+														role="tabpanel" aria-labelledby="heading98"
+														data-parent="#accordionEx23">
+														<div class="card-body">
+															<div class="row my-4">
+																<div class="col-md-8">
+																	<h5 class="font-weight-bold mb-3 black-text">
+																		Responded by <a
+																			th:href="@{'/panel/accounts/user?userID=' + ${response.user.userID}}"
+																			target="_blanck">[[${response.user.username}]]</a> at
+																		[[${response.time}]]
+																	</h5>
+																	<div>
+																		<br> <span th:utext="${response.message}"></span>
+																	</div>
+																</div>
+																<div class="col-md-4 mt-0 pt-0">
+
+																	<button class="btn btn-danger btn-rounded"
+																		th:onclick="deleteResponse([[${response.Id}]])">Delete
+																		Response</button>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+
+
+
+											</div>
+											<!--Accordion wrapper-->
+
+
+											<!-- Card -->
+											<div th:if="${contactUs.responses.size() == 0}"
+												class="card card-cascade narrower mb-5">
+
+												<!-- Card image -->
+												<div
+													class="view view-cascade gradient-card-header blue-gradient">
+													<h4 class="font-weight-500 mb-0">Responses Placed</h4>
+												</div>
+												<!-- Card image -->
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade">
+
+													<p class="font-weight-bold">
+														There are no responses placed yet. <br>Make sure you
+														respond to all the users inquries as soon as possible.
+													</p>
+
+												</div>
+												<!-- Card content -->
+
+											</div>
+											<!-- Card -->
+
+											<!-- First card -->
+
+											<!-- Second card -->
+											<div class="card mb-4">
+												<textarea id="message">Start writing your response.....</textarea>
+											</div>
+											<!-- Second card -->
+
+											<button type="button" onclick="AddResponse()"
+												class="btn btn-primary btn-lg btn-block mt-2 mb-5">Respond
+												Now</button>
+
+
+										</div>
+										<!-- Grid column -->
+
+										<!-- Grid column -->
+										<div class="col-lg-4">
+
+											<!-- Card -->
+											<div class="card card-cascade narrower mb-5">
+
+												<!-- Card image -->
+												<div
+													class="view view-cascade gradient-card-header blue-gradient">
+													<h4 class="font-weight-500 mb-0">Sender Information</h4>
+												</div>
+												<!-- Card image -->
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade">
+													<input type="hidden" id="contactUsID"
+														th:value="${contactUs.contactUsID}">
+													<p>
+														<i class="fas fa-flag mr-1" aria-hidden="true"></i> Name:
+														<strong>[[${contactUs.name}]]</strong>
+													</p>
+													<p>
+														<i class="far fa-eye mr-1" aria-hidden="true"></i> Email:
+														<strong>[[${contactUs.email}]]</strong>
+													</p>
+													<p>
+														<i class="fas fa-archive mr-1 mr-1" aria-hidden="true"></i>
+														Phone: <strong>[[${contactUs.phone}]]</strong>
+													</p>
+													<p>
+														<i class="far fa-calendar-alt mr-1" aria-hidden="true"></i>
+														Time: <strong>[[${contactUs.time}]]</strong>
+													</p>
+													<p>
+														<i class="far fa-calendar-alt mr-1" aria-hidden="true"></i>
+														Total Responds: <strong>[[${contactUs.responses.size()}]]</strong>
+													</p>
+
+
+												</div>
+												<!-- Card content -->
+
+											</div>
+											<!-- Card -->
+
+											<!-- Card -->
+											<div class="card card-cascade narrower">
+
+												<!-- Card image -->
+												<div
+													class="view view-cascade gradient-card-header blue-gradient">
+													<h4 class="font-weight-500 mb-0">Sender Request</h4>
+												</div>
+												<!-- Card image -->
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade">
+													<p>
+														<strong>Subject: </strong><br>[[${contactUs.subject}]]
+													</p>
+													<br>
+													<p>
+														<strong>Message: </strong><br>
+														[[${contactUs.message}]]
+
+													</p>
+												</div>
+												<!-- Card content -->
+
+											</div>
+											<!-- Card -->
+
+										</div>
+										<!-- Grid column -->
+
+									</div>
+									<!-- Grid row -->
+
+								</section>
+								<!-- Section: Create Page -->
+
+
+
+
+							</div>
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 10000;
+
+				var contactUsID = $('#contactUsID').val();
+
+				var successConResAdd = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Response was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addConResErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Response was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var successConResDelete = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+				'role="alert">'
+					+ '<p>'
+					+ '<strong>Success: </strong> Response was deleted successfully.'
+					+ '</p>'
+					+ '<button type="button" class="close" data-dismiss="alert"'+
+					'aria-label="Close">'
+					+ '<span aria-hidden="true">&times;</span>'
+					+ '</button>' + '</div>';
+					
+					var DeleteConResErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Response was not delete.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please try again latter.'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+						
+				function deleteResponse(id) {
+
+					$.ajax({
+
+						url : "/panel/contacts/response/deleteContact",
+						data : {
+							'responseID' : id,
+							'contactUsID' : contactUsID
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+								$('#newDataMessages').append(successConResDelete);
+								listContactResponses();
+							}
+
+							else
+								$('#newDataMessages').append(DeleteConResErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function listContactResponses() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/contacts/contact",
+						data : {
+
+							'contactUsID' : contactUsID
+
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function AddResponse() {
+
+					var message = $('#message').val();
+
+					$.ajax({
+
+						url : "/panel/contacts/contact/addCategory",
+						data : {
+							'message' : message,
+							'contactUsID' : contactUsID
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+								$('#newDataMessages').append(successConResAdd);
+								listContactResponses();
+							}
+
+							else
+								$('#newDataMessages').append(addConResErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout")
+								$('#newDataMessages').append(connectError);
+
+						}
+
+					})
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+								$('#DeleteContact').removeClass(
+										"text-light disabled");
+								$('#DeleteContact').addClass("text-danger");
+							} else {
+								$('#DeleteContact').removeClass("text-danger");
+								$('#DeleteContact').addClass(
+										"text-light disabled");
+							}
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

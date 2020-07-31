@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid card">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="productID: ${notDeleted}">
+									Could not delete product with product ID: <strong>[[${productID}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="productID: ${deletedProducts}">
+									Product with product ID: <strong>[[${productID}]] </strong> was
+									deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] products was
+									deleted successfully.
+								</p>
+								<p th:each="productID: ${deletedProducts}">
+									Product with product ID: <strong>[[${productID}]] </strong> was
+									deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div id="contectChangeArea" class="table-responsive">
+
+							<div class="d-flex justify-content-center buttons-wrapper my-3">
+
+								<button class=" btn btn-rounded btn-sm btn-success"
+									type="button" onclick="listCategoryTools()">
+									<i class="fas fa-sync"></i> Refresh
+								</button>
+
+								<button data-toggle="modal" data-target="#categoryAddModal"
+									data-backdrop="static" data-keyboard="false"
+									class=" btn btn-rounded btn-sm btn-primary" type="button">
+									<i class="fas fa-plus"> </i> &nbsp;New Category
+								</button>
+
+								<button onclick="editCategoryTool()" id="editCategory"
+									class=" btn btn-rounded btn-sm btn-blue-grey" type="button"
+									disabled>
+									<i class="fas fa-pencil-alt mt-0"></i>&nbsp; Edit Category
+								</button>
+
+								<button onclick="deleteCategoryTool()" id="DeleteCategory"
+									class=" btn btn-rounded btn-sm btn-danger" type="button"
+									disabled>
+									<i class="far fa-trash-alt mt-0"></i>&nbsp; Delete
+								</button>
+
+							</div>
+
+							<table th:if="${categories != null}" id="paginationFirstLast"
+								class="table table-hover table-striped text-center" width="100%">
+								<thead>
+									<tr>
+										<th class="th-sm font-weight-bold"></th>
+										<th class="th-lg font-weight-bold">CategoryID</th>
+										<th class="th-sm font-weight-bold">Name</th>
+										<th class="th-sm font-weight-bold">Description</th>
+										<th class="th-sm font-weight-bold">Products</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr th:each="category, status : ${categories}">
+										<td scope="row"><input class="form-check-input"
+											type="checkbox" th:id="${category.categoryID}"
+											th:value="${category.categoryID}" name="type"> <label
+											class="form-check-label label-table"
+											th:for="${category.categoryID}"><strong>[[${status.index + 1}]]</strong></label></td>
+										<td><a class="text-primary font-weight-bold text-nowrap"
+											th:href="@{'/panel/products?categoryID=' + ${category.categoryID} }" target="_blank" >[[${category.categoryID}]]</a></td>
+										<td>[[${category.name}]]</td>
+										<td>[[${category.description}]]</td>
+										<td><a class="text-primary font-weight-bold text-nowrap"
+											th:href="@{'/panel/products?categoryID=' + ${category.categoryID} }" target="_blank" >[[${category.products.size()}]]</a></td>
+									</tr>
+								</tbody>
+							</table>
+
+
+
+
+
+
+
+							<div id="categoryEditModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div class="modal fade" id="categoryEditModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div th:if="${categorySent != null}" class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+
+														<h2 class="h2-responsive product-name">
+
+															<div class="md-form">
+																<input th:value="${categorySent.categoryID}" type="text"
+																	id="categoryID" class="form-control"> <label
+																	class="active" for="categoryID">Category ID</label>
+															</div>
+
+
+
+														</h2>
+
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input th:value="${categorySent.name}" type="text"
+																	id="categoryName" class="form-control"> <label
+																	class="active" for="categoryName">Category Name</label>
+																<input value="${catagory.categoryID}" type="hidden"
+																	id="CatergoryID" class="form-control">
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input th:value="${categorySent.description}"
+																		type="text" id="categoryDescription"
+																		class="form-control"> <label class="active"
+																		for="categoryDescription">Category Description</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="updateCategoryTool()">Update
+																		Category</button>
+																</div>
+															</div>
+														</div>
+														<div id="editFoodError"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+
+
+
+							<div id="categoryAddModalDiv">
+								<!-- Modal: modalQuickView -->
+								<div class="modal fade" id="categoryAddModal" tabindex="-1"
+									role="dialog" aria-labelledby="exampleModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog modal-lg" role="document">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="addCategoryName"
+																	class="form-control"> <label class="active"
+																	for="addCategoryName">Category Name</label>
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="addCategoryDescription"
+																		class="form-control"> <label class="active"
+																		for="addCategoryDescription">Category
+																		Description</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6"></div>
+																<div class="col-md-6"></div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="AddPanelCategoryTool()">Add Category</button>
+																</div>
+															</div>
+
+														</div>
+
+														<div id="addFoodError"></div>
+
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+				var successCatAdd = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Category was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var successCatUpdate = '<div ' +
+						' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+							'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Category was updated successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+								'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addCatErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Category was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var updateCatErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Category was not updated.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function AddPanelCategoryTool() {
+
+					var name = $('#addCategoryName').val();
+					var description = $('#addCategoryDescription').val();
+
+					$.ajax({
+
+						url : "/panel/products/addCategory",
+						data : {
+							'name' : name,
+							'description' : description
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successCatAdd);
+								listCategoryTools();
+							}
+
+							else
+								$('#addFoodError').append(addCatErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#newDataMessages').append(connectError);
+								$('#addFoodError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				function listCategoryTools() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/products/categories",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteCategoryTool() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/products/deleteCategory",
+						data : {
+							'cids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listCategoryTools();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function editCategoryTool() {
+
+					$('#loaderTable').slideDown();
+
+					var id = "";
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						id = $(this).val();
+					});
+
+					console.log(id);
+
+					$.ajax({
+
+						url : "/panel/products/categories",
+						data : {
+							'categoryID' : id
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#categoryEditModalDiv');
+							$('#categoryEditModalDiv').html(result);
+
+							$('#categoryEditModal').modal({
+								backdrop : 'static',
+								keyboard : false
+							});
+
+							$('#loaderTable').fadeOut();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					});
+				};
+
+				function updateCategoryTool() {
+
+					var categoryID = $('#categoryID').val();
+					var name = $('#categoryName').val();
+					var description = $('#categoryDescription').val();
+
+					$.ajax({
+
+						url : "/panel/products/updateCategory",
+						data : {
+							'categoryID' : categoryID,
+							'name' : name,
+							'description' : description
+						},
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successCatUpdate);
+								listCategoryTools();
+							}
+
+							else
+								$('#editFoodError').append(updateCatErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+
+								$('#DeleteCategory').attr('disabled', false);
+								$('#editCategory').attr('disabled', true);
+
+								if (ch_list.length == 1)
+									$('#editCategory').attr('disabled', false);
+
+							}
+
+							else {
+								$('#DeleteCategory').attr('disabled', true);
+								$('#editCategory').attr('disabled', true);
+							}
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Header</title>
+</head>
+<body class="homepage-v1 hidden-sn white-skin animated">
+	<div th:fragment="header">
+		<header>
+
+			<!-- Navbar -->
+			<nav
+				class="navbar fixed-top navbar-expand-lg navbar-light scrolling-navbar white">
+
+				<div class="container">
+
+					<!-- SideNav slide-out button -->
+					<div class="float-left mr-2">
+
+						<a class="button-collapse" href="#" data-activates="slide-out">
+
+							<i class="fas fa-home"></i>
+
+						</a>
+
+					</div>
+
+					<a class="navbar-brand font-weight-bold" href="/"> <strong>Dammika
+							Hotel PVT LTD</strong>
+
+					</a>
+
+
+
+					<button class="navbar-toggler" aria-expanded="false"
+						aria-controls="navbarSupportedContent-4"
+						aria-label="Toggle navigation" type="button"
+						data-target="#navbarSupportedContent-4" data-toggle="collapse">
+
+						<span class="navbar-toggler-icon"></span>
+
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+
+						<ul class="navbar-nav ml-auto">
+
+
+							<li th:if="${#authentication.principal.user.enabled == false}"
+								sec:authorize="isAuthenticated()" class="nav-item dropdown ml-3"><a
+								role="button" data-toggle="modal" data-target="#modalCookie1"
+								class="nav-link  waves-effect waves-light red-text font-weight-bold"
+								href="UserLogOut">Validate User Account </a></li>
+
+
+
+							<li class="nav-item"><a
+								class="nav-link waves-effect waves-light dark-grey-text font-weight-bold"
+								th:href="@{/contact}"> <i class="fas fa-envelope blue-text"></i>
+									Contact <span class="sr-only">(current)</span>
+
+							</a></li>
+
+							<li class="nav-item dropdown ml-3"><a
+								class="nav-link  waves-effect waves-light dark-grey-text font-weight-bold"
+								th:href="@{'/menu'}"> <i class="fas fa-utensils blue-text"></i>
+									Our Menu
+							</a></li>
+
+
+							<li sec:authorize="isAuthenticated()" class="nav-item"><a
+								th:href="@{/user/notifications}" class="nav-link waves-effect">
+									<span id="unreadNotifications" class="badge red"></span> <span
+									class="waves-effect waves-light dark-grey-text font-weight-bold">Notifications</span>
+							</a></li>
+
+							<li sec:authorize="isAuthenticated()" class="nav-item "><a
+								class="nav-link dark-grey-text font-weight-bold waves-effect waves-light"
+								th:href="@{'/user/cart'}"> <span class="badge danger-color"
+									id="cartItemsCount" ></span> <i
+									class="fas fa-shopping-cart blue-text" aria-hidden="true"></i>
+									<span class="clearfix d-none d-sm-inline-block">Cart</span>
+
+							</a></li>
+
+							<li sec:authorize="isAuthenticated()"
+								class="nav-item dropdown ml-3"><a
+								class="nav-link dropdown-toggle waves-effect waves-light dark-grey-text font-weight-bold"
+								id="navbarDropdownMenuLink-4" aria-expanded="false"
+								aria-haspopup="true" data-toggle="dropdown"> <i
+									class="fas fa-user blue-text"></i> <span
+									sec:authentication="principal.user.username"></</span>
+							</a>
+
+								<div class="dropdown-menu dropdown-menu-right dropdown-cyan"
+									aria-labelledby="navbarDropdownMenuLink-4">
+
+									<a class="dropdown-item waves-effect waves-light"
+										th:href="@{'/user/profile'}">My account</a> <a
+										class="dropdown-item waves-effect waves-light"
+										th:href="@{'/logout'}">Log out</a>
+
+								</div></li>
+
+
+
+							<li sec:authorize="isAnonymous()" class="nav-item dropdown ml-3"><a
+								class="nav-link dropdown-toggle waves-effect waves-light dark-grey-text font-weight-bold"
+								id="navbarDropdownMenuLink-4" aria-expanded="false"
+								aria-haspopup="true" data-toggle="dropdown"> <i
+									class="fas fa-user blue-text"></i>Member Area
+							</a>
+
+								<div class="dropdown-menu dropdown-menu-right dropdown-cyan"
+									aria-labelledby="navbarDropdownMenuLink-4">
+
+									<a class="dropdown-item waves-effect waves-light"
+										th:href="@{'/login'}">Login </a> <a
+										class="dropdown-item waves-effect waves-light"
+										th:href="@{'/register'}">Register</a>
+
+								</div></li>
+
+						</ul>
+
+					</div>
+
+				</div>
+
+			</nav>
+			<!-- Navbar -->
+
+		</header>
+
+
+	</div>
+</body>
+
+</html>
+

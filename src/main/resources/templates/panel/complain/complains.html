@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="item: ${notDeleted}">
+									Could not delete Complain with Complain ID: <strong>[[${item}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="item: ${deletedItems}">
+									Complain with Complain ID: <strong>[[${item}]] </strong> was
+									deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] ContactUs was
+									deleted successfully.
+								</p>
+								<p th:each="item: ${deletedItems}">
+									Complain with Complain ID: <strong>[[${item}]] </strong> was
+									deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div id="contectChangeArea" class="">
+
+
+
+
+							<!-- Editable table -->
+							<div th:if="${complains != null}"
+								class="card table-responsive-md">
+								<h3
+									class="card-header  bg-success text-white text-center font-weight-bold text-uppercase py-4">Data
+									table - Customer Complains</h3>
+								<div class="card-body">
+									<div id="" class="">
+										<span class="table-add float-right mb-3 mr-2"><a
+											onclick="deleteComplains()" class="disabled text-light"
+											id="DeleteContact"><i class="fas fa-trash fa-2x"
+												aria-hidden="true"></i></a></span> <span
+											class="table-add float-left mb-3 mr-2"><a
+											onclick="listComplsins()" class="text-info"><i
+												class="fas fa-sync fa-2x" aria-hidden="true"></i></a></span>
+										<table id="paginationFirstLast"
+											class="table table-bordered table-hover table-responsive  text-center">
+											<thead>
+												<tr>
+													<th class="">#</th>
+													<th class=" font-weight-bold text-nowrap">Respond Now</th>
+													<th class=" font-weight-bold text-nowrap">Complain ID</th>
+													<th class=" font-weight-bold text-nowrap">Subject</th>
+													<th class=" font-weight-bold text-nowrap">User name</th>
+													<th class=" font-weight-bold text-nowrap">Email</th>
+													<th class=" font-weight-bold text-nowrap">Phone</th>
+													<th class=" font-weight-bold text-nowrap">Placed Time</th>
+													<th class=" font-weight-bold text-nowrap">Total
+														Responds</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="complain, status : ${complains}">
+													<td scope="row" class="text-nowrap font-weight-bold"><input
+														class="form-check-input" type="checkbox"
+														th:id="${complain.id}" th:value="${complain.id}"
+														name="type"> <label
+														class="form-check-label label-table"
+														th:for="${complain.id}">[[${status.index + 1}]]</label></td>
+													<td class=""><a
+														th:href="@{'/panel/complains/complain?ComplainID=' + ${complain.id}}"
+														target="_blank" class="btn btn-sm btn-primary my-0">Respond</a></td>
+													<td class="text-nowrap">[[${complain.id}]]</td>
+													<td class="text-nowrap">[[${complain.subject}]]</td>
+													<td class="text-nowrap">[[${complain.user.username}]]</td>
+													<td class="text-nowrap">[[${complain.user.email}]]</td>
+													<td class="text-nowrap">[[${complain.user.phone}]]</td>
+													<td class="text-nowrap">[[${complain.time}]]</td>
+													<td class="text-nowrap">[[${complain.responses.size()}]]</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function deleteComplains() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/complains/deletecomplain",
+						data : {
+							'cids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listComplsins();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function listComplsins() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/complains",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+								$('#DeleteContact').removeClass(
+										"text-light disabled");
+								$('#DeleteContact').addClass("text-danger");
+							} else {
+								$('#DeleteContact').removeClass("text-danger");
+								$('#DeleteContact').addClass(
+										"text-light disabled");
+							}
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

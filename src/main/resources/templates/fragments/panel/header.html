@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Header panel</title>
+<script th:replace="fragments/panel/scripts-common :: scripts"></script>
+</head>
+<body class="homepage-v1 hidden-sn white-skin animated">
+	<div th:fragment="header">
+
+
+		<header id="headerRefresh22">
+
+			<!-- Sidebar navigation -->
+			<div id="slide-out" class="side-nav sn-bg-4 fixed"
+				style="transform: translateX(0px);">
+				<ul class="custom-scrollbar ps ps--active-x">
+
+					<!-- Logo -->
+					<li class="logo-sn waves-effect py-3">
+						<div class="text-center">
+							<a href="#" class="pl-0"><img
+								th:src="@{/Design/img/logo3.png}"></a>
+						</div>
+					</li>
+
+					<!-- Search Form -->
+					<li>
+						<form class="search-form" role="search">
+							<div class="md-form mt-0 waves-light waves-effect waves-light">
+								<input type="text" class="form-control py-2"
+									placeholder="Search">
+							</div>
+						</form>
+					</li>
+
+					<!-- Side navigation links -->
+					<li>
+						<ul class="collapsible collapsible-accordion">
+
+							<li><a th:href="@{/panel}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-gem"></i>Administrative Dashboard</a></li>
+
+							<li><a onclick="listAllAboutUs()"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-code"></i>About us</a></li>
+
+							<li><a onclick="listAllDeveloper()"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fab fa-codepen"></i>Developer</a></li>
+
+							<li><a th:href="@{/panel/user/profile}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-user"></i>Profile</a></li>
+
+							<li><a th:href="@{/panel/orders-analysis}"
+								class="collapsible-header waves-effect"><i
+									class="fab fa-jedi-order"></i>Orders Summary</a></li>
+
+							<li><a th:href="@{/panel/product-analysis}"
+								class="collapsible-header waves-effect"><i
+									class="fas fa-chart-line"></i>Product Analysis</a></li>
+
+							<li><a th:href="@{/panel/purchase-analysis}"
+								class="collapsible-header waves-effect"><i
+									class="far fa-credit-card"></i>Purchases Analysis</a></li>
+
+							<li><a th:href="@{/panel/roles}"
+								class="collapsible-header waves-effect"><i
+									class="fas fa-lock"></i>System Role Management</a></li>
+
+							<li><a th:href="@{/panel/products/categories}"
+								class="collapsible-header waves-effect"><i
+									class="fas fa-certificate"></i>Category Management</a></li>
+
+							<li><a class="collapsible-header waves-effect arrow-r">
+									<i class="w-fa fas fa-th"></i>Product Management<i
+									class="fas fa-angle-down rotate-icon"></i>
+							</a>
+								<div class="collapsible-body">
+									<ul>
+
+										<li><a th:href="@{/panel/products}" class="waves-effect">All
+												Products</a></li>
+
+										<li th:each="category : ${categories}"><a
+											th:href="@{'/panel/products?categoryID=' + ${category.categoryID}}"
+											class="waves-effect">[[${category.name}]]</a></li>
+
+									</ul>
+								</div></li>
+
+							<li><a class="collapsible-header waves-effect arrow-r">
+									<i class="w-fa fas fa-users-cog"></i>User Management<i
+									class="fas fa-angle-down rotate-icon"></i>
+							</a>
+								<div class="collapsible-body">
+									<ul>
+
+										<li th:each="role : ${roles}"><a
+											th:href="@{'/panel/accounts?roleID=' + ${role.roleID}}"
+											class="waves-effect">[[${role.name}]]</a></li>
+
+
+									</ul>
+								</div></li>
+							<!-- Simple link -->
+							<li><a th:href="@{/panel/delivery/fees}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-shuttle-van"></i>Delivery Fee Calculator</a></li>
+							<li><a th:href="@{/panel/orders}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-utensils"></i>Order Management</a></li>
+
+							<li><a th:href="@{/panel/feedbacks}"
+								class="collapsible-header waves-effect"><i
+									class="fas fa-comments"></i>Feedbacks Management</a></li>
+
+							<li><a th:href="@{/panel/contacts}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-comment-alt"></i>Support Management</a></li>
+
+							<li><a th:href="@{/panel/complains}"
+								class="collapsible-header waves-effect"><i
+									class="w-fa fas fa-envelope-open"></i>Complains Management</a></li>
+
+							<li><a th:href="@{/panel/mails}"
+								class="collapsible-header waves-effect"><i class="fas fa-at"></i>MailBox
+									Management</a></li>
+
+						</ul>
+					</li>
+					<!-- Side navigation links -->
+
+
+				</ul>
+				<div class="sidenav-bg mask-strong"></div>
+			</div>
+			<!-- Sidebar navigation -->
+
+			<!-- Navbar -->
+			<nav
+				class="navbar fixed-top navbar-expand-lg scrolling-navbar double-nav">
+
+				<!-- SideNav slide-out button -->
+				<div class="float-left">
+					<a href="#" data-activates="slide-out" class="button-collapse"><i
+						class="fas fa-bars"></i></a>
+				</div>
+
+				<!-- Breadcrumb -->
+				<div class="breadcrumb-dn mr-auto">
+					<p>Dashboard v.11.6</p>
+				</div>
+
+				<div class="d-flex change-mode">
+
+					<div class="ml-auto mb-0 mr-3 change-mode-wrapper">
+						<button
+							class="btn btn-outline-black btn-sm waves-effect waves-light"
+							id="dark-mode">Dark Mode LITE</button>
+					</div>
+
+					<!-- Navbar links -->
+					<ul class="nav navbar-nav nav-flex-icons ml-auto">
+
+						<!-- Dropdown -->
+						<li class="nav-item"><a th:href="@{/panel/notifications}"
+							class="nav-link waves-effect"> <span id="unreadNotifications"
+								class="badge red"></span> <i class="fas fa-bell"></i> <span
+								class="clearfix d-none d-sm-inline-block">Notifications</span></a></li>
+
+						<li class="nav-item"><a onclick="notificationListPanel()"
+							class="nav-link waves-effect"><i class="fas fa-envelope"></i>
+								<span class="clearfix d-none d-sm-inline-block">Contact</span></a></li>
+						<li class="nav-item"><a class="nav-link waves-effect"><i
+								class="far fa-comments"></i> <span
+								class="clearfix d-none d-sm-inline-block">Support</span></a></li>
+						<li sec:authorize="isAuthenticated()" class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle waves-effect" href="#"
+							id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false"> <i class="fas fa-user"></i> <span
+								class="clearfix d-none d-sm-inline-block"
+								sec:authentication="principal.user.username"></span>
+						</a>
+							<div class="dropdown-menu dropdown-menu-right"
+								aria-labelledby="userDropdown">
+								<a class="dropdown-item waves-effect waves-light"
+									th:href="@{'/logout'}">Log Out</a> <a
+									class="dropdown-item waves-effect waves-light"
+									th:href="@{'/user/profile'}">My account</a>
+							</div></li>
+
+					</ul>
+					<!-- Navbar links -->
+
+				</div>
+
+			</nav>
+			<!-- Navbar -->
+
+		</header>
+
+
+
+
+	</div>
+</body>
+
+</html>
+

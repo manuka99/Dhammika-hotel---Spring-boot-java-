@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated">
+
+	<div layout:fragment="content">
+		<div id="userProfileInfo" class="view intro-2"
+			style="background: #bdc3c7; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */; background-repeat: no-repeat; background-size: cover; background-position: center center;">
+			<div style="height: 80px"></div>
+			<div aria-busy="true">
+				<div class="container mt-5">
+
+
+					<!--Section: Content-->
+					<section class="dark-grey-text">
+
+
+						<div class="card">
+							<div class="card-body">
+
+								<!--Grid row-->
+								<div class="row">
+
+									<!--Grid column-->
+									<div class="col-lg-12">
+
+										<!-- Pills navs -->
+										<ul
+											class="nav md-pills nav-justified pills-primary font-weight-bold">
+
+											<li class="nav-item"><a class="nav-link"
+												data-toggle="tab" href="#" role="tab" id="myProfile"
+												aria-selected="true">1. User Profile</a></li>
+
+											<li class="nav-item"><a class="nav-link active"
+												data-toggle="tab" id="myOrders" href="#" role="tab"
+												aria-selected="false">2. Orders</a></li>
+
+											<li class="nav-item"><a class="nav-link "
+												data-toggle="tab" id="mySecurity" href="#" role="tab"
+												aria-selected="false">3. Security</a></li>
+
+											<li class="nav-item"><a class="nav-link"
+												data-toggle="tab" id="myComplains" href="#" role="tab"
+												aria-selected="false">4. User Complains</a></li>
+
+										</ul>
+
+										<!-- Pills panels -->
+										<hr class="mb-4">
+										<div id="ContentChange">
+
+											<div class="">
+
+
+
+												<!-- Card -->
+
+												<div class="wish-list mb-4">
+													<div class="skin-light card-body">
+
+
+
+														<h3 class="mb-4">
+															<span class="text-muted">Order ID</span> <strong>#[[${order.orderID}]]</strong>
+															<a class="btn btn-lg ml-4 btn-danger"
+																th:href="@{'/user/cancelOrder?orderID=' + ${order.orderID}}">Cancel
+																Order</a>
+														</h3>
+
+														<hr class="mb-4">
+														<div class="row mb-4"
+															th:each="order_Item : ${order.order_Items}">
+															<div class="col-md-5 col-lg-3 col-xl-3">
+																<div
+																	class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+																	<img class="img-fluid w-100"
+																		th:src="|data:image/png;base64,${order_Item.product.image64String}|"
+																		style="width: 150px; height: 150px; display: block; margin: auto;"
+																		alt="Sample"> <a href="#!">
+																		<div class="mask waves-effect waves-light">
+																			<img class="img-fluid w-100"
+																				th:src="|data:image/png;base64,${order_Item.product.image64String}|"
+																				style="width: 150px; height: 150px; display: block; margin: auto;">
+																			<div
+																				class="mask rgba-black-slight waves-effect waves-light"></div>
+																		</div>
+																	</a>
+																</div>
+															</div>
+															<div class="col-md-7 col-lg-9 col-xl-9">
+																<div>
+																	<div class="d-flex justify-content-between">
+																		<div>
+																			<h5>[[${order_Item.product.name}]]</h5>
+																			<p class="mb-3 text-muted text-uppercase small">[[${order_Item.product.portion}]]</p>
+																			<p class="mb-2 text-muted text-uppercase small">[[${order_Item.product.description}]]</p>
+																		</div>
+
+																		<div>
+
+																			<div class="mb-0 w-100 align-items-right">
+																				<div class="md-form  mb-0">
+																					<span id="discount-code"
+																						class="btn btn-success btn-sm font-weight-light"><strong>QTY
+																							[[${order_Item.quantity}]]</strong></span>
+
+																				</div>
+
+																			</div>
+																		</div>
+																	</div>
+																	<div
+																		class="d-flex justify-content-between align-items-center">
+																		<div>
+
+																			<div class="mb-0 w-100"></div>
+																		</div>
+																	</div>
+																</div>
+																<hr class="mb-4">
+															</div>
+
+														</div>
+														<hr class="mb-4">
+
+														</c:forEach>
+
+														<p class="text-primary mb-0">
+															<i class="fas fa-info-circle mr-1"></i>If you have any
+															issue regarding the order please ring to our hotline or
+															drop us a mail. Thank You!
+														</p>
+
+													</div>
+												</div>
+												<!-- Card -->
+
+
+
+
+												<!-- Card -->
+												<div class="container-fluid mb-4">
+													<div class="card-body">
+
+														<h5 class="mb-3">Delivery Summary</h5>
+
+														<ul class="list-group list-group-flush">
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Order Placed Date <span>[[${order.placedDate}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Expected Delivery Date <span>[[${order.expectedDate}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Shipping Address<span>[[${order.shippingAddress}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+																<div>
+																	<strong>Delivered Date</strong> <strong> </strong>
+																</div> <span><strong>[[${order.deliveredDate}]]</strong></span>
+
+															</li>
+														</ul>
+													</div>
+												</div>
+												<div class="container-fluid mb-4">
+													<div class="card-body">
+
+														<h5 class="mb-3">CheckOut Summary</h5>
+
+														<ul class="list-group list-group-flush">
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Value of the Products<span>[[${order.payment.currency}]] [[${order.payment.subTotal}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Tax and Vat <span>[[${order.payment.currency}]] [[${order.payment.tax}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Shipping Fee<span>[[${order.payment.currency}]] [[${order.payment.shippingFee}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+																<div>
+																	<strong>Total value of the order</strong> <strong>
+																		<p class="mb-0">(including VAT, TAX and Shipping)</p>
+																	</strong>
+																</div> <span><strong>[[${order.payment.currency}]] [[${order.payment.total}]]</strong></span>
+
+															</li>
+														</ul>
+													</div>
+												</div>
+												<div class="container-fluid mb-4">
+													<div class="card-body">
+														<h5 class="mb-3">Payment Summary</h5>
+
+														<ul class="list-group list-group-flush">
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Payment Mode <span>[[${order.orderType}]]</span>
+															</li>
+															<li
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Payment Status <span>[[${order.payment.paymentStatus}]]</span>
+															</li>
+
+															<li th:if="${order.orderType != 'COD' }"
+																class="list-group-item d-flex justify-content-between align-items-center px-0">
+																Payment Amount<span>[[${order.payment.currency}]] [[${order.payment.total}]]</span>
+															</li>
+
+															<li th:if="${order.orderType != 'COD' }"
+																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+																<div>
+																	<strong>Transaction ID</strong> <strong> </strong>
+																</div> <span><strong>[[${order.payment.transactionID}]]</strong></span>
+
+															</li>
+
+
+															<li th:if="${order.orderType == 'COD' }"
+																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+																<div>
+																	<strong>Total Amount Payable</strong> <strong>
+																	</strong>
+																</div> <span><strong>[[${order.payment.currency}]] [[${order.payment.total}]]</strong></span>
+
+															</li>
+
+															<p th:if="${order.orderType == 'COD' }"
+																class="text-primary mb-0">
+																<i class="fas fa-info-circle mr-1"></i>Please do keep
+																the above amount ready when we reach you. Thank You!
+															</p>
+
+
+														</ul>
+
+													</div>
+												</div>
+												<!-- Card -->
+
+
+											</div>
+											<!-- Pills panels -->
+
+
+
+
+										</div>
+										<!--Grid column-->
+
+										<!--Grid column-->
+
+										<!--Grid column-->
+
+									</div>
+									<!--Grid row-->
+
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--Section: Content-->
+
+
+				</div>
+			</div>
+
+			<div style="height: 60px"></div>
+		</div>
+
+	</div>
+
+</body>
+</html>

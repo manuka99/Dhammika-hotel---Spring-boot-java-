@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid card">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="productID: ${notDeleted}">
+									Could not delete product with product ID: <strong>[[${productID}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="productID: ${deletedProducts}">
+									Product with product ID: <strong>[[${productID}]] </strong> was
+									deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] products was
+									deleted successfully.
+								</p>
+								<p th:each="productID: ${deletedProducts}">
+									Product with product ID: <strong>[[${productID}]] </strong> was
+									deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div th:if="${category != null || products != null}"
+							id="contectChangeArea" class="">
+
+							<input th:if="${category != null}" type="hidden" id="catID"
+								th:value="${category.categoryID}">
+							<div class="d-flex justify-content-center buttons-wrapper my-3">
+
+								<button class=" btn btn-rounded btn-sm btn-success"
+									type="button" onclick="listFoodByCategory()">
+									<i class="fas fa-sync"></i> Refresh
+								</button>
+
+								<button data-toggle="modal" data-target="#productAddModal"
+									data-backdrop="static" data-keyboard="false"
+									class=" btn btn-rounded btn-sm btn-primary" type="button">
+									<i class="fas fa-plus"> </i> New Product
+								</button>
+
+								<button id="DeleteProduct"
+									class=" btn btn-rounded btn-sm btn-danger"
+									onclick="deleteProduct()" type="button" disabled>Delete</button>
+
+							</div>
+
+
+							<table th:if="${products != null}" id="paginationFirstLast"
+								class="table table-hover text-white table-responsive text-center">
+								<thead class="bg-ba68c8 purple lighten-2">
+									<tr>
+										<th class="th-sm">#</th>
+										<th class="th-sm">Image</th>
+										<th class="th-lg">ProductID</th>
+										<th class="th-sm">Name</th>
+										<th class="th-sm">Portion</th>
+										<th class="th-sm">Price</th>
+										<th class="th-sm">Tax</th>
+										<th class="th-sm">Availability</th>
+										<th class="th-sm">Feedbacks</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr th:each="product, status: ${products}">
+										<td scope="row"><input class="form-check-input"
+											type="checkbox" th:id="${product.productID}"
+											th:value="${product.productID}" name="type"> <label
+											class="form-check-label label-table"
+											th:for="${product.productID}"><strong>[[${status.index
+													+ 1}]]</strong></label></td>
+										<th><img
+											th:src="|data:image/png;base64,${product.image64String}|"
+											width="50" height="50" /></th>
+										<th class="th-lg"><a class="text-primary font-weight-bold text-nowrap"
+											th:href="@{'/panel/products/product?productID=' + ${product.productID}}"
+											target="_blanck">[[${product.productID}]]</a></th>
+										<td>[[${product.name}]]</td>
+										<td>[[${product.portion}]]</td>
+										<td>[[${product.price}]]</td>
+										<td>[[${product.tax}]]</td>
+										<td>[[${product.active}]]</td>
+										<td>[[${product.feedbacks.size()}]]</td>
+									</tr>
+								</tbody>
+								<tfoot class="bg42a5f5 blue lighten-1">
+									<tr>
+										<th class="th-sm">#</th>
+										<th class="th-sm">Image</th>
+										<th class="th-lg">ProductID</th>
+										<th class="th-sm">Name</th>
+										<th class="th-sm">Portion</th>
+										<th class="th-sm">Price</th>
+										<th class="th-sm">Tax</th>
+										<th class="th-sm">Availability</th>
+										<th class="th-sm">Feedbacks</th>
+									</tr>
+								</tfoot>
+							</table>
+
+
+
+
+							<table th:if="${category != null}" id="paginationFirstLast"
+								class="table table-hover table-responsive text-center"
+								width="100%">
+								<thead class=" light-blue darken-2 white-text">
+									<tr>
+										<th class="th-sm">#</th>
+										<th class="th-sm">Image</th>
+										<th class="th-lg">ProductID</th>
+										<th class="th-sm">Name</th>
+										<th class="th-sm">Portion</th>
+										<th class="th-sm">Price</th>
+										<th class="th-sm">Tax</th>
+										<th class="th-sm">Availability</th>
+										<th class="th-sm">Feedbacks</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr th:each="product, status: ${category.products}">
+										<td scope="row"><input class="form-check-input"
+											type="checkbox" th:id="${product.productID}"
+											th:value="${product.productID}" name="type"> <label
+											class="form-check-label label-table"
+											th:for="${product.productID}"><strong>[[${status.index
+													+ 1}]]</strong></label></td>
+										<th><img
+											th:src="|data:image/png;base64,${product.image64String}|"
+											width="50" height="50" /></th>
+										<th class="th-lg"><a class="text-primary font-weight-bold text-nowrap"
+											th:href="@{'/panel/products/product?productID=' + ${product.productID}}"
+											target="blanck_">[[${product.productID}]]</a></th>
+										<td>[[${product.name}]]</td>
+										<td>[[${product.portion}]]</td>
+										<td>[[${product.price}]]</td>
+										<td>[[${product.tax}]]</td>
+										<td>[[${product.active}]]</td>
+										<td>[[${product.feedbacks.size()}]]</td>
+									</tr>
+								</tbody>
+							</table>
+
+
+
+							<!-- Modal: modalQuickView -->
+							<div id="productAddModalDiv">
+								<div class="modal fade" id="productAddModal">
+									<div class="modal-dialog modal-lg" role="">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active">
+
+																	<div class="file-upload-wrapper">
+																		<input type="file" id="addNewproductImage"
+																			class="file-upload" data-height="400" />
+																	</div>
+
+																	<div id="progress"></div>
+																</div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+
+
+
+															<div class="md-form">
+																<input type="text" id="AddNewproductName"
+																	class="form-control"> <label class="active"
+																	for="AddNewproductName">Product Name</label>
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="AddNewproductPrice"
+																		class="form-control"> <label class="active"
+																		for="AddNewproductPrice">Product Price</label>
+																</div>
+
+
+															</span>
+														</h4>
+
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="AddNewproductDescription"
+																	class="form-control"> <label class="active"
+																	for="AddNewproductDescription">Product
+																	Description</label>
+															</div>
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="AddNewproductPortion"
+																		class="form-control"> <label class="active"
+																		for="AddNewproductPortion">Product Portion</label>
+																</div>
+
+
+															</span>
+														</h4>
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="AddNewproductTax"
+																	class="form-control"> <label class="active"
+																	for="AddNewproductTax">Product Tax</label>
+															</div>
+
+
+
+														</h2>
+
+														<!-- Add to Cart -->
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6">
+																	<h5>Product Visibility:</h5>
+																	<div id="addNewProductOption">
+																		<select id="addNewProductStatusSelect"
+																			class="browser-default custom-select">
+																			<option>Select Status..</option>
+																			<option value="true">Active</option>
+																			<option value="false">Hidden</option>
+																		</select>
+																	</div>
+																</div>
+																<div class="col-md-6">
+
+																	<h5>Product Category:</h5>
+																	<div id="addNewCategoryOption">
+																		<select id="AddNewProductCategorySelect"
+																			class="browser-default custom-select">
+																			<option>Select Category..</option>
+
+																			<option th:each="categoryList : ${categories}"
+																				th:value="${categoryList.categoryID}">[[${categoryList.name}]]</option>
+
+																		</select>
+																	</div>
+
+																</div>
+															</div>
+															<div class="row">
+																<div class="text-center">
+																	<hr class="mb-4">
+																	<button type="button" id="hidden-cancel"
+																		class="btn btn-secondary" data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="addNewProductDetails()">Add new
+																		product</button>
+																</div>
+															</div>
+
+
+
+
+														</div>
+
+														<div id="addFoodError"></div>
+														<!-- /.Add to Cart -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var successAddProduct = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Product was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addFoodErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Product was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a product .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var catergoryID = $('#catID').val();
+
+				function listFoodByCategory() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/products",
+						data : {
+							'categoryID' : catergoryID
+
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#newDataMessages').append(connectError);
+								$('#loaderTable').slideUp();
+							}
+						}
+
+					})
+
+				};
+
+				function addNewProductDetails() {
+
+					var name = $('#AddNewproductName').val();
+					var description = $('#AddNewproductDescription').val();
+					var portion = $('#AddNewproductPortion').val();
+					var price = $('#AddNewproductPrice').val();
+					var tax = $('#AddNewproductTax').val();
+					var CatergoryID = $(
+							"#AddNewProductCategorySelect option:selected")
+							.val();
+					var selectedOption = $(
+							"#addNewProductStatusSelect option:selected").val();
+
+					console.log(name);
+					console.log(description);
+					console.log(portion);
+					console.log(price);
+					console.log(tax);
+					console.log(CatergoryID);
+					console.log(selectedOption);
+
+					var fd = new FormData();
+					fd.append('name', name);
+					fd.append('description', description);
+					fd.append('portion', portion);
+					fd.append('price', price);
+					fd.append('tax', tax);
+					fd.append('active', selectedOption);
+					fd.append('categoryID', CatergoryID);
+
+					var fileDatae = document
+							.querySelector('#addNewproductImage');
+					fd.append('image', fileDatae.files[0])
+
+					var request = new XMLHttpRequest();
+
+					request.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							console.log(this.responseText);
+
+							if (this.responseText === "true") {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successAddProduct);
+								listFoodByCategory();
+							}
+
+							else {
+								$('#addFoodError').append(addFoodErrorMsg);
+							}
+
+							// document.getElementById("demo").innerHTML = this.responseText;
+						}
+
+						//validation failed not logged in
+						else if (this.status == 302) {
+
+							$('.modal').hide();
+							$('.modal-backdrop').remove();
+
+						}
+					};
+
+					request.upload.addEventListener('progress', function(e) {
+
+						document.querySelector('#progress').innerHTML = Math
+								.round(e.loaded / e.total * 100)
+								+ '%';
+
+					}, false);
+
+					console.log('asasas');
+					request.open('POST', '/panel/products/product/addProduct',
+							true);
+
+					request.timeout = 2000; // Set timeout to 4 seconds (4000 milliseconds)
+					request.ontimeout = function() {
+						$('#addFoodError').append(connectError);
+					}
+
+					request.send(fd);
+
+				};
+
+				function deleteProduct() {
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/products/deleteProducts",
+						data : {
+							'fids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+
+							//jQuery("#messages").load(
+							//location.href + " #messages > *");
+							listFoodByCategory();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#newDataMessages').append(connectError);
+								$('#loaderTable').slideUp();
+							}
+						}
+
+					})
+
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0)
+								$('#DeleteProduct').attr('disabled', false);
+
+							else
+								$('#DeleteProduct').attr('disabled', true);
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

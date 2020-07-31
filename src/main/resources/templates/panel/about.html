@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+
+</head>
+
+
+<body class="fixed-sn white-skin" id="body">
+
+	<div layout:fragment="content">
+
+
+
+
+		<main>
+			<div class="container-fluid">
+
+				<!-- Section: Basic examples -->
+				<section>
+
+					<div id="contectChangeArea">
+
+						<div class="container-fluid card">
+
+							<!--Section: Content-->
+							<section class="mx-md-5 dark-grey-text">
+
+								<!-- Grid row -->
+								<div class="row">
+
+									<!-- Grid column -->
+									<div class="col-md-12">
+
+										<!-- Card -->
+										<div class="card card-cascade wider reverse">
+
+											<!-- Card image -->
+											<div class="view view-cascade overlay">
+												<img class="card-img-top" th:src="@{/Design/img/aboutMe.jpg}"
+													alt="Sample image"> <a href="#!">
+													<div class="mask rgba-white-slight"></div>
+												</a>
+											</div>
+
+											<!-- Card content -->
+											<div class="card-body card-body-cascade text-center">
+
+												<!-- Title -->
+												<h3 class="font-weight-bold">
+													<a>Dhammika Hotel Restaurant And Management</a>
+												</h3>
+												<!-- Data -->
+												<p>
+													Developed by <a><strong>Manuka Yasas</strong></a>,
+													09/05/2020
+												</p>
+												<!-- Social shares -->
+												<div class="social-counters">
+													<!-- Facebook -->
+													<a class="btn btn-fb"> <i
+														class="fab fa-facebook-f pr-2"></i> <span
+														class="clearfix d-none d-md-inline-block">Facebook</span>
+													</a> <span class="counter">46</span>
+													<!-- Twitter -->
+													<a class="btn btn-tw"> <i class="fab fa-twitter pr-2"></i>
+														<span class="clearfix d-none d-md-inline-block">Twitter</span>
+													</a> <span class="counter">22</span>
+													<!-- Google+ -->
+													<a class="btn btn-gplus"> <i
+														class="fab fa-google-plus-g pr-2"></i> <span
+														class="clearfix d-none d-md-inline-block">Google+</span>
+													</a> <span class="counter">31</span>
+													<!-- Comments -->
+												</div>
+												<!-- Social shares -->
+
+											</div>
+											<!-- Card content -->
+
+										</div>
+										<!-- Card -->
+
+										<!-- Excerpt -->
+										<div class="mt-5">
+
+											<p>We were able to develope a successfull web aplication
+												to manage all your vehicle services efficiently. This will
+												let users to service the vehicle, manage fuel and to login
+												and experience our attractive all in one packages. Fuel
+												Management Login/Register/Admin Panel Attractive Pages Using
+												Bootstrap 4.0 It took a Considerable amount of time to
+												develope this project so please be kind enough to report us
+												a bug if found and stay with us for more funtionalities.</p>
+
+											<p>This system is mainly used for manage your vehicle
+												services in a efficent way by using a web application.
+												Registering to the system is very easy you have to click on
+												the register button and then fill out the form it is that
+												simple. We usually update and add more packages to our
+												system currently there is no such period to the offers.
+												Service duration depends on the sservice option you select
+												at most full service would take about 20 minutes while
+												checkup service would take around 10 minutes. During a check
+												up we look for the faults in your vehicle such as
+												insufficient brake oil, coolents, engine troubles, heating
+												issues and many more. We do take care of our users privacy
+												and we do not save any credit card credentials in our
+												database only user's credit card number and his name would
+												be saved.</p>
+
+										</div>
+
+									</div>
+									<!-- Grid column -->
+
+								</div>
+								<!-- Grid row -->
+
+								<hr class="mb-5 mt-4">
+
+							</section>
+							<!--Section: Content-->
+
+
+						</div>
+
+						<div class="card container z-depth-1 my-5 py-5 px-4 px-lg-0">
+
+							<!-- Section -->
+							<section>
+
+								<style>
+.timeline {
+	position: relative;
+	list-style: none;
+	padding: 1rem 0;
+	margin: 0;
+}
+
+.timeline::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	bottom: 0;
+	width: 2px;
+	margin-left: -1px;
+	background-color: #50a1ff;
+}
+
+.timeline-element {
+	position: relative;
+	width: 50%;
+	padding: 1rem 0;
+	padding-right: 2.5rem;
+	text-align: right;
+}
+
+.timeline-element::before {
+	content: '';
+	position: absolute;
+	right: -8px;
+	top: 1.35rem;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 2px solid #50a1ff;
+	background-color: #fff;
+}
+
+.timeline-element:nth-child(even)::before {
+	right: auto;
+	left: -8px;
+}
+
+.timeline-element:nth-child(even) {
+	margin-left: 50%;
+	padding-left: 2.5rem;
+	padding-right: 0;
+	text-align: left;
+}
+
+@media ( max-width : 767.98px) {
+	.timeline::before {
+		left: 8px;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element {
+		width: 100%;
+		text-align: left;
+		padding-left: 2.5rem;
+		padding-right: 0;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element::before {
+		top: 1.25rem;
+		left: 1px;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element:nth-child(even) {
+		margin-left: 0rem;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element {
+		width: 100%;
+		text-align: left;
+		padding-left: 2.5rem;
+		padding-right: 0;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element:nth-child(even)::before {
+		left: 1px;
+	}
+}
+
+@media ( max-width : 767.98px) {
+	.timeline-element::before {
+		top: 1.25rem;
+	}
+}
+</style>
+
+								<h3 class="font-weight-bold text-center dark-grey-text pb-2">About
+									the Project</h3>
+								<hr class="w-header my-4">
+								<p class="lead text-center text-muted pt-2 mb-5">This System
+									is Under Development and Based on Java</p>
+
+								<div class="row">
+									<div class="col-lg-8 mx-auto">
+
+										<ol class="timeline">
+											<li class="timeline-element">
+												<h5 class="font-weight-bold dark-grey-text mb-3">Started
+													working on the project</h5>
+												<p class="grey-text font-small">
+													<time datetime="2017-02-08">17 April 2020</time>
+												</p>
+												<p class="text-muted">As Jsp/Servlets was a new subject
+													area, I first studied more and used tutorials to gain
+													knowledge. Youtube And Java Reference Edition Helped me a
+													lot!.</p>
+											</li>
+
+											<li class="timeline-element">
+												<h5 class="font-weight-bold dark-grey-text mb-3">Completed
+													the Fuel Service Functionality</h5>
+												<p class="grey-text font-small">
+													<time datetime="2017-08-17">21 April 2020</time>
+												</p>
+												<p>
+													<img class="img-fluid z-depth-1-half rounded"
+														src="https://mdbootstrap.com/img/Photos/Horizontal/Work/12-col/img%20(6).jpg"
+														alt="...">
+												</p>
+												<p class="text-muted">We had Perform Insert, Update,
+													Delete and retrieve according to our guild lines. So i
+													Selected the Fuel Service Which has all the above
+													operations. However within 4 days i completed it without
+													Styling.</p>
+											</li>
+
+											<li class="timeline-element">
+												<h5 class="font-weight-bold dark-grey-text mb-3">Completed
+													The Index Page</h5>
+												<p class="grey-text font-small">
+													<time datetime="2018-03-26">27 April 2020</time>
+												</p>
+												<p class="text-muted">By Using Bootstrap 4.0 i completed
+													a beautiful web page for the home. Also i designed the
+													pages for the Fuel Service.</p>
+											</li>
+
+											<li class="timeline-element">
+												<h5 class="font-weight-bold dark-grey-text mb-3">Completed
+													the Admin Panel And the Project</h5>
+												<p class="grey-text font-small">
+													<time datetime="2018-04-14">09 May 2020</time>
+												</p>
+												<p class="text-muted">Since our submission dates
+													extended. I added many more functionalities to the system
+													and beautiful Payment gateway with front end validations.
+													Also I created a admin panel with all Crud Operations.</p>
+											</li>
+										</ol>
+
+									</div>
+								</div>
+
+							</section>
+							<!-- Section -->
+
+						</div>
+
+						<div class="card container z-depth-1 my-5">
+
+							<section class="text-center py-5">
+
+								<p class="mb-4 pb-2 lead font-weight-bold">I Guarantee this
+									Project is my own work</p>
+
+								<!-- Logo carousel -->
+								<div id="carouselExampleSlidesOnly" class="carousel slide"
+									data-ride="carousel" data-interval="1800">
+									<div class="carousel-inner">
+										<!-- First slide -->
+										<div class="carousel-item active">
+											<!--Grid row-->
+											<div class="row">
+
+												<!--First column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/5.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/First column-->
+
+												<!--Second column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/7.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Second column-->
+
+												<!--Third column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/6.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Third column-->
+
+												<!--Fourth column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/9.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Fourth column-->
+
+											</div>
+											<!--/Grid row-->
+										</div>
+										<!-- First slide -->
+
+										<!-- Second slide -->
+										<div class="carousel-item">
+											<!--Grid row-->
+											<div class="row">
+
+												<!--First column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/11.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/First column-->
+
+												<!--Second column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/10.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Second column-->
+
+												<!--Third column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/12.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Third column-->
+
+												<!--Fourth column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/13.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Fourth column-->
+
+											</div>
+											<!--/Grid row-->
+										</div>
+										<!-- Second slide -->
+
+										<!-- Third slide -->
+										<div class="carousel-item">
+											<!--Grid row-->
+											<div class="row">
+
+												<!--First column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/1a.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/First column-->
+
+												<!--Second column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/2a.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Second column-->
+
+												<!--Third column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/3a.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Third column-->
+
+												<!--Fourth column-->
+												<div
+													class="col-lg-3 col-md-6 d-flex align-items-center justify-content-center">
+													<img
+														src="https://mdbootstrap.com/img/Photos/Template/4a.png"
+														class="img-fluid px-4" alt="Logo">
+												</div>
+												<!--/Fourth column-->
+
+											</div>
+											<!--/Grid row-->
+										</div>
+										<!-- Third slide -->
+									</div>
+
+								</div>
+								<!-- Logo carousel -->
+
+							</section>
+
+
+						</div>
+					</div>
+				</section>
+			</div>
+
+		</main>
+
+
+
+
+
+
+
+
+	</div>
+
+</body>
+</html>

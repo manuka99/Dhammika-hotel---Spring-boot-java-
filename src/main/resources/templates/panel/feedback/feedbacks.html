@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] was deleted by
+									[[${countSend}]]
+								</p>
+								<p th:each="item: ${notDeleted}">
+									Could not delete Feedback with Feedback ID: <strong>[[${item}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="item: ${deletedItems}">
+									Feedback with Feedback ID: <strong>[[${item}]] </strong> was
+									deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] Feedbacks were
+									deleted successfully.
+								</p>
+								<p th:each="item: ${deletedItems}">
+									Feedback with Feedback ID: <strong>[[${item}]] </strong> was
+									deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+						<div id="contectChangeArea" class="">
+
+							<div th:if="${feedbacks != null}" id="dataTableFood">
+								<!-- Table with panel -->
+								<div class="card card-cascade narrower">
+
+									<!--Card image-->
+									<div
+										class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+										<div>
+											<a type="button" onclick="listAllFeedbacks()"
+												class="btn btn-outline-white material-tooltip-main btn-rounded btn-sm px-2"
+												data-toggle="tooltip" data-placement="bottom"
+												data-original-title="Refresh content"> <i
+												class="fas fa-sync"></i>
+											</a>
+										</div>
+
+										<a href="" class="white-text mx-3">Product Feedbacks </a>
+
+										<div>
+											<button type="button" onclick="deleteFeedbacks()"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="far fa-trash-alt mt-0"></i>
+											</button>
+										</div>
+
+									</div>
+									<!--/Card image-->
+
+									<div class="px-4">
+
+										<div class="table-wrapper">
+											<!--Table-->
+											<div id="adadadaedrervvv" class="">
+												<table id="dtMaterialDesignExample"
+													class="table table-responsive table-hover mb-0">
+
+													<!--Table head-->
+													<thead>
+														<tr>
+															<th class="th-sm text-nowrap"><strong>#</strong></th>
+															<th class="th-sm text-nowrap"><strong>Feedback
+																	ID</strong></th>
+															<th class="th-sm text-nowrap"><strong>Product
+																	Name</strong></th>
+															<th class="th-lg text-nowrap"><strong>User
+																	Name </strong></th>
+															<th class="th-sm text-nowrap"><strong>Comment
+															</strong></th>
+															<th class="th-sm text-nowrap"><strong>Rating
+															</strong></th>
+															<th class="th-sm text-nowrap"><strong>Time
+															</strong></th>
+														</tr>
+													</thead>
+													<!--Table head-->
+
+													<!--Table body-->
+													<tbody>
+														<tr th:each="feedback, status : ${feedbacks}">
+
+															<td scope="row" class="font-weight-bold"><input
+																class="form-check-input" type="checkbox"
+																th:id="${feedback.feedbackID}"
+																th:value="${feedback.feedbackID}" name="type"> <label
+																class="form-check-label label-table"
+																th:for="${feedback.feedbackID}">[[${status.index
+																	+ 1}]]</label></td>
+
+															<th class="th-sm"><span
+																class="text-nowrap text-primary text-uppercase font-weight-bold">[[${feedback.feedbackID}]]</span></th>
+															<td class=" text-nowrap"><a
+																class="text-primary font-weight-bold"
+																th:href="@{'/panel/products/product?productID=' + ${feedback.product.productID}}"
+																target="_blank">[[${feedback.product.name}]] </a></td>
+															<td class=" text-nowrap"><a
+																class="text-primary font-weight-bold"
+																th:href="@{'/panel/accounts/user?userID=' + ${feedback.user.userID}}"
+																target="_blank">[[${feedback.user.username}]]</a></td>
+															<td class=" text-nowrap">[[${feedback.message}]]</td>
+															<td class=" text-nowrap">
+																<ul class="rating mb-0">
+
+																	<th:block
+																		th:each="i: ${#numbers.sequence(1, feedback.rating)}">
+																		<li><i class="fas fa-star fa-sm text-primary"></i></li>
+																	</th:block>
+
+																	<th:block th:if="${feedback.rating != '5'}"
+																		th:each="i: ${#numbers.sequence(feedback.rating, 4)}">
+																		<li><i class="fas fa-star fa-sm grey-text"></i></li>
+																	</th:block>
+																</ul>
+
+															</td>
+															<td class=" text-nowrap"><span class="text-nowrap">[[${feedback.prettyTime}]]</span></td>
+														</tr>
+													</tbody>
+													<!--Table body-->
+												</table>
+												<!--Table-->
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+								<!-- Table with panel -->
+							</div>
+
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 30000;
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function listAllFeedbacks() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/feedbacks",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteFeedbacks() {
+
+					$('#loaderTable').slideDown();
+					
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/feedbacks/deleteFeedback",
+						data : {
+							'fids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listAllFeedbacks();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

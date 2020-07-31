@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+<style type="text/css">/* Chart.js */
+@
+-webkit-keyframes chartjs-render-animation {
+	from {opacity: 0.99
+}
+
+to {
+	opacity: 1
+}
+
+}
+@
+keyframes chartjs-render-animation {
+	from {opacity: 0.99
+}
+
+to {
+	opacity: 1
+}
+
+}
+.chartjs-render-monitor {
+	-webkit-animation: chartjs-render-animation 0.001s;
+	animation: chartjs-render-animation 0.001s;
+}
+</style>
+</head>
+
+
+<body class="fixed-sn white-skin" id="body">
+
+	<div layout:fragment="content">
+
+
+
+
+		<main>
+			<div class="container-fluid">
+
+				<!-- Section: Basic examples -->
+				<section>
+
+					<div id="contectChangeArea">
+
+
+
+						<section class="mt-md-4 pt-md-2 mb-5 pb-4">
+
+							<!-- Grid row -->
+							<div class="row">
+
+								<!-- Grid column -->
+								<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+
+									<!-- Card -->
+									<div class="card card-cascade cascading-admin-card">
+
+										<!-- Card Data -->
+										<div class="admin-up">
+											<i class="far fa-money-bill-alt primary-color mr-3 z-depth-2"></i>
+											<div class="data">
+												<p class="text-uppercase">All orders</p>
+												<h4 class="font-weight-bold dark-grey-text">#DP132</h4>
+											</div>
+										</div>
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div class="progress mb-3">
+												<div class="progress-bar bg-primary" role="progressbar"
+													aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+													style="width: 100%"></div>
+											</div>
+											<p class="card-text">counts all orders cancelled to
+												completed</p>
+										</div>
+
+									</div>
+									<!-- Card -->
+
+								</div>
+								<!-- Grid column -->
+
+								<!-- Grid column -->
+								<div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
+
+									<!-- Card -->
+									<div class="card card-cascade cascading-admin-card">
+
+										<!-- Card Data -->
+										<div class="admin-up">
+											<i class="fas fa-chart-line warning-color mr-3 z-depth-2"></i>
+											<div class="data">
+												<p class="text-uppercase">Completed Orders</p>
+												<h4 class="font-weight-bold dark-grey-text">#DP231</h4>
+											</div>
+										</div>
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div class="progress mb-3">
+												<div class="progress-bar red accent-2" role="progressbar"
+													aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+													style="width: 100%"></div>
+											</div>
+											<p class="card-text">Dynamic Graphs by year based on the
+												completed orders</p>
+										</div>
+
+									</div>
+									<!-- Card -->
+
+								</div>
+								<!-- Grid column -->
+
+								<!-- Grid column -->
+								<div class="col-xl-3 col-md-6 mb-md-0 mb-4">
+
+									<!-- Card -->
+									<div class="card card-cascade cascading-admin-card">
+
+										<!-- Card Data -->
+										<div class="admin-up">
+											<i
+												class="fas fa-chart-pie light-blue lighten-1 mr-3 z-depth-2"></i>
+											<div class="data">
+												<p class="text-uppercase">Cancelled Orders</p>
+												<h4 class="font-weight-bold dark-grey-text">#DP1212</h4>
+											</div>
+										</div>
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div class="progress mb-3">
+												<div class="progress-bar red accent-2" role="progressbar"
+													aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+													style="width: 100%"></div>
+											</div>
+											<p class="card-text">Find out the modes in which the
+												orders was cancelled</p>
+										</div>
+
+									</div>
+									<!-- Card -->
+
+								</div>
+								<!-- Grid column -->
+
+								<!-- Grid column -->
+								<div class="col-xl-3 col-md-6 mb-0">
+
+									<!-- Card -->
+									<div class="card card-cascade cascading-admin-card">
+
+										<!-- Card Data -->
+										<div class="admin-up">
+											<i class="fas fa-chart-bar red accent-2 mr-3 z-depth-2"></i>
+											<div class="data">
+												<p class="text-uppercase">COD Orders</p>
+												<h4 class="font-weight-bold dark-grey-text">#TUF131</h4>
+											</div>
+										</div>
+
+										<!-- Card content -->
+										<div class="card-body card-body-cascade">
+											<div class="progress mb-3">
+												<div class="progress-bar bg-primary" role="progressbar"
+													aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+													style="width: 100%"></div>
+											</div>
+											<p class="card-text">Get the orders completed with cash
+												on delivery</p>
+										</div>
+
+									</div>
+									<!-- Card -->
+
+								</div>
+								<!-- Grid column -->
+
+							</div>
+							<!-- Grid row -->
+
+						</section>
+
+						<!-- chart 1-->
+						<!-- Section: Chart -->
+						<section class="mb-5 mt-5">
+
+							<!-- Card -->
+							<div class="card card-cascade narrower">
+								<section>
+
+									<!-- Grid row -->
+									<div class="row">
+
+										<!-- Grid column -->
+										<div class="col-xl-5 col-lg-12 mr-0 pb-2">
+
+											<!-- Card image -->
+											<div
+												class="view view-cascade gradient-card-header light-blue lighten-1">
+												<h2 class="h2-responsive mb-0 font-weight-500">All
+													Orders Placed</h2>
+											</div>
+
+											<!-- Card content -->
+											<div class="card-body card-body-cascade pb-0">
+
+												<!-- Panel data -->
+												<div class="row py-3 pl-4">
+
+													<!-- First column -->
+													<div class="col-md-6">
+
+														<!-- Date select -->
+														<p class="lead">
+															<span class="badge info-color p-2" id="dataRange">This
+																year</span>
+														</p>
+
+
+														<!-- Date pickers -->
+														<p class="lead pt-3 pb-4">
+															<span class="badge info-color p-2">Select Custom
+																Year</span>
+														</p>
+														<div class="md-form">
+															<input placeholder="Select year" type="text" id="toYear"
+																class="form-control yearonlyDatePicker"> <label
+																for="date-picker-example"></label>
+														</div>
+													</div>
+													<!-- First column -->
+
+													<!-- Second column -->
+													<div class="col-md-6 text-center pl-xl-2 my-md-0 my-3">
+
+														<!-- Summary -->
+														<p>
+															Total Value: <strong><span
+																id="totalValueOfOrders"></span></strong>
+														</p>
+														<p>
+															Total Orders: <strong><span id="totalNoOrders"></span></strong>
+														</p>
+
+														<!-- Change chart -->
+														<span class="min-chart my-4" id="chart-sales"
+															data-percent="99"><span class="percent"></span></span>
+														<h5>
+															<a class="badge green p-2"
+																onclick="orderChartManagement()">Change <i
+																class="fas fa-arrow-circle-up ml-1"></i></a>
+															<button type="button" class="btn btn-info btn-sm p-2"
+																data-toggle="tooltip" data-placement="top"
+																title="Percentage is the acuracy of the data displayed">
+																<i class="fas fa-question"></i>
+															</button>
+														</h5>
+
+													</div>
+													<!-- Second column -->
+
+												</div>
+												<!-- Panel data -->
+
+											</div>
+											<!-- Card content -->
+
+										</div>
+										<!-- Grid column -->
+
+										<!-- Grid column -->
+										<div class="col-xl-7 col-lg-12 mb-4 pb-2">
+
+											<!-- Chart -->
+											<div
+												class="view view-cascade gradient-card-header blue-gradient">
+
+												<canvas id="lineChart" height="175"></canvas>
+
+											</div>
+
+										</div>
+										<!-- Grid column -->
+
+									</div>
+									<!-- Grid row -->
+
+								</section>
+							</div>
+						</section>
+						<!-- Section: Chart -->
+						<!-- chart 1-->
+
+
+						<!-- chart 3-->
+						<div class="container-fluid">
+
+							<!-- Section: Analytical panel -->
+							<section class="mt-md-4 pt-md-2 mb-5">
+
+								<!-- Card -->
+								<div class="card card-cascade narrower">
+
+									<!-- Section: Chart -->
+									<section>
+
+										<!-- Grid row -->
+										<div class="row">
+
+											<!-- Grid column -->
+											<div class="col-xl-5 col-md-12 mr-0">
+
+												<!-- Card image -->
+												<div
+													class="view view-cascade gradient-card-header light-blue lighten-1">
+													<h4 class="h4-responsive mb-0 font-weight-bold">Orders
+														Placed Based on mode</h4>
+												</div>
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade pb-0">
+
+													<!-- Panel data -->
+													<div class="row card-body pt-3">
+
+														<!-- First column -->
+														<div class="col-md-12">
+
+															<!-- Date select -->
+															<p class="lead">
+																<span class="badge success-color p-2">Default
+																	Data is for current year </span>
+															</p>
+
+															<p class="lead">
+																<span class="badge danger-color ">This
+																	information may not be 100% accurate.</span>
+															</p>
+
+															<p class="lead">
+																<span class="badge danger-color ">This Data
+																	calculated to the nearest whole number.</span>
+															</p>
+
+															<!-- Date pickers -->
+															<p class="lead pt-3 pb-2">
+																<span class="badge primary-color p-2">Manual
+																	input date</span>
+															</p>
+															<div class="d-flex justify-content-between">
+																<div class="md-form w-100 mr-2">
+																	<input placeholder="Input year" type="text"
+																		id="toYear3" oninput="orderByTypeBar()"
+																		class="form-control ">
+																</div>
+																<div class="md-form w-100 ml-2">
+																	<input placeholder="Input month" type="text"
+																		class="form-control " id="toMonth3"
+																		oninput="orderByTypeBar()">
+																</div>
+															</div>
+
+														</div>
+														<!-- First column -->
+
+													</div>
+													<!-- Panel data -->
+
+												</div>
+												<!-- Card content -->
+
+											</div>
+											<!-- Grid column -->
+
+											<!-- Grid column -->
+											<div class="col-xl-7 col-md-12 mb-4">
+
+												<!-- Chart -->
+												<div
+													class="view view-cascade gradient-card-header blue-gradient">
+
+													<canvas id="traffic" height="170px"></canvas>
+
+												</div>
+
+											</div>
+											<!-- Grid column -->
+
+										</div>
+										<!-- Grid row -->
+
+									</section>
+									<!-- Section: Chart -->
+
+								</div>
+								<!-- Card -->
+
+							</section>
+							<!-- Section: Analytical panel -->
+						</div>
+
+						<!-- chart 3-->
+
+
+
+
+
+
+
+
+						<!-- chart 4-->
+						<div class="container-fluid">
+
+							<!-- Section: Analytical panel -->
+							<section class="mt-md-4 pt-md-2 mb-5">
+
+								<!-- Card -->
+								<div class="card card-cascade narrower">
+
+									<!-- Section: Chart -->
+									<section>
+
+										<!-- Grid row -->
+										<div class="row">
+
+											<!-- Grid column -->
+											<div class="col-xl-5 col-md-12 mr-0">
+
+												<!-- Card image -->
+												<div
+													class="view view-cascade gradient-card-header light-blue lighten-1">
+													<h4 class="h4-responsive mb-0 font-weight-bold">Orders
+														Completed Based on mode</h4>
+												</div>
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade pb-0">
+
+													<!-- Panel data -->
+													<div class="row card-body pt-3">
+
+														<!-- First column -->
+														<div class="col-md-12">
+
+															<!-- Date select -->
+															<p class="lead">
+																<span class="badge success-color p-2">Default
+																	Data is for current year </span>
+															</p>
+
+															<p class="lead">
+																<span class="badge danger-color ">This
+																	information may not be 100% accurate.</span>
+															</p>
+
+															<p class="lead">
+																<span class="badge danger-color ">This Data
+																	calculated to the nearest whole number.</span>
+															</p>
+
+															<!-- Date pickers -->
+															<p class="lead pt-3 pb-2">
+																<span class="badge primary-color p-2">Manual
+																	input date</span>
+															</p>
+															<div class="d-flex justify-content-between">
+																<div class="md-form w-100 mr-2">
+																	<input placeholder="Input year" type="text"
+																		id="toYear4" oninput="ordersCompletedeBar()"
+																		class="form-control ">
+																</div>
+																<div class="md-form w-100 ml-2">
+																	<input placeholder="Input month" type="text"
+																		class="form-control " id="toMonth4"
+																		oninput="ordersCompletedeBar()">
+																</div>
+															</div>
+
+														</div>
+														<!-- First column -->
+
+													</div>
+													<!-- Panel data -->
+
+												</div>
+												<!-- Card content -->
+
+											</div>
+											<!-- Grid column -->
+
+											<!-- Grid column -->
+											<div class="col-xl-7 col-md-12 mb-4">
+
+												<!-- Chart -->
+												<div
+													class="view view-cascade gradient-card-header blue-gradient">
+
+													<canvas id="ordercom" height="170px"></canvas>
+
+												</div>
+
+											</div>
+											<!-- Grid column -->
+
+										</div>
+										<!-- Grid row -->
+
+									</section>
+									<!-- Section: Chart -->
+
+								</div>
+								<!-- Card -->
+
+							</section>
+							<!-- Section: Analytical panel -->
+						</div>
+
+						<!-- chart 4-->
+
+
+						<script>
+							orderChartManagement();
+							orderByTypeBar();
+							ordersCompletedeBar();
+
+							function orderChartManagement() {
+
+								$("#toYear").datepicker({
+									format : "yyyy",
+									viewMode : "years",
+									minViewMode : "years"
+								});
+
+								var dataByServlet = null;
+
+								$(function() {
+									$('.min-chart#chart-sales')
+											.easyPieChart(
+													{
+														barColor : "#FF5252",
+														onStep : function(from,
+																to, percent) {
+															$(this.el)
+																	.find(
+																			'.percent')
+																	.text(
+																			Math
+																					.round(percent));
+														}
+													});
+								});
+
+								var dataYear = $('#toYear').val();
+
+								if (dataYear != '')
+									$('#dataRange').text(dataYear);
+
+								$
+										.ajax({
+
+											url : "/panel/charts/ordersPerYear",
+											data : {
+												'year' : dataYear
+											},
+											success : function(dataSent) {
+
+												var dataResponse = $
+														.parseJSON(dataSent);
+												var data1 = dataResponse[0];
+												var data2 = dataResponse[1];
+												var data3 = dataResponse[2];
+
+												var ordersCompleted = dataResponse[3];
+												var TotalsalesCompleted = dataResponse[4];
+												var totalCompleted = dataResponse[5];
+
+												var ordersCancelled = dataResponse[6];
+												var TotalsalesCancelled = dataResponse[7];
+												var totalCancelled = dataResponse[8];
+
+												console.log(data1);
+												console.log(data2);
+												console.log(data3);
+
+												$('#totalValueOfOrders').text(
+														"Rs." + data2);
+												$('#totalNoOrders').text(data3);
+
+												dataByServlet = data1;
+
+												var ctxL = document
+														.getElementById(
+																"lineChart")
+														.getContext('2d');
+												var myLineChart = new Chart(
+														ctxL,
+														{
+															type : 'line',
+															data : {
+																labels : [
+																		"January",
+																		"February",
+																		"March",
+																		"April",
+																		"May",
+																		"June",
+																		"July",
+																		"August",
+																		"September",
+																		"Octomber",
+																		"November",
+																		"December" ],
+																datasets : [ {
+																	label : "Orders Per year based on month",
+																	fillColor : "#fff",
+																	backgroundColor : 'rgba(255, 255, 255, .3)',
+																	borderColor : 'rgba(255, 255, 255)',
+																	data : dataByServlet,
+																} ]
+															},
+															options : {
+																legend : {
+																	labels : {
+																		fontColor : "#fff",
+																	}
+																},
+																scales : {
+																	xAxes : [ {
+																		gridLines : {
+																			display : true,
+																			color : "rgba(255,255,255,.25)"
+																		},
+																		ticks : {
+																			fontColor : "#fff",
+																		},
+																	} ],
+																	yAxes : [ {
+																		display : true,
+																		gridLines : {
+																			display : true,
+																			color : "rgba(255,255,255,.25)"
+																		},
+																		ticks : {
+																			fontColor : "#fff",
+																		},
+																	} ],
+																}
+															}
+														});
+
+											}
+
+										});
+
+							};
+
+							// bar
+							function orderByTypeBar() {
+
+								var dataYear = $('#toYear3').val();
+								var dataMonth = $('#toMonth3').val();
+
+								$
+										.ajax({
+
+											url : "/panel/charts/ordersPerYear",
+											data : {
+												'year' : dataYear,
+												'month' : dataMonth
+											},
+											success : function(dataSent) {
+
+												var dataResponse = $
+														.parseJSON(dataSent);
+
+												var data1 = dataResponse[0];
+												var data2 = dataResponse[1];
+												var data3 = dataResponse[2];
+
+												var ordersCompleted = dataResponse[3];
+												var TotalsalesCompleted = dataResponse[4];
+												var totalCompleted = dataResponse[5];
+
+												var ordersCancelled = dataResponse[6];
+												var TotalsalesCancelled = dataResponse[7];
+												var totalCancelled = dataResponse[8];
+
+												var orderType = dataResponse[9];
+
+												var ctxB = document
+														.getElementById(
+																"traffic")
+														.getContext('2d');
+												var myBarChart = new Chart(
+														ctxB,
+														{
+															type : 'bar',
+															data : {
+																labels : [
+																		"Paypal",
+																		"Payhere",
+																		"Cash on Delivery" ],
+																datasets : [ {
+																	label : 'from orders placed',
+																	data : orderType,
+																	backgroundColor : [
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)' ],
+																	borderColor : [
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)' ],
+																	borderWidth : 1
+																} ]
+															},
+															options : {
+																legend : {
+																	labels : {
+																		fontColor : "white"
+																	}
+																},
+																scales : {
+																	yAxes : [ {
+																		ticks : {
+																			beginAtZero : true,
+																			fontColor : "white"
+																		}
+																	} ],
+																	xAxes : [ {
+																		ticks : {
+																			fontColor : "white"
+																		}
+																	} ]
+																}
+															}
+														});
+
+											}
+
+										});
+
+							};
+
+							function ordersCompletedeBar() {
+
+								var dataYear = $('#toYear4').val();
+								var dataMonth = $('#toMonth4').val();
+
+								$
+										.ajax({
+
+											url : "/panel/charts/ordersPerYear",
+											data : {
+												'year' : dataYear,
+												'month' : dataMonth
+											},
+
+											success : function(dataSent) {
+
+												var dataResponse = $
+														.parseJSON(dataSent);
+
+												var data1 = dataResponse[0];
+												var data2 = dataResponse[1];
+												var data3 = dataResponse[2];
+
+												var ordersCompleted = dataResponse[3];
+												var TotalsalesCompleted = dataResponse[4];
+												var totalCompleted = dataResponse[5];
+
+												var ordersCancelled = dataResponse[6];
+												var TotalsalesCancelled = dataResponse[7];
+												var totalCancelled = dataResponse[8];
+
+												var orderType = dataResponse[9];
+												var orderTypeCompleted = dataResponse[10];
+
+												var ctxB = document
+														.getElementById(
+																"ordercom")
+														.getContext('2d');
+												var myBarChart = new Chart(
+														ctxB,
+														{
+															type : 'bar',
+															data : {
+																labels : [
+																		"Paypal",
+																		"Payhere",
+																		"Cash on Delivery" ],
+																datasets : [ {
+																	label : 'from orders completed',
+																	data : orderTypeCompleted,
+																	backgroundColor : [
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)',
+																			'rgba(255, 255, 255, 0.3)' ],
+																	borderColor : [
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)',
+																			'rgba(255, 255, 255, 1)' ],
+																	borderWidth : 1
+																} ]
+															},
+															options : {
+																legend : {
+																	labels : {
+																		fontColor : "white"
+																	}
+																},
+																scales : {
+																	yAxes : [ {
+																		ticks : {
+																			beginAtZero : true,
+																			fontColor : "white"
+																		}
+																	} ],
+																	xAxes : [ {
+																		ticks : {
+																			fontColor : "white"
+																		}
+																	} ]
+																}
+															}
+														});
+
+											}
+
+										});
+
+							};
+
+						</script>
+
+
+
+
+
+					</div>
+				</section>
+			</div>
+
+		</main>
+
+
+
+
+
+
+
+
+	</div>
+
+</body>
+</html>

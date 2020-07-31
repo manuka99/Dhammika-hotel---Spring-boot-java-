@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+<style>
+.tabledatalength {
+	max-width: 200px; /* Customise it accordingly */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.tabledatalength2 {
+	max-width: 260px; /* Customise it accordingly */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+</style>
+
+</head>
+
+
+<body class="fixed-sn white-skin" id="body">
+
+	<div layout:fragment="content">
+
+
+
+
+		<main>
+			<div id="newDataMessages"></div>
+
+			<div class="progress-custom mb-4" id="loaderTable"
+				style="display: none">
+				<div class="indeterminate-my"></div>
+			</div>
+			<div class="">
+
+				<!-- Section: Basic examples -->
+				<section>
+
+					<div id="contectChangeArea">
+
+
+						<div class="row">
+							<div class="col-md-3">
+								<a th:href="@{/panel/mails}" target="_blank"
+									class="btn btn-primary btn-block mb-3"><i
+									class="fas fa-pen-nib"></i>&nbsp; Compose</a>
+
+								<div class="list-group">
+									<button type="button"
+										class="list-group-item list-group-item-action active">
+										MailBox</button>
+									<button type="button" onclick="refreshMailbox('all')"
+										class="list-group-item list-group-item-action">
+										<i class="fas fa-mail-bulk"></i> All Mails <span
+											class="badge bg-primary float-right">511</span>
+									</button>
+									<button type="button" onclick="refreshMailbox('inbox')"
+										class="list-group-item list-group-item-action">
+										<i class="fas fa-inbox"></i> Inbox <span
+											class="badge bg-primary float-right">12</span>
+									</button>
+									<button type="button" onclick="refreshMailbox('sent')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-envelope"></i> Sent
+									</button>
+									<button type="button" onclick="refreshMailbox('draft')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-file-alt"></i> Drafts<span
+											class="badge bg-warning float-right">65</span>
+									</button>
+									<button type="button" onclick="refreshMailbox('trash')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-trash-alt"></i> Trash
+									</button>
+								</div>
+
+
+
+								<div class="list-group mt-4 mb-4">
+									<button type="button"
+										class="list-group-item active list-group-item-action ">
+										Labels</button>
+									<button type="button" onclick="refreshMailbox('important')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-circle text-danger"></i> Important
+									</button>
+									<button type="button" onclick="refreshMailbox('starred')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-circle text-warning"></i> Starred
+									</button>
+									<button type="button" onclick="refreshMailbox('spam')"
+										class="list-group-item list-group-item-action">
+										<i class="far fa-circle text-primary"></i> Spam
+									</button>
+								</div>
+
+							</div>
+							<!-- /.col -->
+							<div id="mailbox" class="col-md-9 container"
+								style="display: none">
+
+								<!-- Editable table -->
+								<div id="mailbox2" th:if="${mails != null}"
+									class="card table-responsive-md">
+									<h3
+										class="card-header  bg-primary text-white text-center font-weight-bold text-uppercase py-4">Mailbox
+										- [[${folderName}]] Mails</h3>
+
+									<div class="mailbox-controls mt-3">
+
+										<div class="btn-group ml-3 mr-2">
+											<select id="noOfMSGRetrieve"
+												class="browser-default custom-select">
+												<option selected value="5">5 Mails</option>
+												<option value="8">8 Mails</option>
+												<option value="10">10 Mails</option>
+												<option value="20">20 Mails</option>
+												<option value="50">50 Mails</option>
+												<option value="100">100 Mails</option>
+											</select>
+										</div>
+
+										<div class="btn-group" role="group"
+											aria-label="Vertical button group">
+
+											<button type="button" onclick="listMoreMails()"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span class="fas fa-compress-arrows-alt fa-2x"></span>
+											</button>
+											<button type="button"
+												th:onclick="refreshMailbox([[${folderName}]])"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-retweet fa-2x"></span>
+											</button>
+											<button type="button" onclick="startEndDatatable()"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-pencil-alt fa-2x"></span>
+											</button>
+
+											<button type="button" onclick="deleteMails()"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="DeleteMail" class=" text-light fas fa-trash fa-2x"></span>
+											</button>
+
+											<button type="button"
+												th:onclick="moveMailsFromTo([[${folderName}]], 'starred')"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-star fa-2x"></span>
+											</button>
+
+											<button type="button"
+												th:onclick="moveMailsFromTo([[${folderName}]], 'important')"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-exclamation fa-2x"></span>
+											</button>
+
+											<button type="button"
+												th:onclick="moveMailsFromTo([[${folderName}]], 'trash')"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="trash" class=" fas fa-trash-restore fa-2x"></span>
+											</button>
+
+											<button type="button"
+												th:onclick="moveMailsFromTo([[${folderName}]], 'spam')"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="trash" class=" fas fa-filter fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-angle-double-right fa-2x"></span>
+											</button>
+
+										</div>
+
+
+
+										<!-- /.float-right -->
+									</div>
+
+
+
+									<div class="card-body">
+										<div id="" class="">
+											<table id="tableInbox"
+												class="table table-hover  paginationFirstLast table-responsive  text-center">
+												<thead>
+													<tr>
+														<th class=""><input id="select_all"
+															onclick="selectAll(this)" class="form-check-input"
+															type="checkbox" name="type"> <label
+															for="select_all" class="form-check-label label-table">#</label></th>
+														<th class=" font-weight-bold text-nowrap">From</th>
+														<th class=" font-weight-bold ">Subject</th>
+														<th class=" font-weight-bold text-nowrap">Time</th>
+													</tr>
+												</thead>
+												<tbody id="tableBody">
+													<tr th:each="mail, status : ${mails}">
+														<td scope="row" class="text-nowrap font-weight-bold"><input
+															th:id="${mail.time}" th:value="${mail.msgNo}"
+															class="form-check-input" type="checkbox" name="type">
+															<label th:for="${mail.time}"
+															class="form-check-label label-table">[[${mail.msgNo}]]</label></td>
+														<td class="font-weight-bold tabledatalength2"><a
+															class="text-primary"
+															th:href="@{'/panel/mails/mail?msgNo='+ ${mail.msgNo} + '&date=' + ${mail.time} + '&folderName=' + ${folderName} }"
+															target="_blank">[[${mail.mailFrom}]]</a></td>
+														<td class="tabledatalength">[[${mail.mailSubject}]]</td>
+														<td class="text-nowrap">[[${mail.time}]]</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+
+
+								<!-- /.col -->
+							</div>
+
+
+
+
+							<div class="col-md-9 container" id="mailboxLoader"
+								style="display: none">
+								<!-- Editable table -->
+								<div class="card">
+									<h3
+										class="card-header  bg-primary text-white text-center font-weight-bold text-uppercase py-4">Mailbox
+										- Preparing...</h3>
+
+
+
+									<div class="mailbox-controls mt-3">
+
+										<div class="btn-group ml-3 mr-2">
+											<select id="noOfMSGRetrieve"
+												class="browser-default custom-select">
+												<option selected value="5">5 Mails</option>
+												<option value="8">8 Mails</option>
+												<option value="10">10 Mails</option>
+												<option value="20">20 Mails</option>
+												<option value="50">50 Mails</option>
+												<option value="100">100 Mails</option>
+											</select>
+										</div>
+
+										<div class="btn-group" role="group"
+											aria-label="Vertical button group">
+
+											<button type="button"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span class="fas fa-compress-arrows-alt fa-2x"></span>
+											</button>
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-retweet fa-2x"></span>
+											</button>
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-pencil-alt fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="DeleteMail" class=" text-light fas fa-trash fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-star fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-exclamation fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="trash" class=" fas fa-trash-restore fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey btn-lg btn-md btn-sm ">
+												<span id="trash" class=" fas fa-filter fa-2x"></span>
+											</button>
+
+											<button type="button"
+												class="btn btn-blue-grey  btn-lg btn-md btn-sm ">
+												<span class="fas fa-angle-double-right fa-2x"></span>
+											</button>
+
+
+
+										</div>
+
+
+
+										<!-- /.float-right -->
+									</div>
+
+
+
+									<div class="card-body">
+										<div id="" class=" mx-auto flex-center" style="height: 400px">
+
+
+
+
+											<div class='container4 loading1'>
+												<div class='img1-container1'>
+
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+													<div class='stripe1 long-stripe2'></div>
+
+
+												</div>
+											</div>
+
+
+
+											<div id="loading" class="">
+												<div class='img1-container1'>
+													<img id="loading-image" style="width: 500px"
+														class="flex-center waves-effect waves-light"
+														th:src="@{/Design/img/gmailsync.gif}" alt="Loading..." />
+												</div>
+											</div>
+
+
+
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+							<!-- /.col -->
+							<div id="compose" class="col-md-9">
+								<div class="card card-primary card-outline">
+									<div class="card-header">
+										<h3 class="card-title text-white">Compose New Message</h3>
+									</div>
+									<!-- /.card-header -->
+									<div class="card-body">
+
+										<div class="form-group">
+											<input class="form-control" placeholder="To:" id="to">
+										</div>
+										<div class="form-group">
+											<input class="form-control" placeholder="Subject:"
+												id="subject">
+										</div>
+
+										<div class="form-group">
+											<textarea id="compose-textarea" class="composetextarea"
+												style="height: 300px">
+                      <h1>
+															<u>Heading Of Message</u>
+														</h1>
+                      <h4>Subheading</h4>
+                      <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
+                        was born and I will give you a complete account of the system, and expound the actual teachings
+                        of the great explorer of the truth, the master-builder of human happiness. No one rejects,
+                        dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
+                        how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
+                        is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
+                        but because occasionally circumstances occur in which toil and pain can procure him some great
+                        pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
+                        except to obtain some advantage from it? But who has any right to find fault with a man who
+                        chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
+                        produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
+                        dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
+                        blinded by desire, that they cannot foresee</p>
+                      <ul>
+                        <li>List item one</li>
+                        <li>List item two</li>
+                        <li>List item three</li>
+                        <li>List item four</li>
+                      </ul>
+                      <p>Thank you,</p>
+                      <p>John Doe</p>
+                    </textarea>
+										</div>
+										<div class="form-group">
+											<div
+												class="btn btn-outline-pink  waves-effect btn-sm float-left file-field">
+												<span><i class="fas fa-paperclip"></i> Attachment
+													max:32MB</span> <input type="file" multiple>
+											</div>
+										</div>
+
+									</div>
+									<!-- /.card-body -->
+									<div class="card-footer">
+										<div class="float-right">
+											<button type="button" class="btn btn-default">
+												<i class="fas fa-pencil-alt"></i> Draft
+											</button>
+											<button type="button" onclick="sendMail()"
+												class="btn btn-primary">
+												<i class="far fa-envelope"></i> Send
+											</button>
+										</div>
+										<button type="reset" class="btn btn-danger">
+											<i class="fas fa-times"></i> Discard
+										</button>
+									</div>
+									<!-- /.card-footer -->
+								</div>
+								<!-- /.card -->
+							</div>
+							<!-- /.col -->
+
+
+
+
+
+
+
+
+
+
+
+
+							<!-- /.row -->
+						</div>
+						<!-- /.container-fluid -->
+
+
+
+
+
+
+
+
+
+					</div>
+				</section>
+			</div>
+
+		</main>
+
+
+
+		<script>
+			var folderNm = "";
+
+			console.log(folderNm);
+
+			var timeoutms = 100000;
+
+			var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+			+'role="alert">'
+					+ '<p>'
+					+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+					+ '</p>'
+					+ '<p>'
+					+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+					+ '</p>'
+
+					+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">'
+					+ '<span aria-hidden="true">&times;</span>'
+					+ '</button>'
+					+ '<div style="height: 10px;"></div>' + '</div>';
+
+			function deleteMails() {
+
+				$('#loaderTable').show();
+
+				var times = new Array();
+				var msgNo = new Array();
+
+				$("input:checkbox[type=checkbox]:checked").each(function() {
+
+					msgNo.push($(this).val());
+					times.push($(this).attr("id"));
+
+				});
+
+				console.log(msgNo);
+				console.log(folderNm);
+
+				$
+						.ajax({
+
+							url : "/panel/mails/deleteMail",
+							data : {
+								'msgNos[]' : msgNo,
+								'times[]' : times,
+								'folderName' : folderNm
+							},
+							type : 'GET',
+							timeout : timeoutms,
+							success : function(data, textStatus, jqXHR) {
+
+								console.log(data);
+
+								var array = JSON.parse(data);
+
+								var deleted = array[0];
+								var notdeleted = array[1];
+
+								console.log(deleted);
+								console.log(notdeleted);
+
+								if ($.fn.DataTable
+										.isDataTable('.paginationFirstLast')) {
+									$('.paginationFirstLast').DataTable()
+											.destroy();
+								}
+
+								deleted.forEach(function(arrayItem) {
+
+									$("[id= '" + arrayItem + "']")
+											.closest('tr').remove();
+
+								});
+
+								$(".paginationFirstLast").DataTable();
+
+								$('#loaderTable').fadeOut();
+
+								successmailDelete(deleted);
+								errorMailDelete(notdeleted);
+
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								if (textStatus === "timeout") {
+									$('#loaderTable').fadeOut();
+									$('#newDataMessages').append(connectError);
+								}
+							}
+
+						})
+
+			};
+
+			function startEndDatatable() {
+
+				if ($.fn.DataTable.isDataTable('.paginationFirstLast')) {
+					$('.paginationFirstLast').DataTable().destroy();
+				}
+
+				else
+					$(".paginationFirstLast").DataTable();
+
+			};
+
+			//refreshMailbox("inbox");
+
+			function refreshMailbox(folderName) {
+
+				$('#mailbox').hide();
+				$('#mailbox2').remove();
+				$('#mailboxLoader').fadeIn();
+
+				connectMailAndList(10, 0, folderName, true);
+
+			};
+
+			function listMoreMails() {
+
+				var isINit = false;
+
+				var noOfmsgs = $("#noOfMSGRetrieve option:selected").val();
+				//var folderName = $('#folderName').val();
+
+				var rows = 0;
+
+				if ($.fn.DataTable.isDataTable('.paginationFirstLast')) {
+
+					rows = $('.paginationFirstLast').DataTable().rows().count();
+				}
+
+				else
+					rows = $('#tableInbox tr').length - 1;
+
+				if (noOfmsgs == null || rows == null) {
+
+					var noOfmsgs = 10;
+
+					var rows = 0;
+
+					isINit = true;
+
+				}
+
+				connectMailAndList(noOfmsgs, rows, folderNm, false);
+
+			};
+
+			function connectMailAndList(noOfmsgs, rows, folderName, isINit) {
+
+				$('#loaderTable').show();
+				$('#compose').hide();
+
+				$
+						.ajax({
+
+							url : "/panel/mails/inbox",
+							data : {
+								'noOfmsgs' : noOfmsgs,
+								'rows' : rows,
+								'folderName' : folderName
+							},
+							type : 'GET',
+							timeout : timeoutms,
+							success : function(data, textStatus, jqXHR) {
+
+								if (isINit) {
+
+									$('#mailboxLoader').fadeOut();
+
+									var result = $(data).find('#mailbox')
+											.html();
+									jQuery("#mailbox").html(result);
+
+									$('#mailbox').fadeIn();
+
+								}
+
+								else {
+									if ($.fn.DataTable
+											.isDataTable('.paginationFirstLast')) {
+										$('.paginationFirstLast').DataTable()
+												.destroy();
+									}
+
+									var result = $(data).find('#tableBody')
+											.html();
+									jQuery("#tableBody").append(result);
+
+									$(".paginationFirstLast").DataTable();
+
+								}
+
+								folderNm = folderName;
+								$('#loaderTable').fadeOut();
+
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								if (textStatus === "timeout") {
+									$('#loaderTable').fadeOut();
+									$('#newDataMessages').append(connectError);
+								}
+							}
+
+						})
+
+			};
+
+			function moveMailsFromTo(from, to) {
+
+				$('#loaderTable').show();
+
+				var times = new Array();
+				var msgNo = new Array();
+
+				$("input:checkbox[type=checkbox]:checked").each(function() {
+
+					msgNo.push($(this).val());
+					times.push($(this).attr("id"));
+
+				});
+
+				$
+						.ajax({
+
+							url : "/panel/mails/moveMail",
+							data : {
+								'msgNos[]' : msgNo,
+								'times[]' : times,
+								'folderFrom' : from,
+								'folderTo' : to
+							},
+							type : 'POST',
+							timeout : timeoutms,
+							success : function(data, textStatus, jqXHR) {
+
+								var array = JSON.parse(data);
+
+								var moved = array[0];
+								var notMoved = array[1];
+
+								console.log(moved);
+								console.log(notMoved);
+
+								if ($.fn.DataTable
+										.isDataTable('.paginationFirstLast')) {
+									$('.paginationFirstLast').DataTable()
+											.destroy();
+								}
+
+								moved.forEach(function(arrayItem) {
+									console.log(arrayItem);
+
+									$("[id= '" + arrayItem + "']")
+											.closest('tr').remove();
+
+								});
+
+								$(".paginationFirstLast").DataTable();
+
+								$('#loaderTable').fadeOut();
+
+								errorMailMoved(notMoved, from, to);
+								successmailMoved(moved, from, to);
+
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								if (textStatus === "timeout") {
+									$('#loaderTable').fadeOut();
+									$('#newDataMessages').append(connectError);
+								}
+							}
+
+						})
+
+			};
+
+			$("#contectChangeArea")
+					.on(
+							"change",
+							".form-check-input",
+							function() {
+
+								var ch_list = new Array();
+								$("input:checkbox[type=checkbox]:checked")
+										.each(function() {
+											ch_list.push($(this).val());
+										});
+
+								if (ch_list.length > 0) {
+									$('#DeleteMail').removeClass(
+											"text-light disabled");
+									$('#DeleteMail').addClass("text-danger");
+								} else {
+									$('#DeleteMail').removeClass("text-danger");
+									$('#DeleteMail').addClass(
+											"text-light disabled");
+								}
+
+							});
+
+			function selectAll(e) {
+
+				if ($('#select_all:checked').val() === 'on') {
+
+					if ($.fn.DataTable.isDataTable('.paginationFirstLast')) {
+						$('.paginationFirstLast').DataTable().destroy();
+					}
+
+					$("input[type='checkbox']").prop('checked', true)
+
+					$(".paginationFirstLast").DataTable();
+				} else {
+
+					if ($.fn.DataTable.isDataTable('.paginationFirstLast')) {
+						$('.paginationFirstLast').DataTable().destroy();
+					}
+
+					$("input[type='checkbox']").prop('checked', false)
+
+					$(".paginationFirstLast").DataTable();
+
+				}
+
+			};
+
+			function successmailMoved(moved, from, to) {
+
+				var movedMailsHtml = "";
+
+				moved
+						.forEach(function(arrayItem) {
+
+							movedMailsHtml += '<p><strong>Success: </strong> Mail of date '
+									+ arrayItem
+									+ '  was moved from <strong>'
+									+ from
+									+ '</strong> to <strong>'
+									+ to
+									+ '</strong>.</p>'
+
+						});
+
+				var successMailMove = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+				'role="alert">'
+						+ '<p>'
+						+ movedMailsHtml
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+					'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				if (moved.length > 0)
+					$('#newDataMessages').append(successMailMove);
+
+			};
+
+			function errorMailMoved(notMoved, from, to) {
+
+				var notMovedMailsHtml = "";
+
+				notMoved
+						.forEach(function(arrayItem) {
+
+							notMovedMailsHtml += '<p><strong>Error: </strong> Mail of date '
+									+ arrayItem
+									+ '  was not moved from <strong>'
+									+ from
+									+ '</strong> to <strong>'
+									+ to
+									+ '</strong> .</p>'
+
+						});
+
+				var errorMail = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-danger alert-dismissible fade show"'+
+				'role="alert">'
+						+ '<p>'
+						+ notMovedMailsHtml
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+					'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				if (notMoved.length > 0)
+					$('#newDataMessages').append(errorMail);
+
+			};
+
+			function composeMail() {
+
+				$.ajax({
+
+					url : "/panel/mails/moveMail",
+					type : 'GET',
+					timeout : timeoutms,
+					success : function(data, textStatus, jqXHR) {
+
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						if (textStatus === "timeout") {
+							$('#loaderTable').fadeOut();
+							$('#newDataMessages').append(connectError);
+						}
+					}
+
+				})
+
+			};
+		</script>
+
+		<script>
+			function sendMail() {
+
+				var body = $('.composetextarea').summernote('code');
+				
+				
+				$(".composetextarea").summernote('destroy');
+				$('.note-frame').remove();
+				//$("#compose-textarea").fadeIn();
+				$('.composetextarea').summernote();
+				//$('.summernote').summernote('enable');
+				
+				
+				var to = $('#to').val();
+				var subject = $('#subject').val();
+
+				$.ajax({
+
+					url : "/panel/mails/sendMail",
+					data : {
+
+						"body" : body,
+						"to" : to,
+						"subject" : subject
+
+					},
+					type : "POST",
+					timeout : 10000,
+					success : function(data, textStatus, jqXHR) {
+
+						if (data == true)
+							alert('Mail was sent successfully');
+
+						else
+							alert('Mail was not sent');
+
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						if (textStatus === "timeout") {
+							$('#loaderTable').fadeOut();
+							$('#newDataMessages').append(connectError);
+						}
+					}
+
+				})
+
+			};
+		</script>
+
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.composetextarea').summernote()
+			});
+		</script>
+		
+		
+		
+		
+		
+		
+	</div>
+
+</body>
+</html>

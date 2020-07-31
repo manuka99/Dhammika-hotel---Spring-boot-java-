@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated">
+
+	<div layout:fragment="content">
+		<div class="intro-2"
+			style="background: rgb(227, 60, 133); background: linear-gradient(90deg, rgba(227, 60, 133, 1) 0%, rgba(50, 127, 219, 0.630987429151348) 100%); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+
+			<div class="container mt-5 pt-3">
+				<h1 class="my-5 h2 text-center font-weight-bold">Express
+					Checkout V2</h1>
+
+				<div class="container wow fadeIn">
+
+					<!-- Heading -->
+
+
+					<!--Grid row-->
+					<div class="row">
+
+						<!--Grid column-->
+						<div class="col-md-8 mb-4">
+
+							<!--Card-->
+							<div class="card">
+
+
+
+
+								<!--Card content-->
+								<form class="card-body" id="checkoutForm"
+									th:action="@{/user/placeOrder}" th:method="POST">
+
+									<!--Username-->
+									<div class="md-form input-group pl-0 mb-5">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="basic-addon1">@</span>
+										</div>
+										<input type="text" class="form-control py-0"
+											th:value="${orderDetails.user.fname + ' ' + orderDetails.user.lname}"
+											aria-describedby="basic-addon1" disabled> <input
+											type="text" class="form-control py-0"
+											th:value="${orderDetails.orderID}" name="orderID"
+											id="orderID" aria-describedby="basic-addon1">
+									</div>
+
+									<!--email-->
+									<div class="md-form mb-5">
+										<input type="text" id="email" class="form-control"
+											th:value="${orderDetails.user.email}" disabled> <label
+											for="email" class="active">Email (optional)</label>
+									</div>
+
+									<!--address-->
+									<div class="md-form mb-5">
+										<input type="text" id="address" class="form-control"
+											th:value="${orderDetails.user.address}" disabled> <label
+											for="address" class="active">Address</label>
+									</div>
+
+									<!--Grid row-->
+									<div class="row">
+
+										<!--Grid column-->
+										<div class="col-lg-4 col-md-12 mb-4">
+
+											<label for="country">Country</label> <select
+												class="custom-select d-block w-100" id="country" disabled>
+												<option value="">Srilanka</option>
+											</select>
+
+										</div>
+										<!--Grid column-->
+									</div>
+									<!--Grid row-->
+
+									<hr>
+
+									<label for="date" class="active">Delivery Date</label> <input
+										type="date" id="dDate" name="dDate" class="form-control mb-4">
+									<hr>
+
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input"
+											id="same-address" checked> <label
+											class="custom-control-label" for="same-address">Shipping
+											address is the same as my billing address</label>
+									</div>
+
+									<hr>
+
+									<div id="addressBill" class="md-form mb-5"
+										style="display: none">
+										<input type="text" id="address2" name="address2"
+											class="form-control"> <label for="address"
+											class="active">Shipping Address</label>
+									</div>
+
+
+									<div class="form-check mb-4">
+
+										<input type="radio" class="form-check-input"
+											id="onlineTransaction" name="transactionType"
+											th:value="onlineTransaction"> <label
+											class="form-check-label" for="onlineTransaction">Online
+											transaction</label>
+
+
+										<div class="form-check mb-4 mt-4">
+
+											<div id="currencyDiv" style="display: none">
+
+												<div class="form-check mb-4 mt-4">
+
+													<input type="radio" class="form-check-input" id="LKR"
+														name="currency" th:value="LKR"> <label
+														class="form-check-label" for="LKR">LKR</label>
+												</div>
+												<div class="form-check mb-4">
+													<input type="radio" class="form-check-input" id="USD"
+														name="currency" th:value="USD"> <label
+														class="form-check-label" for="USD"> USD</label>
+												</div>
+
+											</div>
+
+
+											<div id="orderTypeDiv" style="display: none">
+												<div class="form-check mb-4 mt-4">
+
+													<div class="form-check mb-4">
+														<input type="radio" class="form-check-input" id="payhere"
+															name="orderType" th:value="payhere"> <label
+															class="form-check-label" for="payhere">PayHere</label>
+													</div>
+
+													<div class="form-check mb-4" id="paypalDiv">
+														<input type="radio" class="form-check-input" id="paypal"
+															name="orderType" th:value="paypal"> <label
+															class="form-check-label" for="paypal">Paypal</label>
+													</div>
+
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+
+									<div class="form-check">
+
+										<input type="radio" class="form-check-input" id="offline"
+											name="transactionType" th:value="offline"> <label
+											class="form-check-label" for="offline">Other</label>
+
+										<div id="offlineDiv" style="display: none">
+											<div class="form-check mt-4">
+												<input type="radio" class="form-check-input" id="cod"
+													name="orderType" th:value="cod" checked> <label
+													class="form-check-label" for="cod">Cash on
+													Delivery(only LKR) </label>
+											</div>
+										</div>
+									</div>
+
+
+									<hr class="mb-4">
+									<p class="text-primary mb-0">
+										<i class="fas fa-info-circle mr-1"></i>We will be delivering
+										from 10.00 A.M to 7.00 PM, your order will be delivered on
+										time. Thank you!
+									</p>
+
+									<hr class="mb-4">
+
+									<button id="placeOrder"
+										class="btn btn-primary btn-lg btn-block waves-effect waves-light"
+										type="submit">Place Order</button>
+
+								</form>
+
+							</div>
+							<!--/.Card-->
+
+						</div>
+						<!--Grid column-->
+
+						<!--Grid column-->
+						<div class="col-md-4 mb-4">
+
+							<!-- Heading -->
+							<h3
+								class="d-flex justify-content-between align-items-center mb-3">
+								<span class="font-weight-bold">Order Summary</span>
+							</h3>
+
+							<!-- Cart -->
+							<ul class="list-group mb-3 z-depth-1">
+
+
+
+								<li th:each="orderItem : ${orderDetails.order_Items}"
+									class="list-group-item d-flex justify-content-between lh-condensed">
+									<div>
+										<h6 class="my-0">[[${orderItem.product.name}]]</h6>
+										<small class="text-muted">QTY
+											[[${orderItem.quantity}]]</small>
+									</div> <span class="text-muted">Rs.
+										[[${orderItem.product.price}]] <br>(USD
+										[[${#numbers.formatDecimal(orderItem.product.price / usd, 0,
+										2)}]])
+								</span>
+								</li>
+
+
+								<li class="list-group-item d-flex justify-content-between mt-4"><span>Sum
+										of the products (LKR)</span> Rs. [[${orderDetails.payment.subTotal}]]
+									<br>(USD
+									[[${#numbers.formatDecimal(orderDetails.payment.subTotal / usd,
+									0, 2)}]])</li>
+
+								<li class="list-group-item d-flex justify-content-between"><span>Tax
+										(LKR)</span> Rs. [[${orderDetails.payment.tax}]] <br>(USD
+									[[${#numbers.formatDecimal(orderDetails.payment.tax / usd, 0,
+									2)}]])</li>
+
+								<li class="list-group-item d-flex justify-content-between"><span>Shipping
+										Fee (LKR)</span> Rs. [[${orderDetails.payment.shippingFee}]]<br>(USD
+									[[${#numbers.formatDecimal(orderDetails.payment.shippingFee /
+									usd, 0, 2)}]])</li>
+
+
+								<li class="list-group-item d-flex justify-content-between"><span>Total
+										(LKR)</span> <strong>Rs. [[${orderDetails.payment.total}]]<br>(USD
+										[[${#numbers.formatDecimal(orderDetails.payment.total / usd,
+										0, 2)}]])
+								</strong></li>
+							</ul>
+							<!-- Cart -->
+
+							<!-- Promo code -->
+							<form class="card p-2">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										placeholder="Promo code" aria-label="Recipient's username"
+										aria-describedby="basic-addon2">
+									<div class="input-group-append">
+										<button class="btn btn-secondary btn-md waves-effect m-0"
+											type="button">Redeem</button>
+									</div>
+								</div>
+							</form>
+							<!-- Promo code -->
+
+						</div>
+						<!--Grid column-->
+
+					</div>
+					<!--Grid row-->
+
+				</div>
+				<div class="mb-5"></div>
+
+			</div>
+			<div style="height: 40px"></div>
+
+		</div>
+
+		<script type="text/javascript"
+			th:src="|/Design/mdPro/js/input-values.jquery.js|">
+			
+		</script>
+		<script type="text/javascript"
+			src="https://www.payhere.lk/lib/payhere.js"></script>
+		<script type="text/javascript">
+			var validCheckout = false;
+
+			$('#same-address').change(function() {
+
+				if (!this.checked) {
+
+					$('#addressBill').slideDown();
+
+				}
+
+				else
+					$('#addressBill').slideUp();
+
+			});
+
+			$("#placeOrder")
+					.on(
+							"click",
+							function() {
+
+								event.preventDefault();
+
+								validateDetails();
+
+								var form = event.target.form;
+
+								var $form = $("#checkoutForm");
+
+								var radioValue = $(
+										"input[name='orderType']:checked")
+										.val();
+								var address2 = $("#address2").val();
+								var orderID = $("#orderID").val();
+								var dDate = $('#dDate').val();
+
+								if ($('input[id="same-address"]:checked').length === 0
+										&& address2.length === 0)
+									alert('please confirm your shipping address');
+
+								else if (validCheckout == false)
+									alert('please select a valid payment option and continue.');
+
+								else {
+									if (dDate.length != 0) {
+
+										if (radioValue === 'payhere') {
+
+											var payment = {};
+
+											$
+													.ajax({
+														url : '/user/placeOrder',
+														type : 'POST',
+														data : $form
+																.serialize(),
+														dataType : 'json',
+														success : function(data) {
+															console.log(data);
+															payment = data;
+															payhere
+																	.startPayment(payment);
+
+														}
+													})
+
+										}
+
+										else {
+
+											form.submit();
+
+										}
+									} else
+										alert('Please enter the delivery date');
+									//$('#checkoutForm').attr('action', "placeOrder").submit();
+
+								}
+
+							});
+
+			// Called when user completed the payment. It can be a successful payment or failure
+			payhere.onCompleted = function onCompleted(orderId) {
+				console.log("Payment completed. OrderID:" + orderId);
+				//Note: validate the payment and show success or failure page to the customer
+			};
+
+			// Called when user closes the payment without completing
+			payhere.onDismissed = function onDismissed() {
+				//Note: Prompt user to pay again or show an error page
+				console.log("Payment dismissed");
+			};
+
+			// Called when error happens when initializing payment such as invalid parameters
+			payhere.onError = function onError(error) {
+				// Note: show an error page
+				console.log("Error:" + error);
+			};
+
+			//show payments radio
+
+			$('#onlineTransaction').click(function() {
+
+				$('#offlineDiv').slideUp();
+				$('#currencyDiv').slideDown();
+				$('#orderTypeDiv').slideUp();
+
+				$('input[name="orderType"]').prop('checked', false);
+				$('input[name="currency"]').prop('checked', false);
+
+			});
+
+			$('#LKR').click(function() {
+
+				$('#orderTypeDiv').slideDown();
+				$('#offlineDiv').slideUp();
+				$('#paypalDiv').slideUp();
+				$('input[name="orderType"]').prop('checked', false);
+
+			});
+
+			$('#USD').click(function() {
+
+				$('#orderTypeDiv').slideDown();
+				$('#paypalDiv').slideDown();
+				$('#offlineDiv').slideUp();
+
+			});
+
+			$('#offline').click(function() {
+
+				$('#offlineDiv').slideDown();
+
+				$('#currencyDiv').slideUp();
+				$('#orderTypeDiv').slideUp();
+
+				$('input[name="orderType"]').prop('checked', false);
+				$('input[name="currency"]').attr('checked', false);
+
+			});
+
+			function validateDetails() {
+
+				validCheckout = false;
+
+				if ($('#onlineTransaction').is(':checked')) {
+
+					if ($('#LKR').is(':checked')) {
+
+						if ($('#payhere').is(':checked'))
+							validCheckout = true;
+
+					}
+
+					else if ($('#USD').is(':checked')) {
+
+						if ($('#payhere').is(':checked'))
+							validCheckout = true;
+
+						else if ($('#paypal').is(':checked'))
+							validCheckout = true;
+
+					}
+
+				}
+
+				else if ($('#offline').is(':checked')) {
+
+					if ($('#cod').is(':checked'))
+						validCheckout = true;
+
+				}
+
+			}
+		</script>
+	</div>
+</body>
+</html>

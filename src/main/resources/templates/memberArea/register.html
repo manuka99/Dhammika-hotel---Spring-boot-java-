@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Register</title>
+
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated"
+	style="background: #8E2DE2; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #4A00E0, #8E2DE2);">
+
+	
+	<div layout:fragment="content">
+
+		<div class="container my-5 wow fadeIn animated" data-wow-delay="0.3s"
+									style="visibility: visible; animation-name: fadeIn; animation-delay: 0.3s;">
+
+			<!--Section: Content-->
+			<section>
+				<div class="mask rgba-gradient">
+					<div
+						class="container h-100 d-flex justify-content-center align-items-center">
+
+						<!-- Grid row -->
+						<div class="row pt-5">
+
+							<!-- Grid column -->
+							<div class="col-md-12">
+
+								<div class="card">
+									<div class="card-body">
+
+										<h2
+											class="font-weight-bold my-4 text-center mb-2 mt-4 font-weight-bold">
+											<strong>REGISTER</strong>
+										</h2>
+
+										<p class="font-weight-bold my-4 text-center font-weight-bold">
+											<strong><span> Fill out the registration
+													form, our system will validate your details and then you
+													can submit</span></strong>
+										</p>
+
+										<hr>
+
+										<!-- Grid row -->
+										<div class="row mt-5">
+
+											<!-- Grid column -->
+											<div class="col-md-6 ml-lg-5 ml-md-3">
+
+												<!-- Grid row -->
+												<div class="row pb-4">
+													<div class="col-2 col-lg-1">
+														<i class="fas fa-university indigo-text fa-lg"></i>
+													</div>
+													<div class="col-10">
+														<h4 class="font-weight-bold mb-4">
+															<strong>PAYMENT</strong>
+														</h4>
+														<p>SFSDSDSDSDDDDDDDDDDDDDDDDDDDDSDSDSDSDSDS DSDSDSSSSS
+															SDSDSDSDS SDSSDSSSDSDHSDJKHSDJSHDJKSHJSHDKSHK</p>
+													</div>
+												</div>
+												<!-- Grid row -->
+
+												<!-- Grid row -->
+												<div class="row pb-4">
+													<div class="col-2 col-lg-1">
+														<i class="fas fa-desktop deep-purple-text fa-lg"></i>
+													</div>
+													<div class="col-10">
+														<h4 class="font-weight-bold mb-4">
+															<strong>CHECKOUT</strong>
+														</h4>
+														<p>SFSDSDSDSDDDDDDDDDDDDDDDDDDDDSDSDSDSDSDS DSDSDSSSSS
+															SDSDSDSDS SDSSDSSSDSDHSDJKHSDJSHDJKSHJSHDKSHK.</p>
+													</div>
+												</div>
+												<div class="row pb-4">
+													<div class="col-2 col-lg-1">
+														<i class="fas fa-desktop deep-purple-text fa-lg"></i>
+													</div>
+													<div class="col-10">
+														<h4 class="font-weight-bold mb-4">
+															<strong>CART</strong>
+														</h4>
+														<p>SFSDSDSDSDDDDDDDDDDDDDDDDDDDDSDSDSDSDSDS DSDSDSSSSS
+															SDSDSDSDS SDSSDSSSDSDHSDJKHSDJSHDJKSHJSHDKSHK.</p>
+													</div>
+												</div>
+												<!-- Grid row -->
+
+												<!-- Grid row -->
+												<div class="row pb-4">
+													<div class="col-2 col-lg-1">
+														<i class="far fa-money-bill-alt purple-text fa-lg"></i>
+													</div>
+													<div class="col-10">
+														<h4 class="font-weight-bold mb-4">
+															<strong>EFFICENCY</strong>
+														</h4>
+														<p>SFSDSDSDSDDDDDDDDDDDDDDDDDDDDSDSDSDSDSDS DSDSDSSSSS
+															SDSDSDSDS SDSSDSSSDSDHSDJKHSDJSHDJKSHJSHDKSHK.</p>
+													</div>
+												</div>
+												<!-- Grid row -->
+
+											</div>
+											<!-- Grid column -->
+
+											<!-- Grid column -->
+											<div class="col-md-5">
+
+												<form id="userRegister" th:action="@{/saveUser}"
+													th:object="${user}" method="post">
+
+													<div id="fnameError" class="alert alert-danger"
+														role="alert">Your First name is too short</div>
+													<div class="md-form mb-2">
+														<i class="fas fa-user prefix"></i> <input
+															class="form-control" id="fname" type="text"
+															th:field="*{fname}"><br> <label for="name">Your
+															First name</label>
+
+													</div>
+
+													<div id="lnameError" class="alert alert-danger"
+														role="alert">Your Last name is too short</div>
+													<div class="md-form mb-2">
+														<i class="fas fa-user prefix"></i> <input
+															class="form-control" id="lname" type="text"
+															th:field="*{lname}"><br> <label for="name">Your
+															Last name</label>
+													</div>
+
+													<div id="emailError" class="alert alert-danger"
+														role="alert">Your Email is too short</div>
+													<div id="emailError2" class="alert alert-danger"
+														role="alert">There is a registered user with this
+														email</div>
+													<div class="md-form">
+														<i class="fas fa-envelope prefix"></i> <input
+															class="form-control" id="email" type="email"
+															th:field="*{email}"><br> <label for="email">Your
+															email</label>
+													</div>
+
+													<div id="addressError" class="alert alert-danger"
+														role="alert">Your Home Address is too short</div>
+													<div class="md-form">
+														<i class="fas fa-home prefix"></i> <input
+															class="form-control" id="address" type="text"
+															th:field="*{address}"><br> <label
+															for="address">Your Home Address</label>
+													</div>
+
+													<div id="phoneError" class="alert alert-danger"
+														role="alert">Your Phone Number is invalid</div>
+													<div class="md-form">
+														<i class="fas fa-phone prefix black-text"></i> <input
+															class="form-control" id="phone" type="text"
+															th:field="*{phone}"><br> <label for="phone">Your
+															Phone Number</label>
+													</div>
+
+													<div id="passwordError" class="alert alert-danger"
+														role="alert">Your Password is too short</div>
+													<div class="md-form">
+														<i class="fas fa-lock prefix"></i> <input
+															class="form-control" id="password" type="text"
+															th:field="*{password}"><br> <label
+															for="password">Your Password</label>
+													</div>
+
+													<div id="rPasswordError" class="alert alert-danger"
+														role="alert">Your Passwords do not match</div>
+													<div class="md-form">
+														<i class="fas fa-lock prefix"></i> <input
+															class="form-control" id="repeatPassword" type="text">
+														<label for="repeatPassword">Confirm Password</label>
+													</div>
+
+													<div class="text-center">
+														<button
+															class="btn btn-indigo btn-rounded mt-5 waves-effect waves-light"
+															type="button" id="registerNow" onclick="formSubmit()">Sign
+															up</button>
+													</div>
+
+												</form>
+											</div>
+											<!-- Grid column -->
+
+										</div>
+										<!-- Grid row -->
+
+									</div>
+								</div>
+
+							</div>
+							<!-- Grid column -->
+
+						</div>
+						<!-- Grid row -->
+
+					</div>
+				</div>
+			</section>
+			<div style="height: 20px"></div>
+			<!--Section: Content-->
+
+		</div>
+
+
+		<script>
+			hideAllData();
+			var status = 0;
+			var fname = "";
+			var lname = "";
+			var password = "";
+			var phone = 0;
+			var email = "";
+			var address = "";
+			var dateOfBirth = "";
+			var Estatus = 0;
+			//var testPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+			//var testPassword = /^(?=.*\d)(?=.*[a-z]).{8,15}$/;
+
+			//setup before functions
+			var typingTimer; //timer identifier
+			var doneTypingInterval = 4000; //time in ms, 3 second for example
+			var $input = $('#userRegister');
+
+			//on keyup, start the countdown
+			$input.on('keyup', function() {
+				clearTimeout(typingTimer);
+				hideAllData();
+				typingTimer = setTimeout(doneTyping, doneTypingInterval);
+			});
+
+			//on keydown, clear the countdown 
+			$input.on('keydown', function() {
+				clearTimeout(typingTimer);
+			});
+
+			//user is "finished typing," do something
+
+			function doneTyping() {
+
+				hideAllData();
+
+				fname = $('#fname').val();
+				lname = $('#lname').val();
+				phone = $('#phone').val();
+				password = $('#password').val();
+				email = $('#email').val();
+				address = $('#address').val();
+				dateOfBirth = $('#dateOfBirth').val();
+				password = $('#password').val();
+				repeatPassword = $('#repeatPassword').val();
+				var atposition = email.indexOf("@");
+				var dotposition = email.lastIndexOf(".");
+
+				console.log(password);
+
+				$.ajax({
+
+					url : "/register/emailCheck",
+					data : {
+						'email' : email
+
+					},
+
+					success : function(data) {
+
+						if (data === false) {
+							Estatus = 0;
+
+						}
+
+						else {
+							Estatus = 1;
+							$("#registerNow").slideUp();
+
+						}
+
+					}
+
+				})
+
+				if (fname == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#fnameError").slideDown();
+				}
+
+				else if (fname.length < 4) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#fnameError").slideDown();
+				}
+
+				else if (lname == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#lnameError").slideDown();
+				}
+
+				else if (lname.length < 4) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#lnameError").slideDown();
+				}
+
+				else if (email == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#emailError").slideDown();
+
+				}
+
+				else if (email.length < 10) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#emailError").slideDown();
+
+				}
+
+				else if (Estatus == 1) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#emailError2").slideDown();
+
+				}
+
+				else if (address == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#addressError").slideDown();
+
+				}
+
+				else if (address.length < 12) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#addressError").slideDown();
+				}
+
+				else if (phone == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#phoneError").slideDown();
+
+				}
+
+				else if (phone.length < 9) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#phoneError").slideDown();
+				}
+
+				else if (password == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#passwordError").slideDown();
+
+				}
+
+				//else if (!password.match(testPassword)) {
+				//status = 0;
+				//$("#registerNow").slideUp();
+				//$("#infoSpan")
+				//	.text(
+				///		"Your password must be at 8 to 15 of length which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
+				//}
+
+				else if (password.length < 8) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#passwordError").slideDown();
+				}
+
+				else if (repeatPassword == "") {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#rPasswordError").slideDown();
+
+				}
+
+				else if (repeatPassword != password) {
+					status = 0;
+					$("#registerNow").slideUp();
+					$("#rPasswordError").slideDown();
+				}
+
+				else {
+					hideAllData();
+					status = 1;
+					$("#registerNow").slideDown();
+				}
+
+			};
+
+			function formSubmit() {
+
+				doneTyping();
+
+				event.preventDefault();
+				var form = event.target.form; // storing the form
+
+				console.log(password);
+				if (status == 1) {
+
+					form.submit();
+
+				}
+
+			};
+
+			function hideAllData() {
+
+				$("#registerNow").hide();
+				$("#fnameError").hide();
+				$("#lnameError").hide();
+				$("#addressError").hide();
+				$("#rPasswordError").hide();
+				$("#passwordError").hide();
+				$("#phoneError").hide();
+				$("#emailError2").hide();
+				$("#emailError").hide();
+				$("#lnameError").hide();
+
+			};
+		</script>
+	</div>
+</body>
+</html>

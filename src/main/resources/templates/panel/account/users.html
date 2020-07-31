@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${displayMessage}">
+
+							<div th:if="${deleteError}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>Only [[${countDeleted}]] records were
+									deleted by [[${countSend}]] records.
+								</p>
+								<p th:each="userID: ${notDeleted}">
+									Could not delete user with user ID: <strong>[[${userID}]].</strong>
+								</p>
+
+								<p class="text-success" th:each="userID: ${deletedProducts}">
+									User with user ID: <strong>[[${userID}]] </strong> was deleted.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${deleteSuccess}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> [[${countDeleted}]] users were
+									deleted successfully.
+								</p>
+								<p th:each="userID: ${deletedProducts}">
+									User with user ID: <strong>[[${userID}]] </strong> was deleted.
+								</p>
+
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+
+						<div id="contectChangeArea" class="">
+
+							<div th:if="${role != null}" id="dataTableFood">
+								<!-- Table with panel -->
+								<div class="card card-cascade narrower">
+
+									<!--Card image-->
+									<div
+										class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+										<div>
+											<a type="button" onclick="listUsersByRoles()"
+												class="btn btn-outline-white material-tooltip-main btn-rounded btn-sm px-2"
+												data-toggle="tooltip" data-placement="bottom"
+												data-original-title="Refresh content"> <i
+												class="fas fa-sync"></i>
+											</a>
+											<button type="button"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="fas fa-columns mt-0"></i>
+											</button>
+											<input type="hidden" id="roleID" th:value="${role.roleID}">
+										</div>
+
+										<a href="" class="white-text mx-3">Users -
+											[[${role.name}]] </a>
+
+										<div>
+											<button type="button" onclick="deleteUsersbyIDs()"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="far fa-trash-alt mt-0"></i>
+											</button>
+											<button type="button" data-toggle="modal"
+												data-target="#UserAddModal" data-backdrop="static"
+												data-keyboard="false"
+												class="btn btn-outline-white btn-rounded btn-sm px-2">
+												<i class="fas fa-info-circle mt-0"></i>
+											</button>
+										</div>
+
+									</div>
+									<!--/Card image-->
+
+									<div class="px-4">
+
+										<div class="table-wrapper">
+											<!--Table-->
+											<div id="adadadaedrervvv" class="">
+												<table id="dtMaterialDesignExample"
+													class="table table-responsive table-hover mb-0">
+
+													<!--Table head-->
+													<thead>
+														<tr>
+															<th class="th-sm"></th>
+															<th class="th-lg text-nowrap font-weight-bold">User ID</th>
+															<th class="th-lg text-nowrap font-weight-bold">User name</th>
+															<th class="th-lg text-nowrap font-weight-bold">Email</th>
+															<th class="th-lg text-nowrap font-weight-bold">Phone</th>
+															<th class="th-lg text-nowrap font-weight-bold">Address</th>
+															<th class="th-lg text-nowrap font-weight-bold">Date of Birth</th>
+															<th class="th-lg text-nowrap font-weight-bold">IsVerified</th>
+															<th class="th-lg text-nowrap font-weight-bold">IsLocked</th>
+
+														</tr>
+													</thead>
+													<!--Table head-->
+
+													<!--Table body-->
+													<tbody>
+														<tr th:each="user, status :  ${role.users}">
+															<th scope="row"><input class="form-check-input"
+																type="checkbox" th:id="${user.userID}"
+																th:value="${user.userID}" name="items"> <label
+																class="form-check-label label-table"
+																th:for="${user.userID}"><strong>[[${status.index + 1}]]</strong></label></th>
+															<td><a
+																th:href="@{'/panel/accounts/user?userID=' + ${user.userID}}"
+																target="_blank"><strong><span
+																		class="text-nowrap text-primary text-uppercase">[[${user.userID}]]</span></strong></a></td>
+															<td class=" text-nowrap "><span class="text-nowrap">[[${user.username}]]</span></td>
+															<td class=" text-nowrap ">[[${user.email}]]</td>
+															<td class=" text-nowrap " >[[${user.phone}]]</td>
+															<td class=" text-nowrap ">[[${user.address}]]</td>
+															<td class=" text-nowrap ">[[${user.dateOfBirth}]]</td>
+															<td>[[${user.enabled}]]</td>
+															<td>[[${user.notLocked}]]</td>
+
+														</tr>
+													</tbody>
+													<!--Table body-->
+												</table>
+												<!--Table-->
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+								<!-- Table with panel -->
+							</div>
+
+
+
+
+
+							<!-- Modal: modalQuickView -->
+							<div id="UserAddModalDiv">
+								<div class="modal fade" id="UserAddModal">
+									<div class="modal-dialog modal-lg" role="">
+										<div class="modal-content">
+											<div class="modal-body">
+												<div class="row">
+													<div class="container">
+														<!--Carousel Wrapper-->
+														<div id="carousel-thumb"
+															class="carousel slide carousel-fade carousel-thumbnails"
+															data-ride="carousel">
+															<!--Slides-->
+															<div class="carousel-inner" role="listbox">
+																<div class="carousel-item active"></div>
+															</div>
+														</div>
+														<!--/.Carousel Wrapper-->
+													</div>
+													<div class="container">
+														<h2 class="h2-responsive product-name">
+
+
+
+
+															<div class="md-form">
+																<input type="text" id="addUserfName"
+																	class="form-control"> <label class="active"
+																	for="addUserfName">First Name</label>
+															</div>
+
+
+															<div class="md-form">
+																<input type="text" id="addUserlName"
+																	class="form-control"> <label class="active"
+																	for="addUserlName">Last Name</label>
+															</div>
+
+
+
+
+														</h2>
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="addUserEmail"
+																		class="form-control"> <label class="active"
+																		for="addUserEmail">User Email</label>
+																</div>
+
+
+															</span>
+														</h4>
+
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="addUserPhone"
+																	class="form-control"> <label class="active"
+																	for="addUserPhone">User Phone</label>
+															</div>
+
+
+
+														</h2>
+
+														<h2 class="h2-responsive product-name">
+
+
+
+															<div class="md-form">
+																<input type="text" id="addUserAddress"
+																	class="form-control"> <label class="active"
+																	for="addUserAddress">User Address</label>
+															</div>
+
+
+
+														</h2>
+
+														<h4 class="h4-responsive">
+															<span class="green-text">
+																<div class="md-form">
+																	<input type="text" id="addUserPassword"
+																		class="form-control"> <label class="active"
+																		for="addUserPassword">User Password</label>
+																</div>
+
+
+															</span>
+														</h4>
+
+														<!-- Add to Cart -->
+														<div class="card-body">
+															<div class="row">
+																<div class="col-md-6">
+																	<h5>User account Email Status:</h5>
+																	<div id="addUserOption">
+																		<select id="addUserSelect"
+																			class="browser-default custom-select">
+																			<option value="true">Verified</option>
+																			<option value="false" selected>Not Verified</option>
+																		</select>
+																	</div>
+																</div>
+
+																<div class="col-md-6">
+
+																	<h5>User Roles:</h5>
+																	<div id="addNewRoleOption">
+
+
+																		<div class="form-check" th:each="role : ${roles}">
+																			<input type="checkbox" class="form-check-input"
+																				th:id="${role.roleID}" th:value="${role.roleID}"
+																				name="addNewRoles"> <label
+																				class="form-check-label" th:for="${role.roleID}">[[${role.name}]]
+																			</label>
+																		</div>
+
+
+																	</div>
+																</div>
+															</div>
+															<hr class="mb-4">
+															<div class="row">
+																<div class="text-center">
+																	<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close</button>
+																	<button class="btn btn-primary"
+																		onclick="addNewUserDetails()">Add New User</button>
+
+																</div>
+															</div>
+
+														</div>
+														<div id="addFoodError"></div>
+														<!-- /.Add to Cart -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var roleID = $('#roleID').val();
+
+				var successUserAdd = '<div ' +
+				' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> User was added successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var addUserErrorMsg = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>User was not added.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding a category .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+
+				function addNewUserDetails() {
+
+					var password = $('#addUserPassword').val();
+					var fname = $('#addUserfName').val();
+					var lname = $('#addUserlName').val();
+					var email = $('#addUserEmail').val();
+					var phone = $('#addUserPhone').val();
+					var address = $('#addUserAddress').val();
+					var status = $("#addUserSelect option:selected").val();
+
+					var roleIDList = new Array();
+					$("input:checkbox[name='addNewRoles']:checked").each(
+							function() {
+								roleIDList.push($(this).val());
+							});
+
+					$.ajax({
+
+						url : "/panel/accounts/addUser",
+						data : {
+							'password' : password,
+							'fname' : fname,
+							'lname' : lname,
+							'email' : email,
+							'phone' : phone,
+							'address' : address,
+							'status' : status,
+							'roles' : roleIDList,
+
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(successUserAdd);
+								listUsersByRoles();
+							}
+
+							else
+								$('#addFoodError').append(addUserErrorMsg);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#newDataMessages').append(connectError);
+								$('#addFoodError').append(connectError);
+							}
+						}
+
+					})
+				};
+
+				function listUsersByRoles() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/accounts",
+						data : {
+
+							'roleID' : roleID
+
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteUsersbyIDs() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/accounts/deleteAccounts",
+						data : {
+							'uids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listUsersByRoles();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function editCategoryTool() {
+
+					$('#loaderTable').slideDown();
+
+					var id = "";
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						id = $(this).val();
+					});
+
+					console.log(id);
+
+					$.ajax({
+
+						url : "/panel/products/categories",
+						data : {
+							'categoryID' : id
+						},
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#categoryEditModalDiv');
+							$('#categoryEditModalDiv').html(result);
+
+							$('#categoryEditModal').modal({
+								backdrop : 'static',
+								keyboard : false
+							});
+
+							$('#loaderTable').fadeOut();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					});
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0) {
+
+								$('#DeleteCategory').attr('disabled', false);
+								$('#editCategory').attr('disabled', true);
+
+								if (ch_list.length == 1)
+									$('#editCategory').attr('disabled', false);
+
+							}
+
+							else {
+								$('#DeleteCategory').attr('disabled', true);
+								$('#editCategory').attr('disabled', true);
+							}
+
+						});
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

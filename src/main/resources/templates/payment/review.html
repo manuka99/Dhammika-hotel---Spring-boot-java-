@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated">
+
+	<div layout:fragment="content">
+		<div id="userProfileInfo" class="view intro-2"
+			style="background: #ad5389; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #3c1053, #ad5389); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #3c1053, #ad5389);">
+			<div style="height: 80px"></div>
+			<div aria-busy="true">
+				<div class="container mt-5">
+
+
+					<!--Section: Content-->
+					<section class="dark-grey-text">
+
+
+						<div class="card">
+							<div class="card-body">
+
+								<!--Grid row-->
+								<div class="row">
+
+									<!--Grid column-->
+									<div class="col-lg-12">
+
+										<!-- Pills panels -->
+										<div class="wish-list">
+											<div class="skin-light card-body">
+
+												<h1 class="text-muted">Review Paypal Transaction</h1>
+												<hr>
+											</div>
+										</div>
+
+
+										<div class="container-fluid mb-2">
+											<div class="card-body">
+
+												<h5 class="mb-3 font-weight-bold">Payer Information</h5>
+
+												<ul class="list-group list-group-flush">
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Payer First Name (paypal) <span> [[${payer.firstName}]]</span>
+													</li>
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Payer Last Name (paypal) <span> [[${payer.lastName}]]</span>
+													</li>
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Payer Email (paypal) <span> [[${payer.email}]]</span>
+													</li>
+												</ul>
+											</div>
+										</div>
+
+
+										<div class="container-fluid mb-2">
+											<div class="card-body">
+
+												<h5 class="mb-3 font-weight-bold">Transaction Details</h5>
+
+												<ul class="list-group list-group-flush">
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Value of the Products <span>USD
+															[[${transaction.amount.details.subtotal}]]</span>
+													</li>
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Tax and Vat <span>USD
+															[[${transaction.amount.details.tax}]]</span>
+													</li>
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center px-0">
+														Shipping Fee <span>USD
+															[[${transaction.amount.details.shipping}]]</span>
+													</li>
+													<li
+														class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+														<div>
+															<strong>Total value of the order (including VAT,
+																TAX and Shipping) </strong> <strong> </strong>
+														</div> <span><strong>USD
+																[[${transaction.amount.total}]]</strong></span>
+
+													</li>
+												</ul>
+											</div>
+										</div>
+
+
+										<div class="container-fluid mb-2">
+											<div class="card-body">
+												<h5 class="mb-3 font-weight-bold">Product Details</h5>
+												<hr class="mb-2">
+												<div class="table-responsive">
+													<table class="table">
+														<thead>
+															<tr>
+																<th class="font-weight-bold text-nowrap">#</th>
+																<th class="font-weight-bold text-nowrap">Item ID</th>
+																<th class="font-weight-bold text-nowrap">Item Name</th>
+																<th class="font-weight-bold text-nowrap">Quantity</th>
+																<th class="font-weight-bold text-nowrap">Unit Price</th>
+																<th class="font-weight-bold text-nowrap">Tax</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="product, status : ${items}">
+																<td class="font-weight-bold">[[${status.index +
+																	1}]]</td>
+																<td class="font-weight-bold">[[${product.sku}]]</td>
+																<td>[[${product.name}]]</td>
+																<td>[[${product.quantity}]]</td>
+																<td>USD [[${product.price}]]</td>
+																<td>USD [[${product.tax}]]</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+											</div>
+
+
+
+
+											<form class="card-body" id="excecutePaypalPayment"
+												th:action="@{/executePaypalPayemnt}" th:method="POST">
+												<input type="hidden" name="paymentId"
+													th:value="${param.paymentId}" /> <input type="hidden"
+													th:name="PayerID" th:value="${param.PayerID}" />
+												<button type="submit" class="btn btn-primary">Pay
+													Now</button>
+
+											</form>
+										</div>
+										<!--Grid column-->
+
+										<!--Grid column-->
+
+										<!--Grid column-->
+
+									</div>
+									<!--Grid row-->
+
+								</div>
+							</div>
+						</div>
+					</section>
+					<!--Section: Content-->
+
+
+				</div>
+			</div>
+
+			<div style="height: 60px"></div>
+		</div>
+
+	</div>
+
+</body>
+</html>

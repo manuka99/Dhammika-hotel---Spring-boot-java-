@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+<link th:href="@{'/Design/mdPro/css/custom-Progress.css'}"
+	rel="stylesheet">
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated">
+
+	<div layout:fragment="content">
+		<div class="intro-2"
+			style="background: rgb(227, 60, 133); background: linear-gradient(90deg, rgba(227, 60, 133, 1) 0%, rgba(50, 127, 219, 0.630987429151348) 100%); background-repeat: no-repeat; background-size: cover; background-position: center center;">
+			<div style="height: 80px"></div>
+
+			<div id="loadMyCart">
+				<div class="container skin-light">
+
+					<!--Section: Block Content-->
+					<section class="mt-5 mb-4">
+
+						<!--Grid row-->
+						<div class="row">
+
+							<!--Grid column-->
+							<div class="col-lg-8">
+
+								<!-- Card -->
+								<div class="progress-custom" id="lordercartItems"
+									style="display: none">
+									<div class="indeterminate-my"></div>
+								</div>
+								<div class="card wish-list mb-4">
+
+									<div class="card-body">
+
+										<h5 class="mb-4">
+											Cart (<span>[[${cart.itemCount}]]</span> items)
+										</h5>
+
+										<div th:each="cartProduct : ${cart.cart_Items}">
+
+											<div>
+												<div class="row mb-4"
+													th:if="${cartProduct.product.active eq true}">
+													<div class="col-md-5 col-lg-3 col-xl-3">
+														<div
+															class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+															<img class="img-fluid w-100"
+																th:src="|data:image/png;base64,${cartProduct.product.image64String}|"
+																style="width: 150px; height: 150px; display: block; margin: auto;"
+																alt="Sample"> <a href="#!">
+																<div class="mask waves-effect waves-light">
+																	<img class="img-fluid w-100"
+																		th:src="|data:image/png;base64,${cartProduct.product.image64String}|"
+																		style="width: 150px; height: 150px; display: block; margin: auto;">
+																	<div
+																		class="mask rgba-black-slight waves-effect waves-light"></div>
+																</div>
+															</a>
+														</div>
+													</div>
+													<div class="col-md-7 col-lg-9 col-xl-9">
+														<div>
+															<div class="d-flex justify-content-between">
+																<div>
+																	<h5>[[${cartProduct.product.name}]]</h5>
+																	<p class="mb-3 text-muted text-uppercase small">[[${cartProduct.product.portion}]]</p>
+																	<p class="mb-2 text-muted text-uppercase small">[[${cartProduct.product.description}]]</p>
+																</div>
+																<div>
+																	<div
+																		class="def-number-input number-input safari_only mb-0
+																		w-100">
+
+																		<button type="button"
+																			th:onclick="this.parentNode.querySelector('input[type=number]').stepDown(), updateQuantity([[${cartProduct.product.productID}]])"
+																			class="minus"></button>
+																		<input class="quantity" min="1"
+																			th:id="'quantity' + ${cartProduct.product.productID}"
+																			th:value="${cartProduct.quantity}" th:name="qty"
+																			type="number">
+																		<button type="button"
+																			th:onclick="this.parentNode.querySelector('input[type=number]').stepUp(), updateQuantity([[${cartProduct.product.productID}]])"
+																			class="plus"></button>
+
+																	</div>
+																</div>
+															</div>
+															<div
+																class="d-flex justify-content-between align-items-center">
+																<div>
+																	<a
+																		th:onclick="removeItemID([[${cartProduct.product.productID}]])"
+																		type="button"
+																		class="card-link-secondary small text-uppercase mr-3"><i
+																		class="fas fa-trash-alt mr-1"></i> Remove item </a>
+																</div>
+																<p class="mb-0">
+																	<span><strong>Rs.
+																			[[${cartProduct.product.price}]] (USD
+																			[[${#numbers.formatDecimal(cartProduct.product.price
+																			/ usd, 0, 2)}]])</strong></span>
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row mb-4"
+													th:if="${cartProduct.product.active eq false}">
+													<div class="col-md-5 col-lg-3 col-xl-3">
+														<div
+															class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+															<img class="img-fluid w-100"
+																th:src="|data:image/png;base64,${cartProduct.product.image64String}|"
+																style="width: 150px; height: 150px; display: block; margin: auto;"
+																alt="Sample">
+															<div
+																class="mask pattern-4 flex-center waves-effect waves-light">
+																<p class="white-text">Not Available</p>
+															</div>
+
+														</div>
+													</div>
+													<div class="col-md-7 col-lg-9 col-xl-9">
+														<div>
+															<div class="d-flex justify-content-between">
+																<div>
+																	<h5>
+																		<del>[[${cartProduct.product.name}]]</del>
+																	</h5>
+																	<p class="mb-3 text-muted text-uppercase small">
+																		<del>[[${cartProduct.product.portion}]]</del>
+																	</p>
+																	<p class="mb-2 text-muted text-uppercase small">
+																		<del>[[${cartProduct.product.description}]]</del>
+																	</p>
+																</div>
+																<div>
+																	<div
+																		class="def-number-input number-input safari_only mb-0 w-100">
+																		<button class="minus"></button>
+																		<input class="quantity" min="1" value="1"
+																			type="number">
+																		<button class="plus"></button>
+																	</div>
+																</div>
+															</div>
+															<div
+																class="d-flex justify-content-between align-items-center">
+																<div>
+																	<a type="button"
+																		class="card-link-secondary small text-uppercase mr-3"><i
+																		class="fas fa-trash-alt mr-1"></i> Remove item </a>
+																</div>
+																<p class="mb-0">
+																	<span><strong><del>Rs.
+																				[[${#numbers.formatDecimal(cartProduct.product.price,
+																				0, 2)}]] (USD
+																				[[${#numbers.formatDecimal(cartProduct.product.price
+																				/ usd, 0, 2)}]])</del></strong></span>
+																</p>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<p class="text-primary mb-0">
+											<i class="fas fa-info-circle mr-1"></i> Do not delay the
+											purchase, adding items to your cart does not mean booking
+											them.
+										</p>
+									</div>
+								</div>
+								<!-- Card -->
+
+								<!-- Card -->
+								<div class="card mb-4">
+									<div class="card-body">
+
+										<h5 class="mb-4">Expected shipping delivery</h5>
+
+										<p class="mb-0">Thu., 12.03. - Mon., 16.03.</p>
+									</div>
+								</div>
+								<!-- Card -->
+
+								<!-- Card -->
+								<div class="card mb-4">
+									<div class="card-body">
+
+										<h5 class="mb-4">We accept</h5>
+
+										<img class="mr-2" width="45px"
+											src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+											alt="Visa"> <img class="mr-2" width="45px"
+											src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+											alt="American Express"> <img class="mr-2" width="45px"
+											src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+											alt="Mastercard"> <img class="mr-2" width="45px"
+											src="https://z9t4u9f6.stackpathcdn.com/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+											alt="PayPal acceptance mark">
+									</div>
+								</div>
+								<!-- Card -->
+
+							</div>
+							<!--Grid column-->
+
+							<!--Grid column-->
+							<div class="col-lg-4">
+
+								<!-- Card -->
+								<div class="card mb-4  ">
+
+									<button id="dataUpdating" style="display: none"
+										class="btn btn-success mb-3" type="button">
+										<span class="spinner-border spinner-border-sm" role="status"
+											aria-hidden="true"></span> Updating...
+									</button>
+
+									<div class="card-body ">
+
+
+
+
+										<h4 class="mb-3">Shopping Cart</h4>
+
+
+										<ul class="list-group list-group-flush">
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center px-0">
+												Value of the Products <span>Rs. <span>[[${#numbers.formatDecimal(cart.productPriceTotal,
+														0, 2)}]]) <br>(USD
+														[[${#numbers.formatDecimal(cart.productPriceTotal / usd,
+														0, 2)}]])
+												</span></span>
+											</li>
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center px-0">
+												Tax and Vat <span>Rs. <span>[[${#numbers.formatDecimal(cart.tax,
+														0, 2)}]]<br>(USD [[${#numbers.formatDecimal(cart.tax
+														/ usd, 0, 2)}]])
+												</span></span>
+											</li>
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center px-0">
+
+												Shipping Fee <span th:if="${cart.shippingFee > 0}">Rs.
+													<span> [[${#numbers.formatDecimal(cart.shippingFee,
+														0, 2)}]] <br>(USD
+														[[${#numbers.formatDecimal(cart.shippingFee / usd, 0,
+														2)}]])
+												</span>
+											</span>
+
+												<h5 th:if="${cart.shippingFee == 0}">
+													<span class="badge badge-success"> free</span>
+												</h5>
+
+											</li>
+											<li
+												class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+												<div>
+													<strong>Total Amount Payable</strong> <strong>
+														<p class="mb-0">(including VAT)</p>
+													</strong>
+												</div> <span><strong><span>Rs. <span>[[${#numbers.formatDecimal(cart.total
+																, 0, 2)}]] <br>(USD
+																[[${#numbers.formatDecimal(cart.total / usd, 0, 2)}]])
+														</span></span></strong></span>
+
+											</li>
+
+										</ul>
+
+										<a th:href="@{'/user/checkout'}"
+											class="btn btn-primary btn-block waves-effect waves-light">Checkout
+											Now</a>
+
+
+									</div>
+								</div>
+								<!-- Card -->
+
+								<!-- Card -->
+								<div class="card mb-4">
+									<div class="card-body">
+
+										<a class="dark-grey-text d-flex justify-content-between"
+											data-toggle="collapse" href="#collapseExample"
+											aria-expanded="false" aria-controls="collapseExample">
+											Add a discount code (optional) <span><i
+												class="fas fa-chevron-down pt-1"></i></span>
+										</a>
+
+										<div class="collapse" id="collapseExample">
+											<div class="mt-3">
+												<div class="md-form md-outline mb-0">
+													<input type="text" id="discount-code"
+														class="form-control font-weight-light"
+														placeholder="Enter discount code">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- Card -->
+
+							</div>
+							<!--Grid column-->
+
+						</div>
+						<!--Grid row-->
+
+					</section>
+					<!--Section: Block Content-->
+
+				</div>
+
+
+				<div style="height: 40px;"></div>
+
+
+
+			</div>
+
+		</div>
+
+		<!-- SCRIPTS -->
+		<script>
+			function updateQuantity(itemID) {
+
+				$('#dataUpdating').slideDown();
+				$('#lordercartItems').slideDown();
+
+				var newQty = $('#quantity' + itemID).val();
+				console.log(newQty);
+
+				$
+						.ajax({
+
+							url : "/user/cartUpdate",
+							data : {
+								'productID' : itemID,
+								'quantity' : newQty,
+
+							},
+
+							success : function(data) {
+
+								if (data === "updated") {
+									toastr.success('cart was updated');
+
+									cartSize();
+
+									$("#loadMyCart").load(
+											location.href + " #loadMyCart");
+
+								}
+
+								else if (data === "failed") {
+									toastr
+											.error('Maximum quantity of an item cannot exceeds 3 and should be at least 1');
+									cartSize();
+									$("#loadMyCart").load(
+											location.href + " #loadMyCart");
+
+								}
+
+							}
+
+						})
+
+			};
+
+			function removeItemID(itemID) {
+
+				$('#dataUpdating').slideDown();
+				$('#lordercartItems').slideDown();
+
+				$.ajax({
+
+					url : "/user/cartRemove",
+					data : {
+						'pid' : itemID
+					},
+
+					success : function(data) {
+						if (data === true) {
+							toastr.success('item was removed');
+							cartSize();
+							$("#loadMyCart").load(
+									location.href + " #loadMyCart");
+
+						}
+
+						else {
+							cartSize();
+							$("#loadMyCart").load(
+									location.href + " #loadMyCart");
+							toastr.error('item was not removed');
+						}
+
+					}
+
+				})
+
+			};
+		</script>
+
+	</div>
+</body>
+</html>

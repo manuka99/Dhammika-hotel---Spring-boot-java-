@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+</head>
+<body>
+	<form action="#" th:action="@{/uploadFood}" th:object="${product}"
+		method="post" enctype="multipart/form-data">
+
+		<input type="text" th:field="*{name}" placeholder="name"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="text"
+			th:field="*{description}" placeholder="description"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="text"
+			th:field="*{price}" placeholder="price"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="text"
+			th:field="*{tax}" placeholder="tax"
+			class="form-control mb-4 col-4">
+			
+			 <input type="text"
+			th:field="*{category.categoryID}" placeholder="catId"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="text"
+			th:field="*{portion}" placeholder="portion"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="text"
+			th:field="*{active}" placeholder="active"
+			class="form-control mb-4 col-4"> 
+			
+			 <input type="file" name="myFile"
+			 placeholder="Employee"
+			class="form-control mb-4 col-4"> 
+			
+			<input type="submit" />
+	</form>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+
+
+</head>
+
+
+<body class="fixed-sn white-skin" id="body">
+
+	<div layout:fragment="content">
+
+
+
+
+		<main>
+			<div class="container-fluid">
+
+				<!-- Section: Basic examples -->
+				<section>
+
+					<div id="contectChangeArea">
+
+
+
+
+						<!-- Main content -->
+						<section class="content">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-3">
+										<a href="mailbox.html" class="btn btn-primary btn-block mb-3"><i
+											class="fas fa-angle-double-left"></i>&nbsp; Back</a>
+
+										<div class="list-group">
+											<button type="button"
+												class="list-group-item list-group-item-action active">
+												MailBox</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="fas fa-inbox"></i> Inbox <span
+													class="badge bg-primary float-right">12</span>
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-envelope"></i> Sent
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-file-alt"></i> Drafts
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="fas fa-filter"></i> Junk <span
+													class="badge bg-warning float-right">65</span>
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-trash-alt"></i> Trash
+											</button>
+										</div>
+
+
+
+										<div class="list-group mt-4 mb-4">
+											<button type="button"
+												class="list-group-item active list-group-item-action ">
+												Labels</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-circle text-danger"></i> Important
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-circle text-warning"></i> Promotions
+											</button>
+											<button type="button"
+												class="list-group-item list-group-item-action">
+												<i class="far fa-circle text-primary"></i> Social
+											</button>
+										</div>
+
+									</div>
+									<!-- /.col -->
+									<div id="compose" class="col-md-9">
+										<div class="card card-primary card-outline">
+											<div class="card-header">
+												<h3 class="card-title text-white">Compose New Message</h3>
+											</div>
+											<!-- /.card-header -->
+											<div class="card-body">
+
+												<div class="form-group">
+													<input class="form-control" placeholder="To:" id="to">
+												</div>
+												<div class="form-group">
+													<input class="form-control" placeholder="Subject:"
+														id="subject">
+												</div>
+
+												<div class="form-group">
+													<textarea id="compose-textarea" class="form-control"
+														style="height: 300px">
+                      <h1>
+															<u>Heading Of Message</u>
+														</h1>
+                      <h4>Subheading</h4>
+                      <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain
+                        was born and I will give you a complete account of the system, and expound the actual teachings
+                        of the great explorer of the truth, the master-builder of human happiness. No one rejects,
+                        dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know
+                        how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again
+                        is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,
+                        but because occasionally circumstances occur in which toil and pain can procure him some great
+                        pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,
+                        except to obtain some advantage from it? But who has any right to find fault with a man who
+                        chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that
+                        produces no resultant pleasure? On the other hand, we denounce with righteous indignation and
+                        dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so
+                        blinded by desire, that they cannot foresee</p>
+                      <ul>
+                        <li>List item one</li>
+                        <li>List item two</li>
+                        <li>List item three</li>
+                        <li>List item four</li>
+                      </ul>
+                      <p>Thank you,</p>
+                      <p>John Doe</p>
+                    </textarea>
+												</div>
+												<div class="form-group">
+													<div
+														class="btn btn-outline-pink  waves-effect btn-sm float-left file-field">
+														<span><i class="fas fa-paperclip"></i> Attachment
+															max:32MB</span> <input type="file" multiple>
+													</div>
+												</div>
+
+											</div>
+											<!-- /.card-body -->
+											<div class="card-footer">
+												<div class="float-right">
+													<button type="button" class="btn btn-default">
+														<i class="fas fa-pencil-alt"></i> Draft
+													</button>
+													<button type="button" onclick="sendMail()"
+														class="btn btn-primary">
+														<i class="far fa-envelope"></i> Send
+													</button>
+												</div>
+												<button type="reset" class="btn btn-danger">
+													<i class="fas fa-times"></i> Discard
+												</button>
+											</div>
+											<!-- /.card-footer -->
+										</div>
+										<!-- /.card -->
+									</div>
+									<!-- /.col -->
+								</div>
+								<!-- /.row -->
+							</div>
+							<!-- /.container-fluid -->
+						</section>
+						<!-- /.content -->
+
+
+
+
+
+
+
+
+					</div>
+				</section>
+			</div>
+
+		</main>
+
+
+
+		<script>
+			var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+			+'role="alert">'
+					+ '<p>'
+					+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+					+ '</p>'
+					+ '<p>'
+					+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+					+ '</p>'
+
+					+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">'
+					+ '<span aria-hidden="true">&times;</span>'
+					+ '</button>'
+					+ '<div style="height: 10px;"></div>' + '</div>';
+
+			function notificationsOpened(notificationID) {
+
+				$.ajax({
+
+					url : "/user/readNotification",
+					data : {
+						'notificationID' : notificationID
+					},
+
+				})
+
+				$('#' + notificationID).removeClass("active grey lighten-3");
+
+			};
+
+			function sendMail() {
+
+				var body = $('#compose-textarea').summernote('code');
+				var to = $('#to').val();
+				var subject = $('#subject').val();
+
+				$.ajax({
+
+					url : "/panel/mails/sendMail",
+					data : {
+
+						"body" : body,
+						"to" : to,
+						"subject" : subject
+
+					},
+					timeout : 100000,
+					success : function(data, textStatus, jqXHR) {
+
+						if (data == true)
+							alert('sent');
+
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						if (textStatus === "timeout") {
+							$('#loaderTable').fadeOut();
+							$('#newDataMessages').append(connectError);
+						}
+					}
+
+				})
+
+			};
+		</script>
+
+
+		<script type="text/javascript">
+			$(function() {
+				//Add text editor
+				$('#compose-textarea').summernote()
+			})
+		</script>
+	</div>
+
+</body>
+</html>

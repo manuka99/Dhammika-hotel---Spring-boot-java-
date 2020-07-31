@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid ">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="messages" th:if="${message != null}">
+
+							<div th:if="${message == 'error'}"
+								class="mt-2 alert card alert-danger alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Error: </strong>your profile was not updated.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<div style="height: 10px;"></div>
+							</div>
+
+							<div th:if="${message eq 'updated'}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> your profile was updated.
+
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+							<div th:if="${message eq 'emailChanged'}"
+								class="mt-2 mb-4 alert card alert-success alert-dismissible fade show"
+								role="alert">
+								<p>
+									<strong>Success: </strong> your profile was updated and email
+									was changed.
+								</p>
+								<p>
+									click <strong><a th:href="@{/login}"> here </a></strong> to
+									login.
+								</p>
+								<button type="button" class="close" data-dismiss="alert"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						</div>
+
+						<div id="contectChangeArea" class="">
+
+
+							<section class="section team-section">
+
+								<!-- Grid row -->
+								<div class="row text-center">
+
+									<!-- Grid column -->
+									<div class="col-md-8 mt-4 mb-4">
+
+										<!-- Card -->
+										<div class="card card-cascade cascading-admin-card ">
+
+											<form id="userUpdatePanel" th:object="${userSave}">
+
+												<!-- Card Data -->
+												<div class="admin-up d-flex justify-content-start">
+													<i class="fas fa-users info-color py-4 mr-3 z-depth-2"></i>
+													<div class="data">
+														<h5 class="font-weight-bold dark-grey-text">
+															Edit Profile - <span class="text-muted">Complete
+																your profile</span>
+														</h5>
+													</div>
+													<div id="updateProfile" class="text-right">
+														<button style="display: none"
+															class="btn btn-danger btn-sm btn-rounded waves-effect waves-light"
+															id="disableEditUser" type="button"
+															onclick="disableEditUserForm()">Cancel</button>
+														<button style="display: none"
+															class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"
+															id="saveUpdateUser" type="button"
+															onclick="updateProfilePanel()">update</button>
+														<button
+															class="btn btn-primary btn-rounded waves-effect waves-light"
+															id="enableEditUser" type="button"
+															onclick="enableEditUserForm()">Edit Profile</button>
+													</div>
+												</div>
+												<!-- Card Data -->
+
+												<!-- Card content -->
+												<div class="card-body card-body-cascade">
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-md-12">
+
+															<div class="md-form form-sm mb-0">
+																<input class="form-control form-control-sm mycClass"
+																	id="fname" th:field="*{fname}" type="text" disabled>
+																<label class="active" for="form6">First Name</label>
+															</div>
+															<div class="md-form form-sm mb-0 mycClass">
+																<input class="form-control form-control-sm mycClass"
+																	id="lname" th:field="*{lname}" type="text" disabled>
+																<label class="active" for="form6">Last Name</label>
+															</div>
+
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-md-12">
+
+															<div class="md-form form-sm mb-0">
+																<input class="form-control form-control-sm mycClass"
+																	id="email" th:field="*{email}" type="email" disabled>
+																<label class="active" for="form6">User Email</label>
+															</div>
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-md-12">
+
+															<div class="md-form form-sm mb-0">
+																<input class="form-control form-control-sm mycClass"
+																	id="address" th:field="*{address}" type="text" disabled>
+																<label class="active" for="form6">Address</label>
+															</div>
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-md-12">
+
+															<div class="md-form form-sm mb-0">
+																<input class="form-control form-control-sm mycClass"
+																	id="dateOfBirth" type="date" th:field="*{dateOfBirth}"
+																	disabled> <label class="active" for="form6">Date
+																	Of Birth</label>
+															</div>
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-md-12">
+
+															<div class="md-form form-sm mb-0">
+																<input class="form-control form-control-sm mycClass"
+																	id="phone" type="text" th:field="*{phone}" disabled>
+																<label class="active" for="form6">Phone</label>
+															</div>
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-lg-4 col-md-6">
+
+															<div class="md-form form-sm mb-0">
+																<input class="text-primary form-control form-control-sm"
+																	id="form8" value="Sri lanka" type="text" disabled>
+																<label class="active" for="form8">Country</label>
+															</div>
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+												</div>
+												<!-- Card content -->
+											</form>
+										</div>
+										<!-- Card -->
+
+									</div>
+									<!-- Grid column -->
+
+									<!-- Grid column -->
+									<div class="col-md-4 mt-4 mb-4">
+
+										<!-- Card -->
+										<div class="card ">
+
+											<i class="fas fa-shield-alt fa-6x"></i>
+
+
+											<div class="card-body pt-0 mt-0">
+
+												<!-- Name -->
+												<h3 class="mb-3 font-weight-bold">
+													<strong>Profile Security</strong>
+												</h3>
+
+												<p class="mt-4 text-muted">
+												<form oninput="passwordUpdateCheck()">
+													<div class="row">
+														<div class="col-md-12 mb-4">
+															<label for="cc-name123">Current Password</label> <input
+																type="password" class="form-control"
+																id="currentPassword" name="currentPassword">
+														</div>
+
+													</div>
+													<div class="row">
+														<div class="col-md-6 mb-3">
+															<label for="cc-expiration123">New Password</label> <input
+																type="text" class="form-control" id="newPassword"
+																name="newPassword" disabled> <span id="newEnter"
+																style="display: none"><small class="text-muted">Enter
+																	your new password</small></span> <span id="short"
+																style="display: none"><small class="text-muted">Your
+																	password is too short</small></span> <span id="match"
+																style="display: none"><small class="text-muted">Passwords
+																	do not match</small></span> <span id="conditionPass"
+																style="display: none"><small class="text-muted">Your
+																	password must be at 8 to 15 of length.</small></span>
+														</div>
+														<div class="col-md-6 mb-3">
+															<label for="cc-cvv123">Repeat Password</label> <input
+																type="text" class="form-control" id="repeatPass"
+																disabled>
+															<div class="invalid-feedback show">Security code
+																required</div>
+														</div>
+													</div>
+
+
+													<div class="row d-flex justify-content-center">
+														<div id="UpdatePassword" style="display: none">
+															<button
+																class="btn btn-info btn-rounded waves-effect waves-light"
+																type="button" onclick="updatePassword()">update
+																Password</button>
+														</div>
+													</div>
+												</form>
+
+
+
+												</p>
+
+
+											</div>
+
+										</div>
+										<!-- Card -->
+
+									</div>
+									<!-- Grid column -->
+
+								</div>
+								<!-- Grid row -->
+
+							</section>
+
+							<div style="height: 80px"></div>
+
+
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 15000;
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function updateProfilePanel() {
+
+					event.preventDefault();
+					var form = event.target.form; // storing the form
+
+					$('#loaderTable').slideDown();
+
+					var $form = $("#userUpdatePanel");
+
+					$.ajax({
+
+						url : "/panel/user/profileUpdate",
+						data : $form.serialize(),
+						type : "POST",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				}
+
+				var newPassword = "";
+				var currentPassword = "";
+				var repeatPassword = "";
+				var status = 0;
+				var testPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+
+				function PasswordSecurityhideAll() {
+
+					console.log("passSec");
+					status = 0;
+					$('#newEnter').hide();
+					$('#short').hide();
+					$('#match').hide();
+					$('#conditionPass').hide();
+					$("#UpdatePassword").slideUp();
+					// $('#newPassword').attr("disabled", "disabled");
+					// $('#repeatPass').attr("disabled", "disabled");
+
+				}
+
+				function passwordUpdateCheck() {
+
+					newPassword = $('#newPassword').val();
+					currentPassword = $('#currentPassword').val();
+					repeatPassword = $('#repeatPass').val();
+
+					if (currentPassword != "") {
+
+						$('#newPassword').removeAttr('disabled');
+
+						if (newPassword != "") {
+
+							if (newPassword.length > 7) {
+
+								$('#repeatPass').removeAttr('disabled');
+
+								if (newPassword == repeatPassword) {
+									PasswordSecurityhideAll();
+									status = 1;
+									$("#UpdatePassword").slideDown();
+								}
+
+								else {
+									PasswordSecurityhideAll();
+									$('#match').show();
+
+								}
+
+							}
+
+							else {
+								PasswordSecurityhideAll();
+								$('#repeatPass').attr("disabled", "disabled");
+								$('#conditionPass').show();
+							}
+
+						} else {
+							PasswordSecurityhideAll();
+							$('#repeatPass').attr("disabled", "disabled");
+							$('#newEnter').show();
+						}
+
+					}
+
+					else {
+						PasswordSecurityhideAll();
+						$('#newPassword').attr("disabled", "disabled");
+						$('#repeatPass').attr("disabled", "disabled");
+					}
+
+					console.log(status);
+				};
+
+				function updatePassword() {
+
+					event.preventDefault();
+					var form = event.target.form; // storing the form
+
+					if (status == 1) {
+						$
+								.ajax({
+
+									url : "/panel/user/passwordUpdate",
+									data : {
+										'newPass' : newPassword,
+										'oldPass' : currentPassword
+									},
+									type : "POST",
+
+									success : function(data) {
+
+										alert(data);
+										if (data == true) {
+											toastr
+													.success('Success: Your password has been changed!');
+											window.location.replace("login");
+										}
+
+										else {
+											toastr
+													.error('Invalid: Your password has not been changed!');
+										}
+
+									}
+
+								})
+					}
+
+					else
+						$
+								.toaster('Please try again latter!', 'Error',
+										'danger');
+				};
+
+				var newPassword = "";
+				var currentPassword = "";
+				var repeatPassword = "";
+				var status = 0;
+				var testPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+
+				function PasswordSecurityhideAll() {
+
+					console.log("passSec");
+					status = 0;
+					$('#newEnter').hide();
+					$('#short').hide();
+					$('#match').hide();
+					$('#conditionPass').hide();
+					$("#UpdatePassword").slideUp();
+					// $('#newPassword').attr("disabled", "disabled");
+					// $('#repeatPass').attr("disabled", "disabled");
+
+				}
+
+				function passwordUpdateCheck() {
+
+					newPassword = $('#newPassword').val();
+					currentPassword = $('#currentPassword').val();
+					repeatPassword = $('#repeatPass').val();
+
+					if (currentPassword != "") {
+
+						$('#newPassword').removeAttr('disabled');
+
+						if (newPassword != "") {
+
+							if (newPassword.length > 7) {
+
+								$('#repeatPass').removeAttr('disabled');
+
+								if (newPassword == repeatPassword) {
+									PasswordSecurityhideAll();
+									status = 1;
+									$("#UpdatePassword").slideDown();
+								}
+
+								else {
+									PasswordSecurityhideAll();
+									$('#match').show();
+
+								}
+
+							}
+
+							else {
+								PasswordSecurityhideAll();
+								$('#repeatPass').attr("disabled", "disabled");
+								$('#conditionPass').show();
+							}
+
+						} else {
+							PasswordSecurityhideAll();
+							$('#repeatPass').attr("disabled", "disabled");
+							$('#newEnter').show();
+						}
+
+					}
+
+					else {
+						PasswordSecurityhideAll();
+						$('#newPassword').attr("disabled", "disabled");
+						$('#repeatPass').attr("disabled", "disabled");
+					}
+
+					console.log(status);
+				};
+
+				function updatePassword() {
+
+					event.preventDefault();
+					var form = event.target.form; // storing the form
+
+					if (status == 1) {
+						$
+								.ajax({
+
+									url : "/user/passwordUpdate",
+									data : {
+										'newPass' : newPassword,
+										'oldPass' : currentPassword
+									},
+									type : "POST",
+
+									success : function(data) {
+
+										if (data == true) {
+											toastr
+													.success('Success: Your password has been changed!');
+											window.location.replace("login");
+										}
+
+										else {
+											toastr
+													.error('Invalid: Your password has not been changed!');
+										}
+
+									}
+
+								})
+					}
+
+					else
+						$
+								.toaster('Please try again latter!', 'Error',
+										'danger');
+				};
+
+				function listAllOrders() {
+
+					$('#loaderTable').slideDown();
+
+					$.ajax({
+
+						url : "/panel/orders",
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+							$('#loaderTable').fadeOut();
+							var result = $(data).find('#contectChangeArea');
+							$('#contectChangeArea').html(result);
+							runScripts();
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				function deleteOrders() {
+
+					var ch_list = new Array();
+					$("input:checkbox[type=checkbox]:checked").each(function() {
+						ch_list.push($(this).val());
+					});
+
+					console.log(ch_list);
+
+					$.ajax({
+
+						url : "/panel/orders/order/deleteOrder",
+						data : {
+							'oids[]' : ch_list
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							var result = $(data).find('#messages');
+							$('#newDataMessages').append(result);
+							listAllOrders();
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#newDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+
+				$("#contectChangeArea").on(
+						"change",
+						".form-check-input",
+						function() {
+
+							var ch_list = new Array();
+							$("input:checkbox[type=checkbox]:checked").each(
+									function() {
+										ch_list.push($(this).val());
+									});
+
+							if (ch_list.length > 0)
+								$('#DeleteOrder').attr('disabled', false);
+
+							else
+								$('#DeleteOrder').attr('disabled', true);
+
+						});
+
+				function enableEditUserForm() {
+
+					$('form .mycClass').prop('disabled', false);
+					$('#enableEditUser').hide();
+					$('#disableEditUser').fadeIn();
+					$('#saveUpdateUser').fadeIn();
+
+				};
+
+				function disableEditUserForm() {
+
+					$('form .mycClass').prop('disabled', true);
+					$('#enableEditUser').fadeIn();
+					$('#disableEditUser').hide();
+					$('#saveUpdateUser').hide();
+
+				};
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

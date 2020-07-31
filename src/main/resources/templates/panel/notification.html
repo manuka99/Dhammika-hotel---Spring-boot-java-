@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+
+</head>
+
+
+<body class="fixed-sn white-skin" id="body">
+
+	<div layout:fragment="content">
+
+
+
+
+		<main>
+			<div class="container-fluid">
+
+				<!-- Section: Basic examples -->
+				<section>
+
+					<div id="contectChangeArea">
+
+
+						<div class="container skin-light" id="loadMyNotifications">
+
+							<!--Section: Block Content-->
+							<section class="mt-5 mb-4">
+
+								<!--Grid row-->
+								<div class="row">
+
+									<!--Grid column-->
+									<div class="container">
+										<div class="card gray mr-3 z-depth-2 chat-room">
+											<div class="card-body">
+
+												<!-- Grid row -->
+												<div class="  ">
+
+													<!-- Grid column -->
+													<div class="  ">
+
+														<div id="newDataMessages"></div>
+														<div
+															class="white z-depth-1 px-2 pt-3 pb-0 members-panel-1 scrollbar-light-blue">
+															<ul class="list-unstyled friend-list"
+																th:if="${notifications != null}">
+
+																<li th:each="notification : ${notifications}"
+																	th:id="${notification.notificationID}"
+																	class="border border-light"
+																	th:classappend="${notification.seen}? 'p-2' : 'active grey lighten-3 p-2'">
+																	<div class="col-sm-0">
+																		<button class="btn btn-rounded btn-deep-orange btn-sm"
+																			th:onclick="notificationDelete([[${notification.notificationID}]])">
+																			clear<i class="fas fa-trash pl-1"></i>
+																		</button>
+
+																	</div> <a
+																	th:onclick="notificationsOpened([[${notification.notificationID}]])"
+																	href="${notification.url}" target="_blank"
+																	class="d-flex justify-content-between">
+																		<div class="text-large">
+																			<strong>[[${notification.header} ]]</strong>
+																			<p class="last-message text-muted">[[${notification.body}]]</p>
+																		</div>
+																		<div class="chat-footer">
+																			<p class="text-smaller text-muted mb-0">[[${notification.preetyTime}]]</p>
+																			<span th:if="${notification.seen eq false}"
+																				class="badge badge-danger float-right">1</span>
+																		</div>
+
+																</a>
+
+																</li>
+															</ul>
+														</div>
+
+													</div>
+													<!-- Grid column -->
+
+													<!-- Grid column -->
+
+													<!-- Grid column -->
+
+												</div>
+												<!-- Grid row -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+						</div>
+
+
+					</div>
+				</section>
+			</div>
+
+		</main>
+
+
+
+		<script>
+			var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+			+'role="alert">'
+					+ '<p>'
+					+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+					+ '</p>'
+					+ '<p>'
+					+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+					+ '</p>'
+
+					+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">'
+					+ '<span aria-hidden="true">&times;</span>'
+					+ '</button>'
+					+ '<div style="height: 10px;"></div>' + '</div>';
+
+			function notificationsOpened(notificationID) {
+
+				$.ajax({
+
+					url : "/user/readNotification",
+					data : {
+						'notificationID' : notificationID
+					},
+
+				})
+
+				$('#' + notificationID).removeClass("active grey lighten-3");
+
+			};
+
+			function notificationDelete(notificationID) {
+
+				$.ajax({
+
+					url : "/user/deleteNotification",
+					data : {
+						'notificationID' : notificationID
+					},
+					timeout : 10000,
+					success : function(data, textStatus, jqXHR) {
+
+						if (data == true)
+							$('#' + notificationID).remove();
+
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						if (textStatus === "timeout") {
+							$('#loaderTable').fadeOut();
+							$('#newDataMessages').append(connectError);
+						}
+					}
+
+				})
+
+			};
+		</script>
+
+
+
+
+	</div>
+
+</body>
+</html>

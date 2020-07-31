@@ -1,0 +1,201 @@
+/* Your custom styles */
+
+.container4 {
+  display: flex;
+  border: 1px solid  #f2f2f2;
+  height: 420px;
+  width:300px;
+  margin:4px;
+  background-color: white;
+  box-shadow: 2px 5px 5px 1px #f2f2f2;
+}
+
+.container4.loading1 .img1, .container4.loading1 .stripe1 {
+  animation: hintloading 2s ease-in-out 0s infinite reverse;
+  -webkit-animation: hintloading 2s ease-in-out 0s infinite reverse;
+}
+
+
+.container1 {
+  display: flex;
+  border: 1px solid  #f2f2f2;
+  height: 320px;
+  width:246px;
+  padding: 2%;
+  margin:16px;
+  background-color: white;
+  box-shadow: 2px 5px 5px 1px #f2f2f2;
+}
+
+.img1-container1 {
+  width: 100%;
+  padding: 10px;
+}
+
+.img1 {
+  border: 1px solid white;
+  width: 100%;
+  height: 60%;
+  background-color: #e6e6e6;
+}
+
+.content1 {
+  border: 1px solid white;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.stripe1 {
+  border: 1px solid white;
+  height: 4%;
+  background-color: #e6e6e6;
+}
+
+.small-stripe1 {
+  width: 40%;
+  border: 1px solid white;
+}
+
+.medium-stripe1 {
+  width: 70%;
+}
+
+.long-stripe1 {
+	
+margin-top:22px;	
+  width: 100%;
+}
+
+.long-stripe2 {
+	margin-top:12px;
+  width: 100%;
+}
+
+
+.container1.loading1 .img1, .container1.loading1 .stripe1 {
+  animation: hintloading 2s ease-in-out 0s infinite reverse;
+  -webkit-animation: hintloading 2s ease-in-out 0s infinite reverse;
+}
+
+
+
+
+
+.container2 {
+  display: flex;
+  border: 1px solid  #f2f2f2;
+  height: 720px;
+  width:240px;
+  padding: 2%;
+  margin:16px;
+  background-color: white;
+  box-shadow: 2px 5px 5px 1px #f2f2f2;
+}
+
+.img2-container2 {
+  width: 100%;
+  padding: 10px;
+}
+
+.img2 {
+  border: 1px solid white;
+  width: 100%;
+  height: 60%;
+  background-color: #e6e6e6;
+}
+
+.content2 {
+  border: 1px solid white;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+.stripe3 {
+  border: 1px solid white;
+  height: 2%;
+  background-color: #e6e6e6;
+}
+
+.small-stripe2 {
+  width: 40%;
+  border: 1px solid white;
+}
+
+.medium-stripe2 {
+  width: 70%;
+}
+
+.long-stripe3 {
+	
+margin-top:12px;	
+margin-bottom:36px;	
+  width: 100%;
+}
+
+.long-stripe4 {
+	margin-top:12px;
+  width: 100%;
+}
+
+.long-stripe5 {
+margin-top:46px;	
+margin-bottom:36px;	
+  width: 100%;
+}
+
+
+.container2.loading2 .img2, .container2.loading2 .stripe3 {
+  animation: hintloading 2s ease-in-out 0s infinite reverse;
+  -webkit-animation: hintloading 2s ease-in-out 0s infinite reverse;
+}
+
+
+
+@keyframes hintloading
+{
+  0% {
+    opacity: 0.5;
+  }
+  50%  {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+@-webkit-keyframes hintloading
+{
+  0% {
+    opacity: 0.5;
+  }
+  50%  {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.blink_me {
+    animation: blinker 2s ease-in-out 0s infinite reverse;
+  -webkit-animation: blinker 2s ease-in-out 0s infinite reverse;
+}
+
+@keyframes blinker {
+  0% {
+    opacity: 0.5;
+  }
+  50%  {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

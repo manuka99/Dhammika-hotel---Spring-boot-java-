@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/hotel/layout.html}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Menu</title>
+
+
+</head>
+
+
+<body class="homepage-v1 hidden-sn white-skin animated">
+
+	<div layout:fragment="content">
+		<div id="userProfileInfo" class="view intro-2"
+			style="background: #bdc3c7; /* fallback for old browsers */ background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7); /* Chrome 10-25, Safari 5.1-6 */ background: linear-gradient(to right, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */; background-repeat: no-repeat; background-size: cover; background-position: center center;">
+			<div style="height: 80px"></div>
+			<div aria-busy="true">
+				<div class="container mt-5">
+
+
+					<!--Section: Content-->
+					<section class="dark-grey-text">
+
+
+						<div class="card">
+							<div class="card-body">
+
+								<!--Grid row-->
+								<div class="row">
+
+									<!--Grid column-->
+									<div class="col-lg-12">
+
+										<!-- Pills navs -->
+										<ul
+											class="nav md-pills nav-justified pills-primary font-weight-bold">
+
+											<li class="nav-item"><a class="nav-link "
+												data-toggle="tab" href="#" role="tab" id="myProfile"
+												aria-selected="true">1. User Profile</a></li>
+
+											<li class="nav-item"><a class="nav-link"
+												data-toggle="tab" id="myOrders" href="#" role="tab"
+												aria-selected="false">2. Orders</a></li>
+
+											<li class="nav-item"><a class="nav-link"
+												data-toggle="tab" id="mySecurity" href="#" role="tab"
+												aria-selected="false">3. Security</a></li>
+
+											<li class="nav-item"><a class="nav-link active"
+												data-toggle="tab" id="myComplains" href="#" role="tab"
+												aria-selected="false">4. User Complains</a></li>
+
+										</ul>
+
+										<!-- Pills panels -->
+										<hr class="mb-4">
+
+										<div id="ContentChange">
+
+
+
+
+											<div id="supportEmailPlatForm">
+
+
+												<!-- Section: Create Page -->
+												<section class="my-5">
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-lg-8">
+
+
+
+															<!-- First card -->
+															<!--Accordion wrapper-->
+
+															<div class="accordion md-accordion accordion-1 mt-0 mb-5"
+																id="accordionEx23" role="tablist">
+
+																<div id="inquriyResponsesMsg">
+
+																	<div class="card"
+																		th:each="response : ${complain.responses}">
+
+																		<div class="card-header z-depth-1"
+																			th:classappend="${complain.user.userID eq response.user.userID} ? blue : green"
+																			role="tab" id="heading98">
+																			<h5 class="text-uppercase mb-0 py-1">
+																				<a class="collapsed font-weight-bold white-text"
+																					data-toggle="collapse"
+																					th:href="@{'#' + ${response.id}}"
+																					aria-expanded="false" aria-controls="collapse98">
+																					Responded by [[${response.user.fname}]] </a>
+																			</h5>
+																			<span
+																				class="font-weight-bold white-text text-right mr-0">
+																				[[${response.preetyTime}]] </span>
+																		</div>
+
+																		<div th:id="${response.id}" class="collapse"
+																			role="tabpanel" aria-labelledby="heading98"
+																			data-parent="#accordionEx23">
+																			<div class="card-body">
+																				<div class="row my-4">
+																					<div class="col-md-8">
+																						<h5 class="font-weight-bold mb-3 black-text">
+																							Responded by [[${response.user.fname}]]
+																							[[${response.user.lname}]]</h5>
+																						<h6>on [[${response.time}]]</h6>
+																						<hr>
+																						<br>
+																						<div class="font-weight-bold">[[${response.message}]]</div>
+																					</div>
+																					<div class="col-md-4 mt-0 pt-0"></div>
+																				</div>
+																				<div class="row my-4">
+																					<div class="ml-4"
+																						th:each="base64ImageRes : ${response.getBase64StringImages}">
+																						<p>
+																							<img th:if="${base64ImageRes != ''}"
+																								style="height: 350px; width: 300px"
+																								th:src="|data:image/png;base64,${base64ImageRes}|"
+																								alt="" class="img-fluid">
+																						</p>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+
+
+																</div>
+																<div id="newResponses"></div>
+
+															</div>
+															<!--Accordion wrapper-->
+
+															<!-- First card -->
+
+															<!-- Second card -->
+
+
+															<div id="uploadNewImage">
+
+																<button id="uploadNewImage_btn" type="button"
+																	class="btn btn-primary">Add New Image</button>
+
+															</div>
+															<form th:action="@{/user/addComplainResponse}"
+																method="POST" enctype="multipart/form-data">
+																<div class="card mb-4">
+
+																	<div class="file-upload-wrapper" id="image1Div"
+																		style="display: none">
+																		<input type="file" id="image1" name="image1"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div class="file-upload-wrapper" id="image2Div"
+																		style="display: none">
+																		<input type="file" id="image2" name="image2"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div class="file-upload-wrapper" id="image3Div"
+																		style="display: none">
+																		<input type="file" id="image3" name="image3"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div id="progress"></div>
+
+																</div>
+																<!-- Second card -->
+
+																<div class="card mb-4">
+																	<textarea id="messagetex" name="message"
+																		class="form-control" rows="8"
+																		placeholder="Write Your response here!"></textarea>
+
+
+																	<input type="hidden" name="complainID"
+																		th:value="${complain.id}" id="complainID"
+																		class="form-control">
+																</div>
+																<div class="mt-4">
+																	<button type="button" onclick="addResponseINQ()"
+																		class="btn btn-primary btn-lg btn-block mt-2 mb-5">Respond
+																		Now</button>
+
+
+																</div>
+															</form>
+
+
+														</div>
+														<!-- Grid column -->
+
+														<!-- Grid column -->
+														<div class="col-lg-4">
+
+															<!-- Card -->
+															<div class="card card-cascade narrower mb-5">
+
+																<!-- Card image -->
+																<div
+																	class="view view-cascade gradient-card-header blue-gradient">
+																	<h4 class="font-weight-500 mb-0">Complain
+																		Information</h4>
+																</div>
+																<!-- Card image -->
+
+																<!-- Card content -->
+																<div class="card-body card-body-cascade">
+																	<input type="hidden" id="contactUsID"
+																		value="${Inquiry.inquiryID}">
+
+																	<p>
+																		<i class="fas fa-archive mr-1 mr-1" aria-hidden="true"></i>
+																		Complain ID: <strong>[[${complain.id}]]</strong>
+																	</p>
+																	<p>
+																		<i class="far fa-calendar-alt mr-1" aria-hidden="true"></i>
+																		Time: <strong>[[${complain.time}]]</strong>
+																	</p>
+																	<p>
+																		<i class="far fa-circle mr-1" aria-hidden="true"></i>
+																		Total Responds: <strong><span
+																			id="respponsesSize">[[${complain.responses.size()}]]</span></strong>
+																	</p>
+
+
+																</div>
+																<!-- Card content -->
+
+															</div>
+															<!-- Card -->
+
+															<!-- Card -->
+															<div class="card card-cascade narrower">
+
+																<!-- Card image -->
+																<div
+																	class="view view-cascade gradient-card-header blue-gradient">
+																	<h4 class="font-weight-500 mb-0">Complain Message</h4>
+																</div>
+																<!-- Card image -->
+
+																<!-- Card content -->
+																<div class="card-body card-body-cascade">
+																	<p>
+																		<strong>Subject: </strong>[[${complain.subject}]]
+																	</p>
+																	<br>
+																	<p>
+																		<strong>Message: </strong> [[${complain.message}]]
+
+																	</p>
+
+																	<div class=""
+																		th:each="base64Image : ${complain.getBase64StringImages}">
+																		<p>
+																			<img th:if="${ base64Image != ''}"
+																				th:src="|data:image/png;base64,${base64Image}|"
+																				style="height: 250px; width: 400px" alt=""
+																				class="img-fluid">
+																		</p>
+																	</div>
+																</div>
+																<!-- Card content -->
+
+															</div>
+															<!-- Card -->
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+												</section>
+												<!-- Section: Create Page -->
+
+
+
+
+											</div>
+
+
+
+
+
+
+										</div>
+										<!-- Pills panels -->
+
+
+
+
+									</div>
+									<!--Grid column-->
+
+									<!--Grid column-->
+
+									<!--Grid column-->
+
+								</div>
+								<!--Grid row-->
+
+							</div>
+						</div>
+
+					</section>
+					<!--Section: Content-->
+
+
+				</div>
+			</div>
+			<div style="height: 60px"></div>
+		</div>
+
+	</div>
+
+</body>
+</html>
