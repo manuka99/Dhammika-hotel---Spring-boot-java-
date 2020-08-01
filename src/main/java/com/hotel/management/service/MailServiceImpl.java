@@ -5,13 +5,17 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.hotel.management.config.ApplicationUrl;
+import com.hotel.management.controller.OrderController;
 import com.hotel.management.model.Complain;
 import com.hotel.management.model.Mail;
 import com.hotel.management.model.OrderDB;
@@ -23,6 +27,8 @@ import freemarker.template.Template;
 @Service
 public class MailServiceImpl implements MailService {
 
+	private Logger logger = LoggerFactory.getLogger(OrderController.class);
+
 	@Autowired
 	private JavaMailSender sender;
 
@@ -32,6 +38,7 @@ public class MailServiceImpl implements MailService {
 	@Autowired
 	private ApplicationUrl applicationUrl;
 
+	@Async
 	public boolean sendEmail(Mail mail) {
 
 		boolean result = false;
@@ -59,7 +66,7 @@ public class MailServiceImpl implements MailService {
 		} catch (Exception e) {
 
 			result = false;
-			// TODO: handle exception
+			logger.info("error sendind mail");
 		}
 
 		return result;
@@ -67,9 +74,8 @@ public class MailServiceImpl implements MailService {
 	}
 
 	@Override
-	public boolean userRegistrationEmail(User user) throws Exception {
-
-		boolean result = false;
+	@Async
+	public void userRegistrationEmail(User user) throws Exception {
 
 		try {
 
@@ -92,15 +98,12 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
 	public boolean resendAccountActivationEmail(User user) throws Exception {
 
@@ -126,24 +129,21 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
 			result = false;
-
+			logger.info("error sendind mail");
 		}
 
 		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean orderPlacedEmail(OrderDB order) throws Exception {
-
-		boolean result = false;
+	public void orderPlacedEmail(OrderDB order) throws Exception {
 
 		try {
 
 			Mail mail = new Mail();
-			// mail.setMailTo("manukayasas94@gmail.com");
 			mail.setMailTo(order.getUser().getEmail());
 			mail.setMailSubject("Dhammika Hotel: Order Reciept");
 
@@ -159,24 +159,18 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean orderStatusEmail(OrderDB order) throws Exception {
-
-		boolean result = false;
+	public void orderStatusEmail(OrderDB order) throws Exception {
 
 		try {
 
 			Mail mail = new Mail();
-			// mail.setMailTo("manukayasas94@gmail.com");
 			mail.setMailTo(order.getUser().getEmail());
 			mail.setMailSubject("Dhammika Hotel: Order is " + order.getStatus());
 
@@ -192,19 +186,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean profileUpdateEmail(User user, String oldEmail) throws Exception {
-
-		boolean result = false;
+	public void profileUpdateEmail(User user, String oldEmail) throws Exception {
 
 		try {
 
@@ -225,9 +214,7 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
 
 		if (oldEmail != null) {
@@ -252,21 +239,16 @@ public class MailServiceImpl implements MailService {
 				sendEmail(mail2);
 
 			} catch (Exception e) {
-
-				result = false;
-
+				logger.info("error sendind mail");
 			}
 
 		}
 
-		return result;
-
 	}
 
+	@Async
 	@Override
-	public boolean passwordChangedEmail(User user) throws Exception {
-
-		boolean result = false;
+	public void passwordChangedEmail(User user) throws Exception {
 
 		try {
 
@@ -287,19 +269,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean passwordRecoveryEmail(User user, String password) throws Exception {
-
-		boolean result = false;
+	public void passwordRecoveryEmail(User user, String password) throws Exception {
 
 		try {
 
@@ -321,19 +298,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean userPlaceComplain(Complain complain) throws Exception {
-
-		boolean result = false;
+	public void userPlaceComplain(Complain complain) throws Exception {
 
 		try {
 
@@ -354,19 +326,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean userComplainPlaceResponse(Complain complain) throws Exception {
-
-		boolean result = false;
+	public void userComplainPlaceResponse(Complain complain) throws Exception {
 
 		try {
 
@@ -387,19 +354,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean userComplainRecieveResponse(Complain complain) throws Exception {
-
-		boolean result = false;
+	public void userComplainRecieveResponse(Complain complain) throws Exception {
 
 		try {
 
@@ -421,19 +383,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
-
-		return result;
 
 	}
 
+	@Async
 	@Override
-	public boolean panelUserPasswordUpdate(User user) throws Exception {
-
-		boolean result = false;
+	public void panelUserPasswordUpdate(User user) throws Exception {
 
 		try {
 
@@ -454,18 +411,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
 
-		return result;
 	}
 
+	@Async
 	@Override
-	public boolean panelUserProfileUpdate(User user) throws Exception {
-
-		boolean result = false;
+	public void panelUserProfileUpdate(User user) throws Exception {
 
 		try {
 
@@ -486,18 +439,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
 
-		return result;
 	}
 
+	@Async
 	@Override
-	public boolean panelUserAccountLocked(User user) throws Exception {
-
-		boolean result = false;
+	public void panelUserAccountLocked(User user) throws Exception {
 
 		try {
 
@@ -519,18 +468,14 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
 
-		return result;
 	}
 
+	@Async
 	@Override
-	public boolean panelUserPasswordUpdateWithCredentials(User user, String password) throws Exception {
-		
-		boolean result = false;
+	public void panelUserPasswordUpdateWithCredentials(User user, String password) throws Exception {
 
 		try {
 
@@ -551,12 +496,9 @@ public class MailServiceImpl implements MailService {
 			sendEmail(mail);
 
 		} catch (Exception e) {
-
-			result = false;
-
+			logger.info("error sendind mail");
 		}
 
-		return result;
 	}
 
 }

@@ -82,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
 
 		try {
 
-			order = orderRepository.findById(id).get();
+			order = orderRepository.findByOrderIDAndTemp(id, temp);
 
 		} catch (Exception e) {
 			e.printStackTrace();

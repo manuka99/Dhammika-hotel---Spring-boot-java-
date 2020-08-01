@@ -10,16 +10,12 @@ import com.hotel.management.model.Response_Complain;
 import com.hotel.management.model.User;
 
 public interface NotificationService {
-
+	
 	List<NotificationDB> getAllNotifications();
 
 	List<NotificationDB> getAllNotificationsByUser(User user);
 
 	NotificationDB GetNotificationByUserAndNotID(User user, String notificationID);
-
-	//void saveNotification(NotificationDB notification);
-
-	boolean updateNotification(NotificationDB notification);
 
 	boolean deleteNotificationById(String id);
 
@@ -32,12 +28,12 @@ public interface NotificationService {
 	/*
 	 * user place a order
 	 */
-	boolean NewUserOrder(OrderDB order);
+	void NewUserOrder(OrderDB order);
 
 	/*
 	 * user update order
 	 */
-	boolean UpdateUserOrder(OrderDB order);
+	void UpdateUserOrder(OrderDB order);
 
 	/*
 	 * user notified if admin update order
@@ -47,12 +43,12 @@ public interface NotificationService {
 	/*
 	 * user place a complain
 	 */
-	boolean NewUserComplain(Complain complain);
+	void NewUserComplain(Complain complain);
 
 	/*
 	 * user respond to the complain
 	 */
-	boolean NewUserResponse(Response_Complain response);
+	void NewUserResponse(Response_Complain response);
 
 	/*
 	 * user recieves a response from the admin
@@ -76,7 +72,7 @@ public interface NotificationService {
 	/*
 	 * notify if admin update the order
 	 */
-	boolean OrderUpdatedByAdminToAdmin(OrderDB order, User admin);
+	void OrderUpdatedByAdminToAdmin(OrderDB order, User admin);
 
 	/*
 	 * new complain panel
@@ -91,18 +87,18 @@ public interface NotificationService {
 	/*
 	 * new response from admin to admin
 	 */
-	boolean ResponsePlacedByAdminToAdmin(Response_Complain response);
+	void ResponsePlacedByAdminToAdmin(Response_Complain response);
 	
 	
 	/*
 	 * feedbacks
 	 */
 	
-	boolean newFeedback(FeedBack feedback);
+	void newFeedback(FeedBack feedback);
 	
-	boolean updateFeedback(FeedBack feedback);
+	void updateFeedback(FeedBack feedback);
 	
-	boolean deleteFeedback(FeedBack feedback);
+	void deleteFeedback(FeedBack feedback);
 	
 	//boolean deleteFeedbackFromPanelToUser(FeedBack feedback);
 	
@@ -117,6 +113,6 @@ public interface NotificationService {
 	
 	//boolean updateFeedbackFromUserToPanel(FeedBack feedback);
 	
-	boolean deleteFeedbackFromPanel(FeedBack feedback);
+	void deleteFeedbackFromPanel(FeedBack feedback);
 	
 }

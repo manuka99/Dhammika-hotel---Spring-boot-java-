@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +46,8 @@ import com.paypal.base.rest.PayPalRESTException;
 
 @Controller
 public class OrderController {
+	
+	private Logger logger = LoggerFactory.getLogger(OrderController.class);
 
 	@Autowired
 	private CartService cartService;
@@ -261,6 +265,9 @@ public class OrderController {
 			 */
 
 			// validate order saved
+			
+			logger.info("thread created");
+			
 			if (result) {
 
 				notificationService.NewUserOrder(order);
@@ -268,6 +275,8 @@ public class OrderController {
 				mailService.orderPlacedEmail(order);
 
 			}
+			
+			logger.info("folk created");
 
 		}
 

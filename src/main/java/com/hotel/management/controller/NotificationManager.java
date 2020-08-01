@@ -39,7 +39,7 @@ public class NotificationManager {
 			if (notification != null) {
 
 				notification.setSeen(true);
-				result = notificationService.updateNotification(notification);
+				result = notificationService.saveNotificationToDB(notification);
 
 			}
 		} catch (Exception e) {

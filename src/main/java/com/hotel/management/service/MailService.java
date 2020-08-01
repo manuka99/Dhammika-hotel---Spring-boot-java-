@@ -9,37 +9,49 @@ public interface MailService {
 
 	boolean sendEmail(Mail mail) throws Exception;
 
-	boolean userRegistrationEmail(User user) throws Exception;
-	
 	boolean resendAccountActivationEmail(User user) throws Exception;
 
-	boolean orderPlacedEmail(OrderDB order) throws Exception;
+	void userRegistrationEmail(User user) throws Exception;
 
-	boolean orderStatusEmail(OrderDB order) throws Exception;
+	/*
+	 * user profile update
+	 */
+	void profileUpdateEmail(User user, String oldEmail) throws Exception;
 
-	boolean profileUpdateEmail(User user, String oldEmail) throws Exception;
-	
-	boolean passwordChangedEmail(User user) throws Exception;
-	
-	boolean passwordRecoveryEmail(User user, String password) throws Exception;
-	
-	boolean userPlaceComplain(Complain complain) throws Exception;
-	
-	boolean userComplainPlaceResponse(Complain complain) throws Exception;
-	
-	boolean userComplainRecieveResponse(Complain complain) throws Exception;
+	void passwordChangedEmail(User user) throws Exception;
+
+	void passwordRecoveryEmail(User user, String password) throws Exception;
 	
 	
 	/*
-	 * to send panel profile update email
+	 * orders
 	 */
+
+	void orderPlacedEmail(OrderDB order) throws Exception;
+
+	void orderStatusEmail(OrderDB order) throws Exception;
 	
-	boolean panelUserPasswordUpdate(User user) throws Exception;
 	
-	boolean panelUserPasswordUpdateWithCredentials(User user, String password) throws Exception;
-	
-	boolean panelUserProfileUpdate(User user) throws Exception;
-	
-	boolean panelUserAccountLocked(User user) throws Exception;
+	/*
+	 * complains
+	 */
+
+	void userPlaceComplain(Complain complain) throws Exception;
+
+	void userComplainPlaceResponse(Complain complain) throws Exception;
+
+	void userComplainRecieveResponse(Complain complain) throws Exception;
+
+	/*
+	 * to send panel profile update emails to users
+	 */
+
+	void panelUserPasswordUpdate(User user) throws Exception;
+
+	void panelUserPasswordUpdateWithCredentials(User user, String password) throws Exception;
+
+	void panelUserProfileUpdate(User user) throws Exception;
+
+	void panelUserAccountLocked(User user) throws Exception;
 
 }
