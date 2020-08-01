@@ -30,6 +30,40 @@ var errorResponseAdd = '<div '
 		+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
 		+ '</button>' + '</div>';
 
+var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+		+ 'role="alert">'
+		+ '<p>'
+		+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+		+ '</p>'
+		+ '<p>'
+		+ 'Please check your internet connection and click here to <strong><a onclick="loadMyProfile()"> refresh.</a></strong>'
+		+ '</p>'
+
+		+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">'
+		+ '<span aria-hidden="true">&times;</span>'
+		+ '</button>' + '<div style="height: 10px;"></div>' + '</div>';
+
+
+var successProfileUpdate = '<div '
+	+ ' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'
+	+ 'role="alert">' + '<p>'
+	+ '<strong>Success: </strong> Your profile was updated successfully.'
+	+ '</p>' + '<button type="button" class="close" data-dismiss="alert"'
+	+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+	+ '</button>' + '</div>';
+
+var errorProfileUpdate  = '<div '
+	+ ' class="mt-2 mb-4 card alert card alert-danger alert-dismissible fade show"'
+	+ 'role="alert">' + '<p>'
+	+ '<strong>Error: </strong> Your profile was not updated.' + '</p>'
+	+ '<button type="button" class="close" data-dismiss="alert"'
+	+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+	+ '</button>' + '</div>';
+
+var timeoutms = 30000;
+
 var email_static = null;
 var fname_static = null;
 var lname_static = null;
@@ -55,6 +89,7 @@ $("#myOrders").click(function() {
 	$.ajax({
 
 		url : "/user/orders",
+		timeout : timeoutms,
 		success : function(data, textStatus, jqXHR) {
 			var result = $(data).find('#ContentChange');
 			$('#ContentChange').html(result);
@@ -64,6 +99,12 @@ $("#myOrders").click(function() {
 			ordersTableScriptChanging();
 			$("#loaderTable").fadeOut();
 
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			if (textStatus === "timeout") {
+				$('#newDataMessages').append(connectError);
+				$("#loaderTable").fadeOut();
+			}
 		}
 
 	})
@@ -97,6 +138,7 @@ $("#myComplains").click(function() {
 	$.ajax({
 
 		url : "/user/complains",
+		timeout : timeoutms,
 		success : function(data, textStatus, jqXHR) {
 			var result = $(data).find('#ContentChange');
 			$('#ContentChange').html(result);
@@ -106,6 +148,12 @@ $("#myComplains").click(function() {
 			ordersTableScriptChanging();
 			$('.file-upload').file_upload();
 			$("#loaderTable").fadeOut();
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			if (textStatus === "timeout") {
+				$('#newDataMessages').append(connectError);
+				$("#loaderTable").fadeOut();
+			}
 		}
 
 	})
@@ -119,6 +167,7 @@ function loadMyProfile() {
 	$.ajax({
 
 		url : "/user/profile",
+		timeout : timeoutms,
 		success : function(data, textStatus, jqXHR) {
 			var result = $(data).find('#ContentChange');
 			$('#ContentChange').html(result);
@@ -129,12 +178,18 @@ function loadMyProfile() {
 			address_static = $('#address').val();
 			email_static = $('#email').val();
 			fname_static = $('#fname').val();
-			nlame_static = $('#lname').val();
+			lname_static = $('#lname').val();
 			phone_static = $('#phone').val();
 			dateOfBirth_static = $('#dateOfBirth').val();
 			$("#updateProfile").hide();
 			$("#loaderTable").fadeOut();
 
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			if (textStatus === "timeout") {
+				$('#newDataMessages').append(connectError);
+				$("#loaderTable").fadeOut();
+			}
 		}
 
 	})
@@ -186,7 +241,7 @@ function inputForm() {
 
 		if (fname.length < 4) {
 			status = 0;
-			alert('name is too short');
+			toastr.error('name is too short');
 		}
 
 		else {
@@ -199,7 +254,7 @@ function inputForm() {
 
 		if (lname.length < 4) {
 			status = 0;
-			alert('last name is too short');
+			toastr.error('last name is too short');
 		}
 
 		else {
@@ -214,7 +269,7 @@ function inputForm() {
 
 		} else {
 			status = 0;
-			alert('address is too short');
+			toastr.error('address is too short');
 		}
 
 	}
@@ -231,7 +286,7 @@ function inputForm() {
 			$("#updateProfile").fadeIn();
 		} else {
 			status = 0;
-			alert('please select a valide date of birth');
+			toastr.error('please select a valide date of birth');
 		}
 	}
 
@@ -260,21 +315,30 @@ function updateProfile() {
 			url : "/user/profileUpdate",
 			data : $form.serialize(),
 			type : "POST",
+			timeout : timeoutms,
 			success : function(data, textStatus, jqXHR) {
 
 				$("#loaderTable").fadeOut();
 
 				if (data == true) {
 
+					$('#newDataMessages').append(successProfileUpdate);
 					$("#headerRefresh22").load(
 							location.href + " #headerRefresh22");
 					loadMyProfile();
-
+					
 				}
 
-				else
+				else{
+					$('#newDataMessages').append(errorProfileUpdate);
 					alert('Your profile was not updated');
-
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				if (textStatus === "timeout") {
+					$('#newDataMessages').append(connectError);
+					$("#loaderTable").fadeOut();
+				}
 			}
 
 		})
@@ -377,13 +441,15 @@ function updatePassword() {
 						'oldPass' : currentPassword
 					},
 					type : "POST",
-
+					timeout : timeoutms,
 					success : function(data) {
+						
+						$("#loaderTable").fadeOut();
 
 						if (data == true) {
 							toastr
 									.success('Success: Your password has been changed!');
-							window.location.replace("login");
+							$('#ContentChange').load('/user/security #ContentChange');
 						}
 
 						else {
@@ -391,6 +457,12 @@ function updatePassword() {
 									.error('Invalid: Your password has not been changed!');
 						}
 
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+						if (textStatus === "timeout") {
+							$('#newDataMessages').append(connectError);
+							$("#loaderTable").fadeOut();
+						}
 					}
 
 				})
@@ -431,14 +503,14 @@ function addNewInquiryDetails() {
 
 			if (this.responseText === "true") {
 
-				$('#newDataMessages').append(successComplainAdd);
+				$('#newMessages').append(successComplainAdd);
 				valueImageUpload = 0;
 
 			}
 
 			else if (this.responseText === "false") {
 
-				$('#newDataMessages').append(errorComplainAdd);
+				$('#newMessages').append(errorComplainAdd);
 
 			}
 
@@ -461,21 +533,28 @@ function addNewInquiryDetails() {
 
 function MoreOnInquiry(complainID) {
 
+	$("#loaderTable").fadeIn();
+	
 	$.ajax({
 
 		url : "/user/viewComplain",
 		data : {
 			'complainID' : complainID
 		},
-
+		timeout : timeoutms,
 		success : function(data, textStatus, jqXHR) {
-
+			$("#loaderTable").fadeOut();
 			var result = $(data).find('#supportEmailPlatForm');
 			$('#ContentChange').html(result);
 			var url = "/user/viewComplain?complainID=" + complainID;
 			history.pushState({}, "", url);
 			$('.file-upload').file_upload();
 			valueImageUpload = 0;
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+			if (textStatus === "timeout") {
+				$('#newDataMessages').append(connectError);
+			}
 		}
 
 	})
@@ -513,8 +592,7 @@ function addResponseINQ() {
 				valueImageUpload = 0;
 				$("#inquriyResponsesMsg").load(
 						location.href + " #inquriyResponsesMsg");
-				$("#formResponse").load(
-						location.href + " #formResponse");
+				$("#formResponse").load(location.href + " #formResponse");
 			}
 
 			else if (this.responseText === "false") {
@@ -581,7 +659,7 @@ function canceMyOrder(orderID) {
 				data : {
 					'orderID' : orderID
 				},
-
+				timeout : timeoutms,
 				success : function(data, textStatus, jqXHR) {
 
 					if (data === 'true')
@@ -589,6 +667,12 @@ function canceMyOrder(orderID) {
 
 					else
 						alert('your order cannot be canncelled at this stage for more details please do call our hotline..');
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					if (textStatus === "timeout") {
+						$('#newDataMessages').append(connectError);
+						$("#loaderTable").fadeOut();
+					}
 				}
 
 			})
