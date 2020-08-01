@@ -491,7 +491,7 @@ public class OrderController {
 
 		model.addAttribute("orders", orders);
 
-		return "member/orders";
+		return "member/profile";
 	}
 
 	@GetMapping("/user/order")

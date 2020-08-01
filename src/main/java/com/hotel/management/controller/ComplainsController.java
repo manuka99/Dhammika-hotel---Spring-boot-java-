@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hotel.management.model.Complain;
@@ -40,23 +41,23 @@ public class ComplainsController {
 
 		model.addAttribute("complains", complainService.getAllUserComplains(getUserSecurity()));
 
-		return "member/complains";
+		return "member/profile";
 
 	}
 
 	@PostMapping("/user/addComplain")
-	public String userAddComplains(@RequestParam(value = "subject", required = false) String subject,
+	public @ResponseBody boolean userAddComplains(@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message,
 			@RequestPart(value = "image1", required = false) MultipartFile file1,
 			@RequestPart(value = "image2", required = false) MultipartFile file2,
-			@RequestPart(value = "image3", required = false) MultipartFile file3, Model model) throws Exception {
+			@RequestPart(value = "image3", required = false) MultipartFile file3, Model model, boolean result)
+			throws Exception {
 
 		Complain complain = new Complain();
 		complain.setSubject(subject);
 		complain.setMessage(message);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
-		System.out.println("dw423232323232");
 		try {
 			if (file1 != null)
 				complain.setImage1(file1.getBytes());
@@ -75,13 +76,13 @@ public class ComplainsController {
 		complain.setId(inqID);
 		complain.setUser(getUserSecurity());
 		complain.setTime(dtf.format(now));
-		complainService.saveComplain(complain);
+		result = complainService.saveComplain(complain);
 
 		/*
 		 * notification
 		 */
 
-		if (complainService.getUserComplainComplain(inqID, getUserSecurity()) != null) {
+		if (result) {
 
 			notificationService.NewUserComplain(complain);
 
@@ -89,7 +90,7 @@ public class ComplainsController {
 
 		}
 
-		return "redirect:/user/complains";
+		return result;
 
 	}
 
@@ -102,16 +103,17 @@ public class ComplainsController {
 		model.addAttribute("complain", complain);
 		model.addAttribute("newResponse", response);
 
-		return "member/complain";
+		return "member/profile";
 
 	}
 
 	@PostMapping("/user/addComplainResponse")
-	public String userAddComplainResponse(@RequestParam(value = "message", required = false) String message,
+	public @ResponseBody boolean userAddComplainResponse(
+			@RequestParam(value = "message", required = false) String message,
 			@RequestPart(value = "image1", required = false) MultipartFile file1,
 			@RequestPart(value = "image2", required = false) MultipartFile file2,
 			@RequestPart(value = "image3", required = false) MultipartFile file3,
-			@RequestParam("complainID") String complainID, Model model) throws Exception {
+			@RequestParam("complainID") String complainID, Model model, Boolean result) throws Exception {
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -139,7 +141,7 @@ public class ComplainsController {
 				e.printStackTrace();
 			}
 			complain.getResponses().add(response);
-			complainService.saveComplain(complain);
+			result = complainService.saveComplain(complain);
 
 			/*
 			 * validate save
@@ -153,23 +155,25 @@ public class ComplainsController {
 			// getUserSecurity()).getResponses().iterator()
 			// .equals(response)) {
 
-			if (complain.getUser().getUserID().equals(response.getUser().getUserID())) {
+			if (result) {
+				if (complain.getUser().getUserID().equals(response.getUser().getUserID())) {
 
-				notificationService.NewUserResponse(response);
-				mailService.userComplainPlaceResponse(complain);
+					notificationService.NewUserResponse(response);
+					mailService.userComplainPlaceResponse(complain);
 
-			}
+				}
 
-			else {
+				else {
 
-				notificationService.ResponsePlacedByAdminToAdmin(response);
+					notificationService.ResponsePlacedByAdminToAdmin(response);
 
-				mailService.userComplainRecieveResponse(complain);
+					mailService.userComplainRecieveResponse(complain);
+				}
 			}
 
 		}
 
-		return "redirect:/user/viewComplain?complainID=" + complainID;
+		return result;
 
 	}
 

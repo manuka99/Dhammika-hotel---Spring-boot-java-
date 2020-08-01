@@ -128,9 +128,9 @@ public class UserController {
 		return "member/profile";
 	}
 
-	@GetMapping("/user/profileUpdate")
-	public String UserProfileUpdate(@ModelAttribute("userSave") User saveUser, HttpServletRequest request,
-			HttpServletResponse response, Model model) throws Exception {
+	@PostMapping("/user/profileUpdate")
+	public @ResponseBody boolean UserProfileUpdate(@ModelAttribute("userSave") User saveUser, HttpServletRequest request,
+			HttpServletResponse response, Model model, Boolean result) throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		/*
@@ -161,30 +161,33 @@ public class UserController {
 		if (user.getEmail().equals(existingUser.getEmail()) == false)
 			existingUser.setEnabled(false);
 
-		userService.updateUser(existingUser);
+		result = userService.updateUser(existingUser);
 
-		if (user.getEmail().equals(existingUser.getEmail())) {
-			currentUser.setUser(existingUser);
-			Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
-					currentUser.getPassword(), currentUser.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			mailService.profileUpdateEmail(existingUser, null);
-		}
-
-		else {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null) {
-				new SecurityContextLogoutHandler().logout(request, response, auth);
+		if (result) {
+			if (user.getEmail().equals(existingUser.getEmail())) {
+				currentUser.setUser(existingUser);
+				Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
+						currentUser.getPassword(), currentUser.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				mailService.profileUpdateEmail(existingUser, null);
 			}
-			mailService.profileUpdateEmail(existingUser, user.getEmail());
-		}
 
-		return UserProfile(model);
+			else {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				if (auth != null) {
+					new SecurityContextLogoutHandler().logout(request, response, auth);
+				}
+				mailService.profileUpdateEmail(existingUser, user.getEmail());
+			}
+		}
+		return result;
 	}
 
 	@GetMapping("/user/security")
 	public String UserSecurity(Model model) {
-		return "member/security";
+		
+		model.addAttribute("security", true);
+		return "member/profile";
 	}
 
 	@PostMapping("/user/passwordUpdate")
@@ -194,7 +197,7 @@ public class UserController {
 			HttpServletRequest request, HttpServletResponse response, Model model) throws Exception {
 
 		boolean result = false;
-		
+
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		User user = new User();

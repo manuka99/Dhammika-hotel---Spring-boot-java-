@@ -1,3 +1,35 @@
+var successComplainAdd = '<div '
+		+ ' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'
+		+ 'role="alert">' + '<p>'
+		+ '<strong>Success: </strong> Your Complain was added successfully.'
+		+ '</p>' + '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+		+ '</button>' + '</div>';
+
+var errorComplainAdd = '<div '
+		+ ' class="mt-2 mb-4 card alert card alert-danger alert-dismissible fade show"'
+		+ 'role="alert">' + '<p>'
+		+ '<strong>Error: </strong> Your Complain was not added.' + '</p>'
+		+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+		+ '</button>' + '</div>';
+
+var successResponseAdd = '<div '
+		+ ' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'
+		+ 'role="alert">' + '<p>'
+		+ '<strong>Success: </strong> Your Response was added successfully.'
+		+ '</p>' + '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+		+ '</button>' + '</div>';
+
+var errorResponseAdd = '<div '
+		+ ' class="mt-2 mb-4 card alert card alert-danger alert-dismissible fade show"'
+		+ 'role="alert">' + '<p>'
+		+ '<strong>Error: </strong> Your Response was not added.' + '</p>'
+		+ '<button type="button" class="close" data-dismiss="alert"'
+		+ 'aria-label="Close">' + '<span aria-hidden="true">&times;</span>'
+		+ '</button>' + '</div>';
+
 var email_static = null;
 var fname_static = null;
 var lname_static = null;
@@ -12,9 +44,11 @@ lname_static = $('#lname').val();
 phone_static = $('#phone').val();
 dateOfBirth_static = $('#dateOfBirth').val();
 
-$("#updateProfile").fadeOut();
+$("#updateProfile").hide();
 
 $("#myOrders").click(function() {
+
+	$("#loaderTable").fadeIn();
 
 	console.log("orders in");
 
@@ -28,6 +62,7 @@ $("#myOrders").click(function() {
 			;
 			history.pushState({}, "", url);
 			ordersTableScriptChanging();
+			$("#loaderTable").fadeOut();
 
 		}
 
@@ -40,7 +75,46 @@ $("#myOrders").click(function() {
  */
 $("#myProfile").click(function() {
 
-	console.log("profile in");
+	loadMyProfile();
+
+});
+
+$("#mySecurity").click(function() {
+
+	$("#loaderTable").fadeIn();
+	$('#ContentChange').load('/user/security #ContentChange');
+	history.pushState({}, "", "/user/security");
+	PasswordSecurityhideAll();
+	$("#loaderTable").fadeOut();
+
+});
+
+$("#myComplains").click(function() {
+
+	$("#loaderTable").fadeIn();
+	console.log("orders in");
+
+	$.ajax({
+
+		url : "/user/complains",
+		success : function(data, textStatus, jqXHR) {
+			var result = $(data).find('#ContentChange');
+			$('#ContentChange').html(result);
+			var url = "/user/complains";
+			;
+			history.pushState({}, "", url);
+			ordersTableScriptChanging();
+			$('.file-upload').file_upload();
+			$("#loaderTable").fadeOut();
+		}
+
+	})
+
+});
+
+function loadMyProfile() {
+
+	$("#loaderTable").fadeIn();
 
 	$.ajax({
 
@@ -58,44 +132,14 @@ $("#myProfile").click(function() {
 			nlame_static = $('#lname').val();
 			phone_static = $('#phone').val();
 			dateOfBirth_static = $('#dateOfBirth').val();
-			console.log(dateOfBirth_static);
-			$("#updateProfile").fadeOut();
+			$("#updateProfile").hide();
+			$("#loaderTable").fadeOut();
 
 		}
 
 	})
 
-});
-
-$("#mySecurity").click(function() {
-
-	$('#ContentChange').load('/user/security #ContentChange');
-	history.pushState({}, "", "/user/security");
-	PasswordSecurityhideAll();
-
-});
-
-$("#myComplains").click(function() {
-
-	console.log("orders in");
-
-	$.ajax({
-
-		url : "/user/complains",
-		success : function(data, textStatus, jqXHR) {
-			var result = $(data).find('#ContentChange');
-			$('#ContentChange').html(result);
-			var url = "/user/complains";
-			;
-			history.pushState({}, "", url);
-			ordersTableScriptChanging();
-			$('.file-upload').file_upload();
-
-		}
-
-	})
-
-});
+}
 
 var status = 0;
 
@@ -152,7 +196,7 @@ function inputForm() {
 	} else if (lname != lname_static) {
 
 		console.log("sdsds");
-		
+
 		if (lname.length < 4) {
 			status = 0;
 			alert('last name is too short');
@@ -199,6 +243,11 @@ function inputForm() {
 };
 
 function updateProfile() {
+
+	$("#loaderTable").fadeIn();
+
+	$("#updateProfile").hide();
+
 	event.preventDefault();
 	var form = event.target.form; // storing the form
 
@@ -210,11 +259,21 @@ function updateProfile() {
 
 			url : "/user/profileUpdate",
 			data : $form.serialize(),
-			type : "GET",
+			type : "POST",
 			success : function(data, textStatus, jqXHR) {
 
-					$("#body").load(location.href + " #body");
+				$("#loaderTable").fadeOut();
 
+				if (data == true) {
+
+					$("#headerRefresh22").load(
+							location.href + " #headerRefresh22");
+					loadMyProfile();
+
+				}
+
+				else
+					alert('Your profile was not updated');
 
 			}
 
@@ -227,25 +286,6 @@ function updateProfile() {
 	}
 
 }
-
-function MoreOnOrder(orderID) {
-	$.ajax({
-
-		url : "GetMyOrders",
-		data : {
-			'orderID' : orderID
-		},
-
-		success : function(data, textStatus, jqXHR) {
-
-			var result = $(data).find('#ContentChange');
-			$('#ContentChange').html(result);
-			var url = "GetMyOrders?orderID=" + orderID;
-			history.pushState({}, "", url);
-		}
-
-	})
-};
 
 var newPassword = "";
 var currentPassword = "";
@@ -322,33 +362,38 @@ function passwordUpdateCheck() {
 
 function updatePassword() {
 
+	$("#loaderTable").fadeIn();
+
 	event.preventDefault();
 	var form = event.target.form; // storing the form
 
 	if (status == 1) {
-		$.ajax({
+		$
+				.ajax({
 
-			url : "/user/passwordUpdate",
-			data : {
-				'newPass' : newPassword,
-				'oldPass' : currentPassword
-			},
-			type:"POST",
-			
-			success : function(data) {
+					url : "/user/passwordUpdate",
+					data : {
+						'newPass' : newPassword,
+						'oldPass' : currentPassword
+					},
+					type : "POST",
 
-				if (data == true) {
-					toastr.success('Success: Your password has been changed!');
-					window.location.replace("login");
-				}
-				
-				else {
-					toastr.error('Invalid: Your password has not been changed!');
-				}
+					success : function(data) {
 
-			}
+						if (data == true) {
+							toastr
+									.success('Success: Your password has been changed!');
+							window.location.replace("login");
+						}
 
-		})
+						else {
+							toastr
+									.error('Invalid: Your password has not been changed!');
+						}
+
+					}
+
+				})
 	}
 
 	else
@@ -382,11 +427,23 @@ function addNewInquiryDetails() {
 	var request = new XMLHttpRequest();
 
 	request.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200
-				&& this.responseText === "true") {
-			valueImageUpload = 0;
-			$("#body").load(location.href + "#body");
+		if (this.readyState == 4 && this.status == 200) {
+
+			if (this.responseText === "true") {
+
+				$('#newDataMessages').append(successComplainAdd);
+				valueImageUpload = 0;
+
+			}
+
+			else if (this.responseText === "false") {
+
+				$('#newDataMessages').append(errorComplainAdd);
+
+			}
+
 		}
+
 	};
 
 	request.upload.addEventListener('progress', function(e) {
@@ -425,27 +482,6 @@ function MoreOnInquiry(complainID) {
 
 };
 
-function startTrackingNewInquries() {
-	var inqID = $('#contactUsID').val();
-	$.ajax({
-
-		url : "RetrieveInquiryUser",
-		data : {
-			'inquiryID' : inqID
-		},
-
-		success : function(data, textStatus, jqXHR) {
-
-			var result = $(data).find('#inquriyResponsesMsg');
-			$('#inquriyResponsesMsg').html(result);
-			$('.file-upload').file_upload();
-			
-		}
-
-	})
-
-};
-
 function addResponseINQ() {
 
 	var complainID = $('#complainID').val();
@@ -469,10 +505,23 @@ function addResponseINQ() {
 	var request = new XMLHttpRequest();
 
 	request.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200
-				&& this.responseText == "true") {
-			valueImageUpload = 0;
-			$("#body").load(location.href + "#body");
+		if (this.readyState == 4 && this.status == 200) {
+
+			if (this.responseText === "true") {
+
+				$('#newResponses').append(successResponseAdd);
+				valueImageUpload = 0;
+				$("#inquriyResponsesMsg").load(
+						location.href + " #inquriyResponsesMsg");
+				$("#formResponse").load(
+						location.href + " #formResponse");
+			}
+
+			else if (this.responseText === "false") {
+
+				$('#newResponses').append(errorResponseAdd);
+
+			}
 		}
 	};
 

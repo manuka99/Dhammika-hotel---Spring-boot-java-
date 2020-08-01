@@ -30,6 +30,10 @@
 					<section class="dark-grey-text">
 
 
+						<div class="progress-custom" id="loaderTable"
+							style="display: none">
+							<div class="indeterminate-my"></div>
+						</div>
 						<div class="card">
 							<div class="card-body">
 
@@ -43,33 +47,35 @@
 										<ul
 											class="nav md-pills nav-justified pills-primary font-weight-bold">
 
-											<li class="nav-item"><a class="nav-link active"
+											<li class="nav-item"><a class="nav-link"
+												th:classappend="${userSave != null}? 'active' "
 												data-toggle="tab" href="#" role="tab" id="myProfile"
-												aria-selected="true">1. User Profile</a></li>
+												th:aria-selected="${userSave != null}">1. User Profile</a></li>
 
 											<li class="nav-item"><a class="nav-link"
+												th:classappend="${orders != null}? 'active' "
 												data-toggle="tab" id="myOrders" href="#" role="tab"
-												aria-selected="false">2. Orders</a></li>
+												th:aria-selected="${orders != null}">2. Orders</a></li>
 
 											<li class="nav-item"><a class="nav-link"
+												th:classappend="${security != null}? 'active' "
 												data-toggle="tab" id="mySecurity" href="#" role="tab"
-												aria-selected="false">3. Security</a></li>
+												th:aria-selected="${security != null}">3. Security</a></li>
 
 											<li class="nav-item"><a class="nav-link"
+												th:classappend="${complains != null}? 'active' "
 												data-toggle="tab" id="myComplains" href="#" role="tab"
-												aria-selected="false">4. User Complains</a></li>
+												th:aria-selected="${complains != null}">4. User
+													Complains</a></li>
 
 										</ul>
 
 										<!-- Pills panels -->
 										<hr class="mb-4">
+
 										<div id="ContentChange">
 
-											<div class="">
-
-
-
-
+											<div id="profile-basic" th:if="${userSave != null}">
 
 												<!--Card content-->
 												<form id="userDetailsBasicForm"
@@ -141,6 +147,500 @@
 												</form>
 
 											</div>
+
+
+
+											<div id="orders" th:if="${orders != null}">
+												<table
+													class="table table-hover table-striped table-responsive-lg text-center "
+													id="ordersTable">
+													<thead>
+														<tr>
+															<th scope="col"></th>
+															<th scope="col">OrderID</th>
+															<th scope="col" class="text-nowrap">Order Placed
+																Date</th>
+															<th scope="col">PaymentType</th>
+															<th scope="col">Payment</th>
+															<th scope="col">status</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="order : ${orders}">
+															<td></td>
+															<td><a class="text-primary link"
+																th:href="'/user/order?orderID='+ ${order.orderID}"
+																target="_blank">[[${order.orderID}]]</a></td>
+															<td>[[${order.placedDate}]]</td>
+															<td>[[${order.orderType}]]</td>
+															<td>[[${order.payment}]]</td>
+															<td>[[${order.status}]]</td>
+														</tr>
+													</tbody>
+												</table>
+
+											</div>
+
+
+											<div class="wrapper-editor" th:if="${complains != null}">
+
+												<!--Card content-->
+
+												<div
+													class="d-flex justify-content-center buttons-wrapper my-3">
+
+													<button data-toggle="modal" data-target="#inquiryAddModal"
+														data-backdrop="static" data-keyboard="false"
+														class=" btn btn-rounded text-white purple
+           											     lighten-2 add-new-row"
+														type="button">
+														<i class="fas fa-plus"></i> New Complain/inquiry
+													</button>
+
+												</div>
+
+												<table
+													class="table table-hover table-striped table-responsive-lg text-center "
+													id="ordersTable">
+													<thead>
+														<tr>
+															<th scope="col"></th>
+															<th scope="col">InquiryID</th>
+															<th scope="col">Subject</th>
+															<th scope="col">Time</th>
+														</tr>
+													</thead>
+													<tbody>
+
+														<tr th:each="complain : ${complains}">
+															<td></td>
+															<td><a class="text-primary link"
+																th:onclick="MoreOnInquiry([[${complain.id}]])">[[${complain.id}]]</a></td>
+															<td>[[${complain.subject}]]</td>
+															<td>[[${complain.time}]]</td>
+														</tr>
+													</tbody>
+												</table>
+
+
+
+
+
+												<!-- Modal: modalQuickView -->
+												<div id="inquiryAddModalDiv">
+													<div class="modal fade" id="inquiryAddModal">
+														<div class="modal-dialog modal-lg" role="">
+															<div class="modal-content">
+																<div class="modal-body">
+																	<form th:action="@{/user/addComplain}" th:method="POST"
+																		enctype="multipart/form-data">
+																		<div class="row">
+
+																			<div class="container">
+																				<div id="newDataMessages"></div>
+																				<!--Carousel Wrapper-->
+																				<div id="carousel-thumb"
+																					class="carousel slide carousel-fade carousel-thumbnails"
+																					data-ride="carousel">
+																					<!--Slides-->
+																					<div class="carousel-inner" role="listbox">
+																						<div class="carousel-item active">
+
+																							<div class="file-upload-wrapper" id="image1Div"
+																								style="display: none">
+																								<input type="file" id="image1" name="image1"
+																									class="file-upload" data-height="120" />
+																							</div>
+
+																							<div class="file-upload-wrapper" id="image2Div"
+																								style="display: none">
+																								<input type="file" id="image2" name="image2"
+																									class="file-upload" data-height="120" />
+																							</div>
+
+																							<div class="file-upload-wrapper" id="image3Div"
+																								style="display: none">
+																								<input type="file" id="image3" name="image3"
+																									class="file-upload" data-height="120" />
+																							</div>
+
+																							<div id="progress"></div>
+																						</div>
+																					</div>
+																				</div>
+																				<!--/.Carousel Wrapper-->
+																			</div>
+																			<div class="container">
+																				<h2 class="h2-responsive product-name">
+
+																					<div id="uploadNewImage">
+																						<button id="uploadNewImage_btn" type="button"
+																							class="btn btn-primary">Add New Image</button>
+																					</div>
+
+
+																					<div class="md-form">
+																						<input type="text" name="subject" id="subject"
+																							class="form-control"> <label
+																							class="active" for="subject">Subject</label>
+																					</div>
+
+
+
+																				</h2>
+																				<h4 class="h4-responsive">
+																					<span class="green-text">
+																						<div class="md-form">
+																							<input type="text" id="message" name="message"
+																								class="form-control"> <label
+																								class="active" for="message">Message</label>
+																						</div>
+
+
+																					</span>
+																				</h4>
+
+
+
+
+																				<!-- Add to Cart -->
+																				<div class="card-body">
+																					<div class="row">
+																						<div class="col-md-6"></div>
+																						<div class="col-md-6"></div>
+																					</div>
+																					<div class="row">
+																						<div class="text-center">
+																							<hr class="mb-4">
+																							<button type="button" class="btn btn-secondary"
+																								data-dismiss="modal">Close</button>
+																							<button type="button" class="btn btn-primary"
+																								onclick="addNewInquiryDetails()">Add
+																								new Inquiry</button>
+																						</div>
+																					</div>
+																				</div>
+																				<!-- /.Add to Cart -->
+																			</div>
+																		</div>
+																	</form>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+												</div>
+
+
+											</div>
+
+
+
+
+											<div id="security" th:if="${security != null}">
+
+												<div class="row d-flex justify-content-center">
+													<div class="col-md-6">
+														<form oninput="passwordUpdateCheck()">
+															<div class="row">
+																<div class="col-md-12 mb-4">
+																	<label for="cc-name123">Current Password</label> <input
+																		type="password" class="form-control"
+																		id="currentPassword" name="oldPass">
+																</div>
+
+															</div>
+															<div class="row">
+																<div class="col-md-6 mb-3">
+																	<label for="cc-expiration123">New Password</label> <input
+																		type="text" class="form-control" id="newPassword"
+																		name="newPass" disabled> <span id="newEnter"
+																		style="display: none"><small class="text-muted">Enter
+																			your new password</small></span> <span id="short"
+																		style="display: none"><small class="text-muted">Your
+																			password is too short</small></span> <span id="match"
+																		style="display: none"><small class="text-muted">Passwords
+																			do not match</small></span> <span id="conditionPass"
+																		style="display: none"><small class="text-muted">Your
+																			password must be at least 8 to 15 of length</small></span>
+																</div>
+																<div class="col-md-6 mb-3">
+																	<label for="cc-cvv123">Repeat Password</label> <input
+																		type="text" class="form-control" id="repeatPass"
+																		disabled>
+																	<div class="invalid-feedback show">Security code
+																		required</div>
+																</div>
+															</div>
+
+
+															<div class="row d-flex justify-content-center">
+																<div id="UpdatePassword" style="display: none">
+																	<button class="btn btn-indigo"
+																		onclick="updatePassword()">update Password</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+
+											</div>
+
+
+
+
+
+											<div id="supportEmailPlatForm" th:if="${complain != null}">
+
+
+												<!-- Section: Create Page -->
+												<section class="my-5">
+
+													<!-- Grid row -->
+													<div class="row">
+
+														<!-- Grid column -->
+														<div class="col-lg-8">
+
+
+
+															<!-- First card -->
+															<!--Accordion wrapper-->
+
+															<div class="accordion md-accordion accordion-1 mt-0 mb-5"
+																id="accordionEx23" role="tablist">
+
+																<div id="inquriyResponsesMsg">
+
+																	<div class="card"
+																		th:each="response : ${complain.responses}">
+
+																		<div class="card-header z-depth-1"
+																			th:classappend="${complain.user.userID eq response.user.userID} ? blue : green"
+																			role="tab" id="heading98">
+																			<h5 class="text-uppercase mb-0 py-1">
+																				<a class="collapsed font-weight-bold white-text"
+																					data-toggle="collapse"
+																					th:href="@{'#' + ${response.id}}"
+																					aria-expanded="false" aria-controls="collapse98">
+																					Responded by [[${response.user.fname}]] </a>
+																			</h5>
+																			<span
+																				class="font-weight-bold white-text text-right mr-0">
+																				[[${response.preetyTime}]] </span>
+																		</div>
+
+																		<div th:id="${response.id}" class="collapse"
+																			role="tabpanel" aria-labelledby="heading98"
+																			data-parent="#accordionEx23">
+																			<div class="card-body">
+																				<div class="row my-4">
+																					<div class="col-md-8">
+																						<h5 class="font-weight-bold mb-3 black-text">
+																							Responded by [[${response.user.fname}]]
+																							[[${response.user.lname}]]</h5>
+																						<h6>on [[${response.time}]]</h6>
+																						<hr>
+																						<br>
+																						<div class="font-weight-bold">[[${response.message}]]</div>
+																					</div>
+																					<div class="col-md-4 mt-0 pt-0"></div>
+																				</div>
+																				<div class="row my-4">
+																					<div class="ml-4"
+																						th:each="base64ImageRes : ${response.getBase64StringImages}">
+																						<p>
+																							<img th:if="${base64ImageRes != ''}"
+																								style="height: 350px; width: 300px"
+																								th:src="|data:image/png;base64,${base64ImageRes}|"
+																								alt="" class="img-fluid">
+																						</p>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+
+
+
+																</div>
+																<div id="newResponses"></div>
+
+															</div>
+															<!--Accordion wrapper-->
+
+															<!-- First card -->
+
+															<!-- Second card -->
+
+
+															<div id="uploadNewImage">
+
+																<button id="uploadNewImage_btn" type="button"
+																	class="btn btn-primary">Add New Image</button>
+
+															</div>
+															<form th:action="@{/user/addComplainResponse}"
+																id="formResponse" method="POST"
+																enctype="multipart/form-data">
+																<div class="card mb-4">
+
+																	<div class="file-upload-wrapper" id="image1Div"
+																		style="display: none">
+																		<input type="file" id="image1" name="image1"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div class="file-upload-wrapper" id="image2Div"
+																		style="display: none">
+																		<input type="file" id="image2" name="image2"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div class="file-upload-wrapper" id="image3Div"
+																		style="display: none">
+																		<input type="file" id="image3" name="image3"
+																			class="file-upload" data-height="120" />
+																	</div>
+
+																	<div id="progress"></div>
+
+																</div>
+																<!-- Second card -->
+
+																<div class="card mb-4">
+																	<textarea id="messagetex" name="message"
+																		class="form-control" rows="8"
+																		placeholder="Write Your response here!"></textarea>
+
+
+																	<input type="hidden" name="complainID"
+																		th:value="${complain.id}" id="complainID"
+																		class="form-control">
+																</div>
+																<div class="mt-4">
+																	<button type="button" onclick="addResponseINQ()"
+																		class="btn btn-primary btn-lg btn-block mt-2 mb-5">Respond
+																		Now</button>
+
+
+																</div>
+															</form>
+
+
+														</div>
+														<!-- Grid column -->
+
+														<!-- Grid column -->
+														<div class="col-lg-4">
+
+															<!-- Card -->
+															<div class="card card-cascade narrower mb-5">
+
+																<!-- Card image -->
+																<div
+																	class="view view-cascade gradient-card-header blue-gradient">
+																	<h4 class="font-weight-500 mb-0">Complain
+																		Information</h4>
+																</div>
+																<!-- Card image -->
+
+																<!-- Card content -->
+																<div class="card-body card-body-cascade">
+																	<input type="hidden" id="contactUsID"
+																		value="${Inquiry.inquiryID}">
+
+																	<p>
+																		<i class="fas fa-archive mr-1 mr-1" aria-hidden="true"></i>
+																		Complain ID: <strong>[[${complain.id}]]</strong>
+																	</p>
+																	<p>
+																		<i class="far fa-calendar-alt mr-1" aria-hidden="true"></i>
+																		Time: <strong>[[${complain.time}]]</strong>
+																	</p>
+																	<p>
+																		<i class="far fa-circle mr-1" aria-hidden="true"></i>
+																		Total Responds: <strong><span
+																			id="respponsesSize">[[${complain.responses.size()}]]</span></strong>
+																	</p>
+
+
+																</div>
+																<!-- Card content -->
+
+															</div>
+															<!-- Card -->
+
+															<!-- Card -->
+															<div class="card card-cascade narrower">
+
+																<!-- Card image -->
+																<div
+																	class="view view-cascade gradient-card-header blue-gradient">
+																	<h4 class="font-weight-500 mb-0">Complain Message</h4>
+																</div>
+																<!-- Card image -->
+
+																<!-- Card content -->
+																<div class="card-body card-body-cascade">
+																	<p>
+																		<strong>Subject: </strong>[[${complain.subject}]]
+																	</p>
+																	<br>
+																	<p>
+																		<strong>Message: </strong> [[${complain.message}]]
+
+																	</p>
+
+																	<div class=""
+																		th:each="base64Image : ${complain.getBase64StringImages}">
+																		<p>
+																			<img th:if="${ base64Image != ''}"
+																				th:src="|data:image/png;base64,${base64Image}|"
+																				style="height: 250px; width: 400px" alt=""
+																				class="img-fluid">
+																		</p>
+																	</div>
+																</div>
+																<!-- Card content -->
+
+															</div>
+															<!-- Card -->
+
+														</div>
+														<!-- Grid column -->
+
+													</div>
+													<!-- Grid row -->
+
+												</section>
+												<!-- Section: Create Page -->
+
+
+
+
+											</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 										</div>
 										<!-- Pills panels -->
 
