@@ -47,11 +47,11 @@
 								class="collapsible-header waves-effect"><i
 									class="w-fa fas fa-gem"></i>Administrative Dashboard</a></li>
 
-							<li><a onclick="listAllAboutUs()"
+							<li><a th:href="@{/panel/about}"
 								class="collapsible-header waves-effect"><i
 									class="w-fa fas fa-code"></i>About us</a></li>
 
-							<li><a onclick="listAllDeveloper()"
+							<li><a th:href="@{/panel/developer}"
 								class="collapsible-header waves-effect"><i
 									class="w-fa fab fa-codepen"></i>Developer</a></li>
 
@@ -74,6 +74,10 @@
 							<li><a th:href="@{/panel/roles}"
 								class="collapsible-header waves-effect"><i
 									class="fas fa-lock"></i>System Role Management</a></li>
+
+							<li><a th:href="@{/panel/currency}"
+								class="collapsible-header waves-effect"><i
+									class="fas fa-hand-holding-usd"></i>Currency Bot api</a></li>
 
 							<li><a th:href="@{/panel/products/categories}"
 								class="collapsible-header waves-effect"><i

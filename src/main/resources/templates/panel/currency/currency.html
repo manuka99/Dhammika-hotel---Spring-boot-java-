@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.w3.org/1999/xhtml"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	layout:decorator="~{layouts/panel/layout.html}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body class="fixed-sn white-skin" id="body">
+
+
+	<div layout:fragment="content">
+		<div id="body2">
+
+			<main>
+				<div id="newDataMessages"></div>
+
+				<div class="progress-custom" id="loaderTable" style="display: none">
+					<div class="indeterminate-my"></div>
+				</div>
+				<div class="container-fluid">
+
+					<!-- Section: Basic examples -->
+					<section>
+
+						<div id="contectChangeArea" class="">
+
+							<div class="row">
+								<div class="container">
+									<section class="mb-4">
+
+										<div class="card">
+											<div class="card-body d-flex justify-content-between">
+												<h4 class="h4-responsive mt-3 font-weight-bold">
+													Currency Bot V1<span
+														class="text-capitalize font-weight-bold text-info">
+														(Auto updated 3h)</span>
+												</h4>
+
+												<div>
+													<a class="btn btn-success waves-effect waves-light"
+														data-toggle="modal" data-target="#currencyEditModal"
+														data-backdrop="static" data-keyboard="false"><i
+														class="fas fa-pen left"></i> Edit</a> <a
+														class="btn btn-primary waves-effect waves-light"
+														href="https://currencylayer.com/"><i
+														class="fas fa-star left"></i> Go premium</a>
+												</div>
+
+											</div>
+										</div>
+
+									</section>
+
+									<section class="mb-4">
+
+										<div class="card">
+											<div class="card-body">
+
+												<!-- Grid row -->
+												<div class="row">
+
+													<!-- Grid column -->
+													<div class="col-md-12 text-left">
+
+														<p>
+															<strong>Bot ID: [[${currency.id}]] </strong>
+														</p>
+
+														<p>
+															<strong>Last updated: </strong>
+															[[${currency.lastUpdate}]]
+														</p>
+														<p>
+															<strong>1 USD in LKR: </strong>[[${currency.value}]]
+														</p>
+
+														<p class="text-primary font-weight-bold mb-0">
+															<i class="fas fa-info-circle mr-1"></i>The above USD
+															value will be used for every Payments/Purchases. This
+															value will be auto updated after three hours through our
+															API, so please make sure any changes done may only remain
+															for three hours.
+														</p>
+
+													</div>
+													<!-- Grid column -->
+
+													<!-- Grid column -->
+
+													<!-- Grid column -->
+
+												</div>
+												<!-- Grid row -->
+
+											</div>
+										</div>
+
+									</section>
+
+
+
+									<section class="mb-5">
+
+										<div class="card">
+											<div class="card-body">
+
+												<div class=" ">
+													<div class="">
+
+														<h5 class="mb-4"></h5>
+
+														<p>
+															A social bot (also: socialbot or socbot) is an agent that
+															communicates more or less autonomously on social media,
+															often with the task of influencing the course of
+															discussion and/or the opinions of its readers.<br> <br>It
+															is related to chatbots but mostly only uses rather simple
+															interactions or no reactivity at all. The messages (e.g.
+															tweets) it distributes are mostly either very simple, or
+															prefabricated (by humans), and it often operates in
+															groups and various configurations of partial human
+															control (hybrid).It usually targets advocating certain
+															ideas, supporting campaigns, or aggregating other sources
+															either by acting as a "follower" and/or gathering
+															followers itself. In this very limited respect, social
+															bots can be said to have passed the Turing test. <br>
+															<br> If the expectation is that behind every social
+															media profile there should be a human, social bots always
+															use fake accounts. This is not different from other
+															social media API uses. Social bots appear to have played
+															a significant role in the 2016 United States presidential
+															election and their history appears to go back at least to
+															the United States midterm elections, 2010. <br> <br>
+															It is estimated that 9-15% of active Twitter accounts may
+															be social bots and that 15% of the total Twitter
+															population active in the US presidential election
+															discussion were bots. At least 400,000 bots were
+															responsible for about 3.8 million tweets, roughly 19% of
+															the total volume.
+														</p>
+
+
+
+													</div>
+												</div>
+
+											</div>
+										</div>
+
+									</section>
+
+								</div>
+							</div>
+
+
+							<div class="modal fade" id="currencyEditModal" tabindex="-1"
+								role="dialog" aria-labelledby="exampleModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div class="row">
+												<div class="container">
+													<!--Carousel Wrapper-->
+													<div id="carousel-thumb"
+														class="carousel slide carousel-fade carousel-thumbnails"
+														data-ride="carousel">
+														<!--Slides-->
+														<div class="carousel-inner" role="listbox">
+															<div class="carousel-item active"></div>
+														</div>
+													</div>
+													<!--/.Carousel Wrapper-->
+												</div>
+												<div class="container">
+													<p class="h2-responsive product-name font-weight-bold">
+														Enter Custom LKR value for one USD: (currently 1 USD =
+														[[${currency.value}]] LKR ) <input type="text"
+															class="form-control" id="currencyValue" required>
+													<p class="text-primary font-weight-bold mb-0">
+														<i class="fas fa-info-circle mr-1"></i>Note: This value
+														will be auto updated after three hours through the api.
+													</p>
+
+													</p>
+													<div class="card-body">
+														<div class="row">
+															<div class="col-md-6"></div>
+															<div class="col-md-6"></div>
+														</div>
+														<div class="row">
+															<div class="text-center">
+																<button type="button" class="btn btn-secondary"
+																	data-dismiss="modal">Close</button>
+																<button class="btn btn-primary"
+																	onclick="updateCurrency()">Update</button>
+															</div>
+														</div>
+														
+													</div>
+													<div id="editDataMessages"></div>
+
+												</div>
+
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+						</div>
+					</section>
+				</div>
+			</main>
+
+
+
+
+			<script type="text/javascript">
+				var timeoutms = 8000;
+
+				var connectError = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Timeout: </strong>Connection to the server failed.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'Please check your internet connection and click here to <strong><a onclick="listFoodDetails()"> refresh.</a></strong>'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				var successUpdateCurrency = '<div ' +
+					' class="mt-2 mb-4 card alert card alert-success alert-dismissible fade show"'+
+					'role="alert">'
+						+ '<p>'
+						+ '<strong>Success: </strong> Currency bot was updated successfully.'
+						+ '</p>'
+						+ '<button type="button" class="close" data-dismiss="alert"'+
+						'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>' + '</div>';
+
+				var errorUpdateCurrency = '<div class="mt-2 alert card alert-danger alert-dismissible fade show"'
+							+'role="alert">'
+						+ '<p>'
+						+ '<strong>Error: </strong>Currency bot was not updated.'
+
+						+ '</p>'
+						+ '<p>'
+						+ 'This may be due to invalid user input, please fill out all the fields befour adding .'
+						+ '</p>'
+
+						+ '<button type="button" class="close" data-dismiss="alert"'
+						+ 'aria-label="Close">'
+						+ '<span aria-hidden="true">&times;</span>'
+						+ '</button>'
+						+ '<div style="height: 10px;"></div>'
+						+ '</div>';
+
+				function updateCurrency() {
+
+					var currencyValue = $('#currencyValue').val();
+
+					$.ajax({
+
+						url : "/panel/currency/update",
+						data : {
+							"value" : currencyValue
+						},
+						type : 'POST',
+						timeout : timeoutms,
+						success : function(data, textStatus, jqXHR) {
+
+							if (data == true) {
+
+								$('.modal').hide();
+								$('.modal-backdrop').remove();
+								$('#newDataMessages').append(
+										successUpdateCurrency);
+								$('#loaderTable').fadeIn();
+
+								$("#contectChangeArea").load(
+										location.href + " #contectChangeArea");
+
+								$('#loaderTable').fadeOut();
+
+							}
+
+							else
+								$('#editDataMessages').append(
+										errorUpdateCurrency);
+
+						},
+						error : function(jqXHR, textStatus, errorThrown) {
+							if (textStatus === "timeout") {
+								$('#loaderTable').fadeOut();
+								$('#editDataMessages').append(connectError);
+							}
+						}
+
+					})
+
+				};
+			</script>
+
+		</div>
+	</div>
+
+
+</body>
+</html>

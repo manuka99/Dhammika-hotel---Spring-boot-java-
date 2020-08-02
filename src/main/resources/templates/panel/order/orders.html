@@ -129,14 +129,14 @@
 													class="text-nowrap text-primary text-uppercase">[[${order.orderID}]]</span></a></strong></th>
 										<td>[[${order.orderType}]]</td>
 										<td>[[${order.status}]]</td>
-										<td>[[${order.payment}]]</td>
+										<td>[[${order.payment.paymentStatus}]]</td>
 										<td>[[${order.shippingAddress}]]</td>
 										<td><span class="text-nowrap">[[${order.placedDate}]]</span></td>
 										<td><span class="text-nowrap">[[${order.expectedDate}]]</span></td>
-										<td>[[${order.tax}]]</td>
-										<td>[[${order.shippingFee}]]</td>
-										<td>[[${order.subTotal}]]</td>
-										<td>[[${order.total}]]</td>
+										<td>[[${order.payment.tax}]]</td>
+										<td>[[${order.payment.shippingFee}]]</td>
+										<td>[[${order.payment.subTotal}]]</td>
+										<td>[[${order.payment.total}]]</td>
 										<td>[[${order.order_Items.size()}]]</td>
 										<td><span class="text-nowrap"
 											th:if="${order.deliveredDate == null}">Not Delivered
