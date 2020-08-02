@@ -36,30 +36,6 @@
 									<!--Grid column-->
 									<div class="col-lg-12">
 
-										<!-- Pills navs -->
-										<ul
-											class="nav md-pills nav-justified pills-primary font-weight-bold">
-
-											<li class="nav-item"><a class="nav-link"
-												data-toggle="tab" href="#" role="tab" id="myProfile"
-												aria-selected="true">1. User Profile</a></li>
-
-											<li class="nav-item"><a class="nav-link active"
-												data-toggle="tab" id="myOrders" href="#" role="tab"
-												aria-selected="false">2. Orders</a></li>
-
-											<li class="nav-item"><a class="nav-link "
-												data-toggle="tab" id="mySecurity" href="#" role="tab"
-												aria-selected="false">3. Security</a></li>
-
-											<li class="nav-item"><a class="nav-link"
-												data-toggle="tab" id="myComplains" href="#" role="tab"
-												aria-selected="false">4. User Complains</a></li>
-
-										</ul>
-
-										<!-- Pills panels -->
-										<hr class="mb-4">
 										<div id="ContentChange">
 
 											<div class="">
@@ -76,9 +52,15 @@
 														<h3 class="mb-4">
 															<span class="text-muted">Order ID</span> <strong>#[[${order.orderID}]]</strong>
 															<a class="btn btn-lg ml-4 btn-danger"
+																th:if="${order.status != 'Completed' and order.status != 'Cancelled' }"
 																th:href="@{'/user/cancelOrder?orderID=' + ${order.orderID}}">Cancel
 																Order</a>
 														</h3>
+
+
+														<h5>
+															<span class="text-primary font-weight-bold">([[${order.status}]])</span>
+														</h5>
 
 														<hr class="mb-4">
 														<div class="row mb-4"
@@ -104,18 +86,36 @@
 																<div>
 																	<div class="d-flex justify-content-between">
 																		<div>
-																			<h5>[[${order_Item.product.name}]]</h5>
+																			<h5>
+																				<a
+																					th:href="@{'/product?productID=' + ${order_Item.product.productID} }"
+																					class="text-capitalize">[[${order_Item.product.name}]]
+																				</a><span class="font-weight-bold"> x
+																					[[${order_Item.quantity}]]</span>
+																			</h5>
+																			<a
+																				th:href="@{'/menu/page/1?sortField=name&sortDir=asc&catergoryID=' + ${order_Item.product.category.categoryID} +'&price=0'}"
+																				class="mb-2 text-muted badge badge-success text-uppercase small">[[${order_Item.product.category.name}]]</a>
 																			<p class="mb-3 text-muted text-uppercase small">[[${order_Item.product.portion}]]</p>
-																			<p class="mb-2 text-muted text-uppercase small">[[${order_Item.product.description}]]</p>
+																			<p class="mb-3 text-muted text-uppercase small">LKR
+																				[[${order_Item.product.price}]] (Current price in
+																				LKR)</p>
 																		</div>
 
 																		<div>
 
 																			<div class="mb-0 w-100 align-items-right">
 																				<div class="md-form  mb-0">
-																					<span id="discount-code"
-																						class="btn btn-success btn-sm font-weight-light"><strong>QTY
-																							[[${order_Item.quantity}]]</strong></span>
+
+
+
+																					<a
+																						th:href="@{'/product?productID=' + ${order_Item.product.productID} }"
+																						class="text-capitalize deep-purple-text"> <strong><i
+																							class="fas fa-angle-double-right"></i>Review our
+																							taste <i class="fas fa-pepper-hot"></i> </strong>
+																					</a>
+
 
 																				</div>
 
@@ -188,15 +188,18 @@
 														<ul class="list-group list-group-flush">
 															<li
 																class="list-group-item d-flex justify-content-between align-items-center px-0">
-																Value of the Products<span>[[${order.payment.currency}]] [[${order.payment.subTotal}]]</span>
+																Value of the Products<span>[[${order.payment.currency}]]
+																	[[${order.payment.subTotal}]]</span>
 															</li>
 															<li
 																class="list-group-item d-flex justify-content-between align-items-center px-0">
-																Tax and Vat <span>[[${order.payment.currency}]] [[${order.payment.tax}]]</span>
+																Tax and Vat <span>[[${order.payment.currency}]]
+																	[[${order.payment.tax}]]</span>
 															</li>
 															<li
 																class="list-group-item d-flex justify-content-between align-items-center px-0">
-																Shipping Fee<span>[[${order.payment.currency}]] [[${order.payment.shippingFee}]]</span>
+																Shipping Fee<span>[[${order.payment.currency}]]
+																	[[${order.payment.shippingFee}]]</span>
 															</li>
 															<li
 																class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
@@ -204,7 +207,8 @@
 																	<strong>Total value of the order</strong> <strong>
 																		<p class="mb-0">(including VAT, TAX and Shipping)</p>
 																	</strong>
-																</div> <span><strong>[[${order.payment.currency}]] [[${order.payment.total}]]</strong></span>
+																</div> <span><strong>[[${order.payment.currency}]]
+																		[[${order.payment.total}]]</strong></span>
 
 															</li>
 														</ul>
@@ -226,7 +230,8 @@
 
 															<li th:if="${order.orderType != 'COD' }"
 																class="list-group-item d-flex justify-content-between align-items-center px-0">
-																Payment Amount<span>[[${order.payment.currency}]] [[${order.payment.total}]]</span>
+																Payment Amount<span>[[${order.payment.currency}]]
+																	[[${order.payment.total}]]</span>
 															</li>
 
 															<li th:if="${order.orderType != 'COD' }"
@@ -243,7 +248,8 @@
 																<div>
 																	<strong>Total Amount Payable</strong> <strong>
 																	</strong>
-																</div> <span><strong>[[${order.payment.currency}]] [[${order.payment.total}]]</strong></span>
+																</div> <span><strong>[[${order.payment.currency}]]
+																		[[${order.payment.total}]]</strong></span>
 
 															</li>
 

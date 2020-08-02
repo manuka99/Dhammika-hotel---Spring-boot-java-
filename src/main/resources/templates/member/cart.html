@@ -362,19 +362,21 @@
 								if (data === "updated") {
 									toastr.success('cart was updated');
 
-									cartSize();
-
 									$("#loadMyCart").load(
 											location.href + " #loadMyCart");
+									
+									cartSize();
 
 								}
 
 								else if (data === "failed") {
 									toastr
 											.error('Maximum quantity of an item cannot exceeds 3 and should be at least 1');
-									cartSize();
+
 									$("#loadMyCart").load(
 											location.href + " #loadMyCart");
+									
+									cartSize();
 
 								}
 
@@ -399,17 +401,17 @@
 					success : function(data) {
 						if (data === true) {
 							toastr.success('item was removed');
-							cartSize();
 							$("#loadMyCart").load(
 									location.href + " #loadMyCart");
+							cartSize();
 
 						}
 
 						else {
-							cartSize();
 							$("#loadMyCart").load(
 									location.href + " #loadMyCart");
 							toastr.error('item was not removed');
+							cartSize();
 						}
 
 					}
