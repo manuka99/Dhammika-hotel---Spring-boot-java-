@@ -1,6 +1,7 @@
 package com.hotel.management.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,8 +34,29 @@ public class CurrencyGeneratorserviceImpl implements CurrencyGeneratorService {
 	static CloseableHttpClient httpClient = HttpClients.createDefault();
 
 	@Override
-	public List<CurrencyGenerator> findAll() {
-		return currencyGeneratorRepository.findAll();
+	public CurrencyGenerator findAll() {
+
+		CurrencyGenerator cg = new CurrencyGenerator();
+		List<CurrencyGenerator> cgs = new ArrayList<>();
+
+		try {
+
+			cgs = currencyGeneratorRepository.findAll();
+
+		} catch (Exception e) {
+			priceOfaUsdToLkr();
+
+		} finally {
+
+			if (cgs.size() == 1)
+				cg = cgs.get(0);
+
+			else if (cgs.size() > 1)
+				removeAll();
+
+		}
+
+		return cg;
 	}
 
 	@Override
@@ -59,37 +81,34 @@ public class CurrencyGeneratorserviceImpl implements CurrencyGeneratorService {
 
 		double usdValue = 0;
 
-		List<CurrencyGenerator> cgs = findAll();
+		CurrencyGenerator cg = findAll();
 
-		if (cgs.size() > 0) {
-			for (CurrencyGenerator cg : cgs) {
+		if (cg.getId() != null) {
 
-				if (Math.abs(new Date().getTime() - cg.getLastUpdate().getTime()) > expireTime) {
+			if (Math.abs(new Date().getTime() - cg.getLastUpdate().getTime()) > expireTime) {
 
-					usdValue = sendLiveRequest();
+				usdValue = sendLiveRequest();
 
-					System.out.println(usdValue + "ssasa");
+				System.out.println(usdValue + "ssasa");
 
-					if (usdValue != 0) {
-						CurrencyGenerator currency = new CurrencyGenerator();
-						currency.setId(cg.getId());
-						currency.setValue(usdValue);
-						saveTodb(currency);
-					}
-
-					else
-						usdValue = cg.getValue();
+				if (usdValue != 0) {
+					CurrencyGenerator currency = new CurrencyGenerator();
+					currency.setId(cg.getId());
+					currency.setValue(usdValue);
+					saveTodb(currency);
 				}
 
 				else
 					usdValue = cg.getValue();
 			}
+
+			else
+				usdValue = cg.getValue();
 		}
 
 		else {
 
 			usdValue = sendLiveRequest();
-
 			CurrencyGenerator currency = new CurrencyGenerator();
 			currency.setValue(usdValue);
 			saveTodb(currency);
@@ -129,6 +148,20 @@ public class CurrencyGeneratorserviceImpl implements CurrencyGeneratorService {
 
 		return usdValue;
 
+	}
+
+	@Override
+	public boolean removeAll() {
+
+		boolean result = false;
+
+		try {
+			currencyGeneratorRepository.deleteAll();
+			result = true;
+		} catch (Exception e) {
+		}
+
+		return result;
 	}
 
 }
