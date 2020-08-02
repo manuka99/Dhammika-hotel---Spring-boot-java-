@@ -1,5 +1,7 @@
 package com.hotel.management.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,8 @@ public class NotificationManager {
 
 	@Autowired
 	private NotificationService notificationService;
+
+	private static final Logger logger = LoggerFactory.getLogger(NotificationManager.class);
 
 	@GetMapping("/user/notifications")
 	public String GetMemberNotifications(Model model) {
@@ -43,7 +47,7 @@ public class NotificationManager {
 
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return result;
@@ -76,11 +80,15 @@ public class NotificationManager {
 
 		int count = 0;
 
-		for (NotificationDB notification : notificationService.getAllNotificationsByUser(getPrincipalUser())) {
+		try {
+			for (NotificationDB notification : notificationService.getAllNotificationsByUser(getPrincipalUser())) {
 
-			if (notification.isSeen() == false)
-				++count;
+				if (notification.isSeen() == false)
+					++count;
 
+			}
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return count;

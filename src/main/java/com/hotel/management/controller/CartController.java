@@ -2,6 +2,8 @@ package com.hotel.management.controller;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,9 +29,11 @@ public class CartController {
 
 	@Autowired
 	private ProductService productService;
-	
+
 	@Autowired
 	private CurrencyGeneratorService currencyGeneratorService;
+
+	private Logger logger = LoggerFactory.getLogger(CartController.class);
 
 	@GetMapping("/user/cart")
 	public String UserCart(Model model) {
@@ -37,11 +41,17 @@ public class CartController {
 		boolean result = cartService.calculateUpdateCartValues(getUserCart());
 
 		if (result) {
-			Cart cart = cartService.getCartById(getUserCart().getCartID());
-			model.addAttribute("cart", cart);
+
+			try {
+				Cart cart = cartService.getCartById(getUserCart().getCartID());
+				model.addAttribute("cart", cart);
+				model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.info("exception");
+			}
+
 		}
-		
-		model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
 
 		return "member/cart";
 	}
@@ -64,50 +74,56 @@ public class CartController {
 
 		Set<Cart_Items> set = cart.getCart_Items();
 
-		Product product = productService.getProductById(productID);
+		try {
 
-		if (cart != null && product.isActive() && intQuantity < 4 && intQuantity > 0) {
+			Product product = productService.getProductById(productID);
 
-			for (Cart_Items cart_item : set) {
+			if (cart != null && product.isActive() && intQuantity < 4 && intQuantity > 0) {
 
-				/*
-				 * update
-				 */
-				if (cart_item.getProduct().getProductID().equals(productID)
-						&& (intQuantity + cart_item.getQuantity()) < 4) {
+				for (Cart_Items cart_item : set) {
 
-					cart_item.setQuantity(intQuantity + cart_item.getQuantity());
-					updated = true;
-					// update
+					/*
+					 * update
+					 */
+					if (cart_item.getProduct().getProductID().equals(productID)
+							&& (intQuantity + cart_item.getQuantity()) < 4) {
+
+						cart_item.setQuantity(intQuantity + cart_item.getQuantity());
+						updated = true;
+						// update
+
+					}
+
+					else if (cart_item.getProduct().getProductID().equals(productID))
+						canAddToCart = false;
 
 				}
 
-				else if (cart_item.getProduct().getProductID().equals(productID))
-					canAddToCart = false;
+				if (updated == false && canAddToCart) {
+					Cart_Items cart_item = new Cart_Items();
+					cart_item.setProduct(product);
+					cart_item.setQuantity(intQuantity);
+					cart_item.setCart(cart);
+					set.add(cart_item);
+					addToCart = true;
+					// added
+				}
+
+				cart.setCart_Items(set);
+				result = cartService.calculateUpdateCartValues(cart);
 
 			}
 
-			if (updated == false && canAddToCart) {
-				Cart_Items cart_item = new Cart_Items();
-				cart_item.setProduct(product);
-				cart_item.setQuantity(intQuantity);
-				cart_item.setCart(cart);
-				set.add(cart_item);
-				addToCart = true;
-				// added
-			}
+			if (updated && result)
+				msg = "updated";
 
-			cart.setCart_Items(set);
-			result = cartService.calculateUpdateCartValues(cart);
+			if (addToCart && result)
+				msg = "added";
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception");
 		}
-
-		if (updated && result)
-			msg = "updated";
-
-		if (addToCart && result)
-			msg = "added";
-
 		return msg;
 	}
 
@@ -136,7 +152,8 @@ public class CartController {
 					}
 
 				} catch (Exception e) {
-					// TODO: handle exception
+					e.printStackTrace();
+					logger.info("exception");
 				}
 
 			}
@@ -180,17 +197,14 @@ public class CartController {
 
 				try {
 
-					System.out.println("adadadadad");
-
 					result = cart.getCart_Items().remove(deleteItem);
 
 					if (result)
 						result = cartService.saveCart(cart);
 
-					System.out.println("adadadadad");
-
 				} catch (Exception e) {
-					// TODO: handle exception
+					e.printStackTrace();
+					logger.info("exception");
 				}
 
 			}
@@ -217,19 +231,13 @@ public class CartController {
 			user = ((CurrentUser) principal).getUser();
 		}
 
-		Cart cart = cartService.getCartByUserId(user);
+		Cart cart = new Cart();
 
-		for (Cart_Items cart_item : cart.getCart_Items()) {
-			try {
-
-				Product product = new Product();
-				product = cart_item.getProduct();
-				cart_item.setProduct(product);
-
-			} catch (NullPointerException e) {
-				// TODO: handle exception
-			}
-
+		try {
+			cart = cartService.getCartByUserId(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception at cart");
 		}
 
 		return cart;

@@ -35,7 +35,7 @@ public class FoodController {
 
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Autowired
 	private CurrencyGeneratorService currencyGeneratorService;
 
@@ -45,21 +45,20 @@ public class FoodController {
 
 	}
 
-	@GetMapping("/newFood")
-	public String newFood(Model model) {
-		Product product = new Product();
-		model.addAttribute("product", product);
-		return "upload";
-
-	}
-
 	@GetMapping("/product")
 	public String viewProduct(@RequestParam(value = "productID") String id, Model model) {
-		Product product = productService.getProductById(id);
-		model.addAttribute("product", product);
-		model.addAttribute("canReview", orderService.hasProductOfUserOrder(product, getPrincipalUser()));
-		model.addAttribute("userReview", getPrincipalUser());
-		model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+
+		try {
+			Product product = productService.getProductById(id);
+			model.addAttribute("product", product);
+			model.addAttribute("canReview", orderService.hasProductOfUserOrder(product, getPrincipalUser()));
+			model.addAttribute("userReview", getPrincipalUser());
+			model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception");
+		}
+
 		return "products/product";
 
 	}

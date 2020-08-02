@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -51,6 +53,8 @@ public class UserController {
 	@Autowired
 	private EmailConfirmTokenService emailConfirmTokenService;
 
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
+
 	@GetMapping("/register/emailCheck")
 	public @ResponseBody boolean checkEmailExist(@RequestParam("email") String email, Model model) {
 
@@ -65,6 +69,7 @@ public class UserController {
 
 		} catch (Exception e) {
 			result = false;
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return result;
@@ -77,41 +82,60 @@ public class UserController {
 		return "memberArea/register";
 	}
 
-	@PostMapping("/saveUser")
-	public String RegisterUser(@ModelAttribute("user") User user, Model model) throws Exception {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+	@PostMapping("/register/saveUser")
+	public String RegisterUser(@ModelAttribute("user") User user, RedirectAttributes ra) throws Exception {
+		
+		boolean result = false;
+		
+		try {
 
-		/*
-		 * set user role as member
-		 */
-		Set<Role> roles = new HashSet<>();
-		Role role = roleService.getRoleByName("MEMBER");
-		role.getUsers().add(user);
-		roles.add(role);
-		user.setRoles(roles);
+			User userEmail = userService.findByEmail(user.getEmail());
 
-		/*
-		 * set cart
-		 */
+			if (userEmail == null) {
+				logger.info("no email");
+				
+				/*
+				 * set user role as member
+				 */
+				
+				Set<Role> roles = new HashSet<>();
+				Role role = roleService.getRoleByName("MEMBER");
+				role.getUsers().add(user);
+				roles.add(role);
+				user.setRoles(roles);
 
-		Cart cart = new Cart();
-		cart.setUser(user);
-		user.setCart(cart);
+				/*
+				 * set cart
+				 */
 
-		EmailConfirmToken emailConfirmToken = new EmailConfirmToken(user);
-		user.setEmailConfirmToken(emailConfirmToken);
-		userService.saveUser(user);
+				Cart cart = new Cart();
+				cart.setUser(user);
+				user.setCart(cart);
 
-		/*
-		 * send registration email
-		 */
-		mailService.userRegistrationEmail(user);
+				EmailConfirmToken emailConfirmToken = new EmailConfirmToken(user);
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				user.setEmailConfirmToken(emailConfirmToken);
+				user.setEnabled(false);
+				user.setNotLocked(true);
+				result = userService.saveUser(user);
 
-		/*
-		 * send token mail
-		 */
+				/*
+				 * send registration email
+				 */
+				mailService.userRegistrationEmail(user);
 
-		return "redirect: /login";
+				/*
+				 * send token mail
+				 */
+			}
+
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
+		}
+
+		ra.addAttribute("registered", result);
+
+		return "redirect:/login";
 	}
 
 	@GetMapping("/user/profile")
@@ -129,8 +153,8 @@ public class UserController {
 	}
 
 	@PostMapping("/user/profileUpdate")
-	public @ResponseBody boolean UserProfileUpdate(@ModelAttribute("userSave") User saveUser, HttpServletRequest request,
-			HttpServletResponse response, Model model, Boolean result) throws Exception {
+	public @ResponseBody boolean UserProfileUpdate(@ModelAttribute("userSave") User saveUser,
+			HttpServletRequest request, HttpServletResponse response, Model model, Boolean result) throws Exception {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		/*
@@ -185,7 +209,7 @@ public class UserController {
 
 	@GetMapping("/user/security")
 	public String UserSecurity(Model model) {
-		
+
 		model.addAttribute("security", true);
 		return "member/profile";
 	}
@@ -206,20 +230,23 @@ public class UserController {
 			user = ((CurrentUser) principal).getUser();
 		}
 
-		User existingUser = userService.getUserById(user.getUserID());
+		try {
 
-		System.out.println(existingUser.getPassword() + "sdsd " + oldPassword);
+			User existingUser = userService.getUserById(user.getUserID());
 
-		if (passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
-			System.out.println("sdsdsdsd");
-			existingUser.setPassword(passwordEncoder.encode(newPassword));
-			result = userService.updateUser(existingUser);
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null) {
-				new SecurityContextLogoutHandler().logout(request, response, auth);
+			if (passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
+				System.out.println("sdsdsdsd");
+				existingUser.setPassword(passwordEncoder.encode(newPassword));
+				result = userService.updateUser(existingUser);
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				if (auth != null) {
+					new SecurityContextLogoutHandler().logout(request, response, auth);
+				}
+
+				mailService.passwordChangedEmail(existingUser);
 			}
-
-			mailService.passwordChangedEmail(existingUser);
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return result;
@@ -239,64 +266,78 @@ public class UserController {
 
 		}
 
-		if (user.getUserID() != null) {
+		try {
 
-			EmailConfirmToken pastToken = emailConfirmTokenService.getTokenByUser(user);
+			if (user.getUserID() != null) {
 
-			if (pastToken != null)
-				emailConfirmTokenService.deleteToken(pastToken);
+				EmailConfirmToken pastToken = emailConfirmTokenService.getTokenByUser(user);
 
-			if (emailConfirmTokenService.getTokenByUser(user) == null) {
+				if (pastToken != null)
+					emailConfirmTokenService.deleteToken(pastToken);
 
-				EmailConfirmToken emailConfirmToken = new EmailConfirmToken(user);
-				emailConfirmTokenService.saveToken(emailConfirmToken);
-				user.setEmailConfirmToken(emailConfirmToken);
+				if (emailConfirmTokenService.getTokenByUser(user) == null) {
 
+					EmailConfirmToken emailConfirmToken = new EmailConfirmToken(user);
+					emailConfirmTokenService.saveToken(emailConfirmToken);
+					user.setEmailConfirmToken(emailConfirmToken);
+
+				}
+
+				result = mailService.resendAccountActivationEmail(user);
 			}
 
-			mailService.resendAccountActivationEmail(user);
-			result = true;
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return result;
 
 	}
 
-	@GetMapping("/confirm-email")
+	@GetMapping("/confirm-email/confirm")
 	public String UserEmailConfirm(HttpServletRequest request, HttpServletResponse response,
 			RedirectAttributes rAttributes) throws Exception {
 
 		long mills_per_day = 24 * 60 * 60 * 1000L;
 
+		boolean result = false;
+
 		String userID = request.getParameter("uid");
 		String token = request.getParameter("token");
 
-		User user = userService.getUserById(userID);
+		try {
 
-		if (user != null && token != null) {
+			User user = userService.getUserById(userID);
 
-			EmailConfirmToken emailConfirmToken = emailConfirmTokenService.getTokenByUser(user);
+			if (user != null && token != null) {
 
-			if (emailConfirmToken != null) {
-				Date date = emailConfirmToken.getCreatedDate();
+				EmailConfirmToken emailConfirmToken = emailConfirmTokenService.getTokenByUser(user);
 
-				System.out.println(Math.abs(new Date().getTime() - date.getTime()));
+				if (emailConfirmToken != null) {
+					Date date = emailConfirmToken.getCreatedDate();
 
-				if (Math.abs(new Date().getTime() - date.getTime()) < mills_per_day) {
+					System.out.println(Math.abs(new Date().getTime() - date.getTime()));
 
-					user.setEnabled(true);
-					userService.saveUser(user);
+					if (Math.abs(new Date().getTime() - date.getTime()) < mills_per_day) {
 
-					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-					if (auth != null) {
-						new SecurityContextLogoutHandler().logout(request, response, auth);
+						user.setEnabled(true);
+						result = userService.saveUser(user);
+
+						Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+						if (auth != null) {
+							new SecurityContextLogoutHandler().logout(request, response, auth);
+						}
+
 					}
-
 				}
 			}
+
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
-		return "redirect:login";
+		rAttributes.addAttribute("emailVerified", result);
+		return "redirect:/login";
 	}
 
 	@GetMapping("/forgot-password")
@@ -320,7 +361,7 @@ public class UserController {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.info(e.toString() + "message: " + e.getMessage());
 		}
 
 		return result;

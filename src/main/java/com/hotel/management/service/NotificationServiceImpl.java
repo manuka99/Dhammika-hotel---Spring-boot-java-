@@ -22,7 +22,7 @@ import com.hotel.management.repository.NotificationRepository;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-	private Logger logger = LoggerFactory.getLogger(OrderController.class);
+	private Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 
 	@Autowired
 	private NotificationRepository notificationRepository;
@@ -470,7 +470,7 @@ public class NotificationServiceImpl implements NotificationService {
 		List<String> role_names = new ArrayList<>();
 		role_names.add("ADMIN");
 		role_names.add("FOOD_MANAGER");
-
+		
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
 			try {

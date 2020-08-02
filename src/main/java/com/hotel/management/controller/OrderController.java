@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hotel.management.model.Cart;
 import com.hotel.management.model.Cart_Items;
@@ -46,7 +47,7 @@ import com.paypal.base.rest.PayPalRESTException;
 
 @Controller
 public class OrderController {
-	
+
 	private Logger logger = LoggerFactory.getLogger(OrderController.class);
 
 	@Autowired
@@ -74,53 +75,61 @@ public class OrderController {
 	private PaymentServices paymentServices;
 
 	@GetMapping("/user/checkout")
-	public String Checkout(Model model) {
+	public String Checkout(Model model, RedirectAttributes redirectAttributes) {
 
 		orderService.deleteOrderTempBasedOnTime();
 
-		String url = "/error";
+		String url = "redirect:/user/profile";
 
 		User user = getSessionUser();
 
-		OrderDB orderDetail = new OrderDB();
-		PaymentDB payment = new PaymentDB();
+		if (user.getEnabled()) {
 
-		try {
+			OrderDB orderDetail = new OrderDB();
+			PaymentDB payment = new PaymentDB();
 
-			if (cartService.calculateUpdateCartValues(cartService.getCartByUserId(user))) {
+			try {
 
-				Cart myCart = cartService.getCartByUserId(user);
+				if (cartService.calculateUpdateCartValues(cartService.getCartByUserId(user))) {
 
-				String orderID = UniqueIdGenerator.userIDGenerator("ord");
-				orderDetail.setOrderID(orderID);
-				orderDetail.setShippingAddress(user.getAddress());
-				payment.setShippingFee(myCart.getShippingFee());
-				payment.setTax(myCart.getTax());
-				payment.setSubTotal(myCart.getProductPriceTotal());
-				payment.setTotal(myCart.getTotal());
-				orderDetail.setUser(user);
+					Cart myCart = cartService.getCartByUserId(user);
 
-				for (Cart_Items cart_item : myCart.getCart_Items()) {
-					Order_Items order_item = new Order_Items();
-					order_item.setProduct(cart_item.getProduct());
-					order_item.setQuantity(cart_item.getQuantity());
-					order_item.setOrder_db(orderDetail);
-					orderDetail.getOrder_Items().add(order_item);
+					String orderID = UniqueIdGenerator.userIDGenerator("ord");
+					orderDetail.setOrderID(orderID);
+					orderDetail.setShippingAddress(user.getAddress());
+					payment.setShippingFee(myCart.getShippingFee());
+					payment.setTax(myCart.getTax());
+					payment.setSubTotal(myCart.getProductPriceTotal());
+					payment.setTotal(myCart.getTotal());
+					orderDetail.setUser(user);
+
+					for (Cart_Items cart_item : myCart.getCart_Items()) {
+						Order_Items order_item = new Order_Items();
+						order_item.setProduct(cart_item.getProduct());
+						order_item.setQuantity(cart_item.getQuantity());
+						order_item.setOrder_db(orderDetail);
+						orderDetail.getOrder_Items().add(order_item);
+					}
+
+					payment.setOrder(orderDetail);
+					orderDetail.setPayment(payment);
+
+					orderService.saveOrder(orderDetail);
+
+					url = "redirect:/payment/CheckoutV2?orderID=" + orderID;
+
 				}
 
-				payment.setOrder(orderDetail);
-				orderDetail.setPayment(payment);
-
-				orderService.saveOrder(orderDetail);
-
-				url = "redirect:/payment/CheckoutV2?orderID=" + orderID;
+			} catch (Exception e) {
+				logger.info(e.toString() + "message: " + e.getMessage());
 
 			}
 
-		} catch (Exception e) {
+		}
 
-			e.printStackTrace();
+		else {
 
+			redirectAttributes.addAttribute("notValidated", true);
 		}
 
 		return url;
@@ -131,6 +140,8 @@ public class OrderController {
 			Model model) {
 
 		User user = getSessionUser();
+		
+		String orderID = "";
 
 		int intQty = 1;
 
@@ -140,31 +151,37 @@ public class OrderController {
 			intQty = 1;
 		}
 
-		Product product = productService.getProductById(productID);
+		try {
 
-		OrderDB orderDetail = new OrderDB();
-		com.hotel.management.model.PaymentDB payment = new com.hotel.management.model.PaymentDB();
+			Product product = productService.getProductById(productID);
 
-		String orderID = UniqueIdGenerator.userIDGenerator("ord");
-		orderDetail.setOrderID(orderID);
-		orderDetail.setUser(user);
-		orderDetail.setShippingAddress(user.getAddress());
-		payment.setTax(product.getTax() * intQty);
-		payment.setSubTotal(product.getPrice() * intQty);
-		payment.setShippingFee(deliveryFeeService.getShippingFeeFromSubTotal(payment.getSubTotal()));
-		payment.setTotal(payment.getTax() + payment.getSubTotal() + payment.getShippingFee());
+			OrderDB orderDetail = new OrderDB();
+			com.hotel.management.model.PaymentDB payment = new com.hotel.management.model.PaymentDB();
 
-		Order_Items order_item = new Order_Items();
-		order_item.setProduct(product);
-		order_item.setQuantity(intQty);
-		order_item.setOrder_db(orderDetail);
-		orderDetail.getOrder_Items().add(order_item);
+			orderID = UniqueIdGenerator.userIDGenerator("ord");
+			orderDetail.setOrderID(orderID);
+			orderDetail.setUser(user);
+			orderDetail.setShippingAddress(user.getAddress());
+			payment.setTax(product.getTax() * intQty);
+			payment.setSubTotal(product.getPrice() * intQty);
+			payment.setShippingFee(deliveryFeeService.getShippingFeeFromSubTotal(payment.getSubTotal()));
+			payment.setTotal(payment.getTax() + payment.getSubTotal() + payment.getShippingFee());
 
-		payment.setOrder(orderDetail);
-		orderDetail.setPayment(payment);
+			Order_Items order_item = new Order_Items();
+			order_item.setProduct(product);
+			order_item.setQuantity(intQty);
+			order_item.setOrder_db(orderDetail);
+			orderDetail.getOrder_Items().add(order_item);
 
-		orderService.saveOrder(orderDetail);
-		model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+			payment.setOrder(orderDetail);
+			orderDetail.setPayment(payment);
+
+			orderService.saveOrder(orderDetail);
+			model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+
+		} catch (Exception e) {
+			logger.info(e.toString() + "message: " + e.getMessage());
+		}
 
 		return "redirect:/payment/CheckoutV2?orderID=" + orderID;
 	}
@@ -265,9 +282,9 @@ public class OrderController {
 			 */
 
 			// validate order saved
-			
+
 			logger.info("thread created");
-			
+
 			if (result) {
 
 				notificationService.NewUserOrder(order);
@@ -275,8 +292,6 @@ public class OrderController {
 				mailService.orderPlacedEmail(order);
 
 			}
-			
-			logger.info("folk created");
 
 		}
 

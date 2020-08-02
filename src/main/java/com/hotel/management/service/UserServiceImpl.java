@@ -2,6 +2,8 @@ package com.hotel.management.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);

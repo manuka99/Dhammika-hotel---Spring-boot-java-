@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -34,7 +36,9 @@ public class ComplainsController {
 	private NotificationService notificationService;
 
 	@Autowired
-	MailService mailService;
+	private MailService mailService;
+
+	private Logger logger = LoggerFactory.getLogger(ComplainsController.class);
 
 	@GetMapping("/user/complains")
 	public String userComplains(Model model) {
@@ -99,9 +103,15 @@ public class ComplainsController {
 
 		Response_Complain response = new Response_Complain();
 
-		Complain complain = complainService.getUserComplainComplain(complainID, getUserSecurity());
-		model.addAttribute("complain", complain);
-		model.addAttribute("newResponse", response);
+		try {
+			Complain complain = complainService.getUserComplainComplain(complainID, getUserSecurity());
+			model.addAttribute("complain", complain);
+			model.addAttribute("newResponse", response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception");
+		}
 
 		return "member/profile";
 
@@ -118,59 +128,65 @@ public class ComplainsController {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 
-		Complain complain = complainService.getUserComplainComplain(complainID, getUserSecurity());
+		try {
 
-		if (complain != null) {
-			Response_Complain response = new Response_Complain();
-			response.setId(UniqueIdGenerator.userIDGenerator("res"));
-			response.setMessage(message);
-			response.setComplain(complain);
-			response.setUser(getUserSecurity());
-			response.setTime(dtf.format(now));
-			try {
-				if (file1 != null)
-					response.setImage1(file1.getBytes());
+			Complain complain = complainService.getUserComplainComplain(complainID, getUserSecurity());
 
-				if (file2 != null)
-					response.setImage2(file2.getBytes());
+			if (complain != null) {
+				Response_Complain response = new Response_Complain();
+				response.setId(UniqueIdGenerator.userIDGenerator("res"));
+				response.setMessage(message);
+				response.setComplain(complain);
+				response.setUser(getUserSecurity());
+				response.setTime(dtf.format(now));
+				try {
+					if (file1 != null)
+						response.setImage1(file1.getBytes());
 
-				if (file3 != null)
-					response.setImage3(file3.getBytes());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			complain.getResponses().add(response);
-			result = complainService.saveComplain(complain);
+					if (file2 != null)
+						response.setImage2(file2.getBytes());
 
-			/*
-			 * validate save
-			 */
+					if (file3 != null)
+						response.setImage3(file3.getBytes());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				complain.getResponses().add(response);
+				result = complainService.saveComplain(complain);
 
-			/*
-			 * notification
-			 */
+				/*
+				 * validate save
+				 */
 
-			// if (complainService.getUserComplainComplain(complainID,
-			// getUserSecurity()).getResponses().iterator()
-			// .equals(response)) {
+				/*
+				 * notification
+				 */
 
-			if (result) {
-				if (complain.getUser().getUserID().equals(response.getUser().getUserID())) {
+				// if (complainService.getUserComplainComplain(complainID,
+				// getUserSecurity()).getResponses().iterator()
+				// .equals(response)) {
 
-					notificationService.NewUserResponse(response);
-					mailService.userComplainPlaceResponse(complain);
+				if (result) {
+					if (complain.getUser().getUserID().equals(response.getUser().getUserID())) {
 
+						notificationService.NewUserResponse(response);
+						mailService.userComplainPlaceResponse(complain);
+
+					}
+
+					else {
+
+						notificationService.ResponsePlacedByAdminToAdmin(response);
+
+						mailService.userComplainRecieveResponse(complain);
+					}
 				}
 
-				else {
-
-					notificationService.ResponsePlacedByAdminToAdmin(response);
-
-					mailService.userComplainRecieveResponse(complain);
-				}
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return result;

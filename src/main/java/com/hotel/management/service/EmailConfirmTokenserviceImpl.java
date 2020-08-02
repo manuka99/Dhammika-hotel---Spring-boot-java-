@@ -1,5 +1,7 @@
 package com.hotel.management.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,8 @@ import com.hotel.management.repository.EmailConfirmTokenRepository;
 @Service
 public class EmailConfirmTokenserviceImpl implements EmailConfirmTokenService {
 
+	private Logger logger = LoggerFactory.getLogger(EmailConfirmTokenserviceImpl.class);
+	
 	@Autowired
 	private EmailConfirmTokenRepository emailConfirmTokenRepository;
 

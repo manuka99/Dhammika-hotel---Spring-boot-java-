@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	private Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
 
 	@Override
 	public List<Role> getAllRoles() {
@@ -74,11 +78,11 @@ public class RoleServiceImpl implements RoleService {
 		Set<User> users = new HashSet<>();
 
 		for (String role_name : role_names) {
-
 			try {
 				users.addAll(getRoleByName(role_name).getUsers());
+				
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 
 		}

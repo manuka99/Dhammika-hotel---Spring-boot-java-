@@ -3,6 +3,8 @@ package com.hotel.management.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,8 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	private Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+	
 	@Override
 	public List<Product> getAllProducts() {
 		return productRepository.findAll();

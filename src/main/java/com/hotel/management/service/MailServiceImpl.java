@@ -27,7 +27,7 @@ import freemarker.template.Template;
 @Service
 public class MailServiceImpl implements MailService {
 
-	private Logger logger = LoggerFactory.getLogger(OrderController.class);
+	private Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
 
 	@Autowired
 	private JavaMailSender sender;
@@ -90,7 +90,7 @@ public class MailServiceImpl implements MailService {
 			object.put("header", "");
 			object.put("para1", "Thanks for registering on our site.");
 			object.put("para2", "Before we get started, we'll need to verify your email.");
-			object.put("mailURl", applicationUrl.getUrl() + "/confirm-email?uid=" + user.getUserID() + "&token="
+			object.put("mailURl", applicationUrl.getUrl() + "/confirm-email/confirm?uid=" + user.getUserID() + "&token="
 					+ user.getEmailConfirmToken().getConfirmationToken());
 			object.put("mailURlName", "Confirm my email");
 			mail.setModel(object);
@@ -103,7 +103,6 @@ public class MailServiceImpl implements MailService {
 
 	}
 
-	@Async
 	@Override
 	public boolean resendAccountActivationEmail(User user) throws Exception {
 
@@ -121,12 +120,12 @@ public class MailServiceImpl implements MailService {
 			object.put("header", "");
 			object.put("para1", "Please verify your email");
 			object.put("para2", "Amazing deals, updates, interesting news right in your inbox.");
-			object.put("mailURl", applicationUrl.getUrl() + "/confirm-email?uid=" + user.getUserID() + "&token="
+			object.put("mailURl", applicationUrl.getUrl() + "/confirm-email/confirm?uid=" + user.getUserID() + "&token="
 					+ user.getEmailConfirmToken().getConfirmationToken());
 			object.put("mailURlName", "Confirm my email");
 			mail.setModel(object);
 
-			sendEmail(mail);
+			result = sendEmail(mail);
 
 		} catch (Exception e) {
 			result = false;

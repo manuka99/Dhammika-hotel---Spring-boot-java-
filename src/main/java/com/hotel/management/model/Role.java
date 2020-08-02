@@ -22,7 +22,7 @@ public class Role {
 	private String name;
 	private String description;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable
 	private Set<User> users;
 

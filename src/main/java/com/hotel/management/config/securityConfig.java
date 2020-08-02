@@ -23,12 +23,10 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().headers().frameOptions().sameOrigin().and().authorizeRequests()
 				.antMatchers("/resources/**", "/webjars/**", "/assets/**", "/Design/**").permitAll().antMatchers("/")
 				.permitAll()
-				.antMatchers("/menu/**", "/newFood", "/register/**", "/product/**", "/confirm-email" , "/public/**",
+				.antMatchers("/menu/**", "/newFood", "/login/**", "/register/**", "/product/**", "/confirm-email/**" , "/public/**",
 						"/forgot-password", "/contact", "/saveContactUs")
 				.permitAll().antMatchers().permitAll()
-				.antMatchers("/uploadFood").permitAll()
-				.antMatchers("/user/**").hasAuthority("MEMBER")
-				.antMatchers("/payment/**").hasAuthority("MEMBER")
+				.antMatchers("/user/**", "/payment/**").hasAuthority("MEMBER")
 				.antMatchers("/panel/**").hasAuthority("ADMIN")
 				.anyRequest().authenticated()
 				.and().formLogin().loginPage("/login").defaultSuccessUrl("/menu").failureUrl("/login?error").permitAll()

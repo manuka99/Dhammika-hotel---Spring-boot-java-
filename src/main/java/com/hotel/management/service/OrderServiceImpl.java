@@ -3,6 +3,8 @@ package com.hotel.management.service;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private CurrencyGeneratorService currencyGeneratorService;
+	
+	private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Override
 	public boolean saveOrder(OrderDB order) {
@@ -114,20 +118,20 @@ public class OrderServiceImpl implements OrderService {
 
 				for (OrderDB order : orders) {
 
-					for (Order_Items orderItem : order.getOrder_Items()) {
+					if (order.getStatus().equals("Delivered")) {
+						for (Order_Items orderItem : order.getOrder_Items()) {
 
-						try {
-							if (orderItem.getProduct().getProductID().equals(product.getProductID())) {
-
-								result = true;
-
+							try {
+								if (orderItem.getProduct().getProductID().equals(product.getProductID())) {
+									result = true;
+									break;
+								}
+							} catch (Exception e) {
+								// TODO: handle exception
 							}
-						} catch (Exception e) {
-							// TODO: handle exception
+
 						}
-
 					}
-
 				}
 			}
 		}

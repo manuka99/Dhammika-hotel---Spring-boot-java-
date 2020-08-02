@@ -3,18 +3,23 @@ package com.hotel.management.controller;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.management.model.CurrentUser;
 import com.hotel.management.model.FeedBack;
 import com.hotel.management.model.Product;
+import com.hotel.management.model.Role;
 import com.hotel.management.model.User;
+import com.hotel.management.service.CurrencyGeneratorService;
 import com.hotel.management.service.FeedBackService;
 import com.hotel.management.service.NotificationService;
 import com.hotel.management.service.OrderService;
@@ -36,7 +41,12 @@ public class FeedBackController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@GetMapping("/user/addFeedBack")
+	@Autowired
+	private CurrencyGeneratorService currencyGeneratorService;
+
+	private Logger logger = LoggerFactory.getLogger(FeedBackController.class);
+
+	@PostMapping("/user/addFeedBack")
 	@ResponseBody
 	public boolean postFeedBack(@RequestParam(value = "productID", required = false) String productID,
 			@RequestParam(value = "feedbackText", required = true) String feedbackText,
@@ -75,6 +85,7 @@ public class FeedBackController {
 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			result = false;
 		}
 
@@ -86,26 +97,33 @@ public class FeedBackController {
 	public String editFeedBack(@RequestParam(value = "productID", required = false) String productID,
 			@RequestParam(value = "feedbackID", required = false) String feedbackID, Model model) {
 
-		Product product = productService.getProductById(productID);
+		try {
 
-		if (product != null && getPrincipalUser() != null) {
+			Product product = productService.getProductById(productID);
 
-			FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
-					product);
+			if (product != null && getPrincipalUser() != null) {
 
-			model.addAttribute("editFeedback", feedback);
+				FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
+						product);
 
+				model.addAttribute("editFeedback", feedback);
+
+				model.addAttribute("product", product);
+				model.addAttribute("userReview", getPrincipalUser());
+				model.addAttribute("canReview", orderService.hasProductOfUserOrder(product, getPrincipalUser()));
+				model.addAttribute("usd", currencyGeneratorService.priceOfaUsdToLkr());
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		model.addAttribute("product", product);
-		model.addAttribute("userReview", getPrincipalUser());
-		model.addAttribute("canReview", orderService.hasProductOfUserOrder(product, getPrincipalUser()));
 
 		return "products/product";
 
 	}
 
-	@GetMapping("/user/updateFeedBack")
+	@PostMapping("/user/updateFeedBack")
 	@ResponseBody
 	public boolean updateFeedBack(@RequestParam(value = "productID", required = false) String productID,
 			@RequestParam(value = "feedbackID", required = false) String feedbackID,
@@ -114,38 +132,45 @@ public class FeedBackController {
 
 		boolean result = false;
 
-		Product product = productService.getProductById(productID);
+		try {
 
-		if (product != null && getPrincipalUser() != null) {
+			Product product = productService.getProductById(productID);
 
-			FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
-					product);
+			if (product != null && getPrincipalUser() != null) {
 
-			if (feedback != null) {
+				FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
+						product);
 
-				boolean updateFeedback = true;
+				if (feedback != null) {
 
-				if (message != null)
-					feedback.setMessage(message);
+					boolean updateFeedback = true;
 
-				try {
-					if (rating != null) {
-						Integer.parseInt(rating);
-						feedback.setRating(rating);
+					if (message != null)
+						feedback.setMessage(message);
+
+					try {
+						if (rating != null) {
+							Integer.parseInt(rating);
+							feedback.setRating(rating);
+						}
+					} catch (Exception e) {
+						updateFeedback = false;
+
 					}
-				} catch (Exception e) {
-					updateFeedback = false;
+
+					if (updateFeedback)
+						result = feedBackService.saveFeedback(feedback);
+
+					if (result)
+						notificationService.updateFeedback(feedback);
 
 				}
 
-				if (updateFeedback)
-					result = feedBackService.saveFeedback(feedback);
-
-				if (result)
-					notificationService.updateFeedback(feedback);
-
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception caught");
 		}
 
 		return result;
@@ -159,19 +184,38 @@ public class FeedBackController {
 
 		boolean result = false;
 
-		Product product = productService.getProductById(productID);
+		try {
 
-		if (product != null && getPrincipalUser() != null) {
+			Product product = productService.getProductById(productID);
 
-			FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
-					product);
+			if (product != null && getPrincipalUser() != null) {
 
-			if (feedback != null)
-				result = feedBackService.deleteFeedBackById(feedbackID);
+				FeedBack feedback = feedBackService.getFeedBackByIdAndUserAndProduct(feedbackID, getPrincipalUser(),
+						product);
 
-			if (result)
-				notificationService.deleteFeedback(feedback);
+				if (feedback != null) {
+					result = feedBackService.deleteFeedBackById(feedbackID);
+					notificationService.deleteFeedback(feedback);
+				} else {
 
+					FeedBack feedback2 = feedBackService.getFeedBackById(feedbackID);
+
+					for (Role role : getPrincipalUser().getRoles()) {
+
+						if (role.getName().equals("ADMIN")) {
+							result = feedBackService.deleteFeedBackById(feedbackID);
+							notificationService.deleteFeedbackFromPanel(feedback2);
+							break;
+						}
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("exception");
 		}
 
 		return result;
