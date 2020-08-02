@@ -82,6 +82,56 @@
 															<span aria-hidden="true">&times;</span>
 														</button>
 													</div>
+
+													<div th:if="${param.emailVerified}">
+														<div th:if="${param.emailVerified[0] == 'false'}"
+															class="mt-2 alert alert-danger alert-dismissible fade show"
+															role="alert">
+															<strong>Error: </strong>Your email was not verified.
+															Credentials may be old or invalid.
+															<button type="button" class="close" data-dismiss="alert"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+															<div style="height: 10px;"></div>
+														</div>
+
+														<div th:if="${param.emailVerified[0] == 'true'}"
+															class="mt-2 mb-4 alert alert-success alert-dismissible fade show"
+															role="alert">
+															<strong>Success: </strong> Email was verified
+															successfully. Login now to examine changes..
+															<button type="button" class="close" data-dismiss="alert"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+													</div>
+
+													<div th:if="${param.registered}">
+														<div th:if="${param.registered[0] == 'false'}"
+															class="mt-2 alert alert-danger alert-dismissible fade show"
+															role="alert">
+															<strong>Error: </strong>Your account was not registered.
+															Please fill the entire form and submit.
+															<button type="button" class="close" data-dismiss="alert"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+															<div style="height: 10px;"></div>
+														</div>
+
+														<div th:if="${param.registered[0] == 'true'}"
+															class="mt-2 mb-4 alert alert-success alert-dismissible fade show"
+															role="alert">
+															<strong>Success: </strong> Your account was registered
+															successfully. Login now to examine changes..
+															<button type="button" class="close" data-dismiss="alert"
+																aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+													</div>
 													<div style="height: 8px;"></div>
 
 

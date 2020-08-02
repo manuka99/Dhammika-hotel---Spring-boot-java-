@@ -121,19 +121,25 @@
 
 		<script>
 			function ResendActivationCode() {
+				
+				$("#sendEmailCodeVerify").html("Please wait.....");
+				$("#sendEmailCodeVerify").addClass('disabled');
 
 				$
 						.ajax({
 
 							url : "/user/resendVerificationCode",
 							success : function(data) {
+								
+								$("#sendEmailCodeVerify").html("Resend Code");
+								$("#sendEmailCodeVerify").removeClass('disabled');
 
 								console.log(data);
 								if (data === true)
 									alert('Verification code sent successfully');
 
 								else
-									alert('There was a error in sending the verification code');
+									alert('There was a error in sending the verification code. Try again later..');
 
 							}
 

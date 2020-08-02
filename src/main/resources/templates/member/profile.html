@@ -31,6 +31,61 @@
 
 
 						<div id="newDataMessages"></div>
+
+						<div th:if="${param.notValidated}"
+							class="mt-2 alert card alert-dismissible fade show" role="alert">
+
+							<section class="mb-4">
+
+								<div class="">
+									<div class="card-body d-flex justify-content-between">
+										<h3 class=" text-danger mt-3 font-weight-bold">Error :(</h3>
+
+										<div>
+											<a class="btn btn-success waves-effect waves-light"
+												onclick="$('#email').focus()";
+											><i
+												class="fas fa-pen left"></i> Update Email</a> <a
+												class="btn btn-primary waves-effect waves-light"
+												data-toggle="modal" data-target="#modalCookie1"><i
+												class="fas fa-book left"></i> Send Verification code</a>
+										</div>
+
+									</div>
+
+									<span class="font-weight-bold text-dark">* Please verify
+										your email to purchase products.</span>
+
+
+									<p>
+										<br>According to our company policy all customers need to
+										validate their email address in order to make purchases
+										through the system. This is mainly done in order to safe guard
+										our users privacy policy and also to provide a effective and
+										user friendly service by notifying our clients through emails.
+									</p>
+
+									<p class="text-primary font-weight-bold mb-0">
+										<i class="fas fa-info-circle mr-1"></i>You can send an
+										verification link to the provided email address or else change
+										your email address below and proceed.
+									</p>
+
+
+								</div>
+
+							</section>
+
+
+							<button type="button" class="close" data-dismiss="alert"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+
+
+
+
 						<div class="progress-custom" id="loaderTable"
 							style="display: none">
 							<div class="indeterminate-my"></div>
@@ -174,7 +229,7 @@
 																target="_blank">[[${order.orderID}]]</a></td>
 															<td>[[${order.placedDate}]]</td>
 															<td>[[${order.orderType}]]</td>
-															<td>[[${order.payment}]]</td>
+															<td>[[${order.payment.paymentStatus}]]</td>
 															<td>[[${order.status}]]</td>
 														</tr>
 													</tbody>
@@ -445,7 +500,7 @@
 																						<hr>
 																						<br>
 																						<div class="font-weight-bold">
-																						<span th:utext="${response.message}" ></span>
+																							<span th:utext="${response.message}"></span>
 																						</div>
 																					</div>
 																					<div class="col-md-4 mt-0 pt-0"></div>
@@ -662,7 +717,6 @@
 
 							</div>
 						</div>
-
 					</section>
 					<!--Section: Content-->
 

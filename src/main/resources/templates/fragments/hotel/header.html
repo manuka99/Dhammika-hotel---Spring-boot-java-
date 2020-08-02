@@ -11,7 +11,7 @@
 </head>
 <body class="homepage-v1 hidden-sn white-skin animated">
 	<div th:fragment="header">
-		<header id="headerRefresh22" >
+		<header id="headerRefresh22">
 
 			<!-- Navbar -->
 			<nav
@@ -54,8 +54,8 @@
 							<li th:if="${#authentication.principal.user.enabled == false}"
 								sec:authorize="isAuthenticated()" class="nav-item dropdown ml-3"><a
 								role="button" data-toggle="modal" data-target="#modalCookie1"
-								class="nav-link  waves-effect waves-light red-text font-weight-bold"
-								href="UserLogOut">Validate User Account </a></li>
+								class="nav-link  waves-effect waves-light red-text font-weight-bold">Validate
+									User Account </a></li>
 
 
 
@@ -82,7 +82,7 @@
 							<li sec:authorize="isAuthenticated()" class="nav-item "><a
 								class="nav-link dark-grey-text font-weight-bold waves-effect waves-light"
 								th:href="@{'/user/cart'}"> <span class="badge danger-color"
-									id="cartItemsCount" ></span> <i
+									id="cartItemsCount"></span> <i
 									class="fas fa-shopping-cart blue-text" aria-hidden="true"></i>
 									<span class="clearfix d-none d-sm-inline-block">Cart</span>
 

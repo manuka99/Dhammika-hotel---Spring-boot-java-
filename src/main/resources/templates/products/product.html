@@ -152,7 +152,7 @@
 							<p class="small text-muted text-uppercase mb-2">[[${product.category.name}]]</p>
 
 							<h6>Rs.[[${product.price}]] (USD
-												[[${#numbers.formatDecimal(product.price / usd, 0, 2)}]])</h6>
+								[[${#numbers.formatDecimal(product.price / usd, 0, 2)}]])</h6>
 							<p class="pt-1">[[${product.description}]]</p>
 						</div>
 						<div class="tab-pane fade" id="info" role="tabpanel"
@@ -229,7 +229,7 @@
 
 
 												<div th:if="${feedback.user.userID != userReview.userID}">
-													<button sec:authorize="hasAnyAuthority('MEMBER')"
+													<button sec:authorize="hasAnyAuthority('ADMIN')"
 														th:onclick="deleteFeedback([[${feedback.feedbackID}]])"
 														class="btn btn-danger btn-sm">delete</button>
 												</div>
@@ -495,7 +495,7 @@
 							'feedbackText' : review,
 							'rating' : count
 						},
-
+						type : "POST",
 						success : function(data) {
 							if (data === true) {
 								$("#feedBackAllReviewsPanel").load(
@@ -578,7 +578,7 @@
 								'message' : message,
 								'rating' : count
 							},
-
+							type : "POST",
 							success : function(data) {
 								if (data === true) {
 									toastr.success('Your review was updated');

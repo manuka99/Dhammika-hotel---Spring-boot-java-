@@ -68,7 +68,7 @@
 
 																	</div> <a
 																	th:onclick="notificationsOpened([[${notification.notificationID}]])"
-																	href="${notification.url}" target="_blank"
+																	th:href="@{'/'+ ${notification.url}}" target="_blank"
 																	class="d-flex justify-content-between">
 																		<div class="text-large">
 																			<strong>[[${notification.header} ]]</strong>

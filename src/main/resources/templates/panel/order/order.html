@@ -243,15 +243,15 @@
 															<select id="orderPaymentSelect"
 																class="browser-default custom-select">
 																<option value="Not Paid"
-																	th:selected="${order.payment eq 'Not Paid'}">Not
+																	th:selected="${order.payment.paymentStatus eq 'Not Paid'}">Not
 																	Paid</option>
 																<option value="Paid"
-																	th:selected="${order.payment eq 'Paid'}">Paid</option>
+																	th:selected="${order.payment.paymentStatus eq 'Paid'}">Paid</option>
 																<option value="Not Refunded"
-																	th:selected="${order.payment eq 'Not Refunded'}">Not
+																	th:selected="${order.payment.paymentStatus eq 'Not Refunded'}">Not
 																	Refunded</option>
 																<option value="Refunded"
-																	th:selected="${order.payment eq 'Refunded'}">Refunded</option>
+																	th:selected="${order.payment.paymentStatus eq 'Refunded'}">Refunded</option>
 															</select>
 														</h4>
 														<br>

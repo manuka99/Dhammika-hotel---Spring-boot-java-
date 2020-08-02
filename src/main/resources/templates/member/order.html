@@ -52,7 +52,7 @@
 														<h3 class="mb-4">
 															<span class="text-muted">Order ID</span> <strong>#[[${order.orderID}]]</strong>
 															<a class="btn btn-lg ml-4 btn-danger"
-																th:if="${order.status != 'Completed' and order.status != 'Cancelled' }"
+																th:if="${order.status != 'Delivered' and order.status != 'Cancelled' }"
 																th:href="@{'/user/cancelOrder?orderID=' + ${order.orderID}}">Cancel
 																Order</a>
 														</h3>
@@ -109,7 +109,7 @@
 
 
 
-																					<a
+																					<a th:if="${order.status eq 'Delivered'}"
 																						th:href="@{'/product?productID=' + ${order_Item.product.productID} }"
 																						class="text-capitalize deep-purple-text"> <strong><i
 																							class="fas fa-angle-double-right"></i>Review our
