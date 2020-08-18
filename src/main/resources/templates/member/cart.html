@@ -74,6 +74,10 @@
 															<div class="d-flex justify-content-between">
 																<div>
 																	<h5>[[${cartProduct.product.name}]]</h5>
+																	<h6>
+																		<strong><span class="badge badge-success"
+																			th:text="${cartProduct.product.category.name}"></span></strong>
+																	</h6>
 																	<p class="mb-3 text-muted text-uppercase small">[[${cartProduct.product.portion}]]</p>
 																	<p class="mb-2 text-muted text-uppercase small">[[${cartProduct.product.description}]]</p>
 																</div>
@@ -138,6 +142,10 @@
 																	<h5>
 																		<del>[[${cartProduct.product.name}]]</del>
 																	</h5>
+																	<h6>
+																		<strong><span class="badge badge-success"
+																			th:text="${cartProduct.product.category.name}"></span></strong>
+																	</h6>
 																	<p class="mb-3 text-muted text-uppercase small">
 																		<del>[[${cartProduct.product.portion}]]</del>
 																	</p>
@@ -364,7 +372,7 @@
 
 									$("#loadMyCart").load(
 											location.href + " #loadMyCart");
-									
+
 									cartSize();
 
 								}
@@ -375,7 +383,7 @@
 
 									$("#loadMyCart").load(
 											location.href + " #loadMyCart");
-									
+
 									cartSize();
 
 								}

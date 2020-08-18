@@ -67,7 +67,7 @@ public class FoodController {
 	public String findPaginatedProducts(@PathVariable(value = "pageNo") int pageNo,
 			@RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir,
 			@RequestParam("catergoryID") String catergoryID, @RequestParam("price") String price, Model model) {
-		int pageSize = 5;
+		int pageSize = 8;
 		Page<Product> page = productService.findPaginated(pageNo, pageSize, sortField, sortDir, catergoryID, price);
 		List<Product> listProducts = page.getContent();
 

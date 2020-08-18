@@ -90,7 +90,7 @@ public class ChartsController {
 
 				}
 
-				if (yearNow == yearOrder && orderDB.getStatus().equals("Completed")) {
+				if (yearNow == yearOrder && orderDB.getStatus().equals("Delivered")) {
 
 					ordersCompleted[month - 1] = 1 + ordersCompleted[month - 1];
 					TotalsalesCompleted += orderDB.getPayment().getTotal();

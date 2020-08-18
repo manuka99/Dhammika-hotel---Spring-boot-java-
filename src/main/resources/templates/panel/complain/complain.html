@@ -51,7 +51,7 @@
 
 												<div class="card"
 													th:each="response, status : ${complain.responses}">
-													<div class="card-header blue z-depth-1" role="tab"
+													<div class="card-header z-depth-1" 	th:classappend="${complain.user.userID eq response.user.userID}? 'blue' : 'grey'" role="tab"
 														id="heading98">
 														<h5 class="text-uppercase mb-0 py-1">
 															<a class="collapsed font-weight-bold white-text"
@@ -188,7 +188,7 @@
 												<!-- Card image -->
 												<div
 													class="view view-cascade gradient-card-header blue-gradient">
-													<h4 class="font-weight-500 mb-0">Sender Information</h4>
+													<h4 class="font-weight-500 mb-0">Complain Information</h4>
 												</div>
 												<!-- Card image -->
 
@@ -230,7 +230,7 @@
 												<!-- Card image -->
 												<div
 													class="view view-cascade gradient-card-header blue-gradient">
-													<h4 class="font-weight-500 mb-0">Sender Request</h4>
+													<h4 class="font-weight-500 mb-0">Complain Body</h4>
 												</div>
 												<!-- Card image -->
 

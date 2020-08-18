@@ -32,7 +32,7 @@
 						<div class="view  z-depth-1">
 
 							<img
-								src="Design/img/hotel-restaurant-pool-people-flames-fire-others.jpeg"
+								th:src="@{/Design/img/hotel-restaurant-pool-people-flames-fire-others.jpeg}"
 								style="height: 280px; width: 480px" class="img-fluid"
 								alt="sample image">
 
@@ -427,15 +427,32 @@
 											<div class="text-center pt-4">
 
 												<h5>
-													<strong><span class="text-capitalize"
-														th:text="${Food.name}"></span></strong>
+
+													<strong><span th:if="${Food.active}"
+														class="text-capitalize" th:text="${Food.name}"></span> <span
+														th:if="${Food.active eq false}" class="text-capitalize"><del>[[${Food.name}]]</del></span>
+
+
+													</strong>
+												</h5>
+												<h5>
+													<strong><span class="badge badge-success"
+														th:text="${Food.category.name}"></span></strong>
 												</h5>
 												<h6>
-													<strong><span th:text="${Food.portion}"></span></strong>
+													<strong><span class="text-muted"
+														th:if="${Food.active}" th:text="${Food.portion}"></span></strong> <strong><span
+														class="text-muted" th:if="${Food.active eq false}"><del>[[${Food.portion}]]</del></span></strong>
 												</h6>
-												<h6 class="mb-3">
+												<h6 class="mb-3" th:if="${Food.active}">
 													Rs.[[${Food.price}]] <br>( USD
 													[[${#numbers.formatDecimal(Food.price / usd, 0, 2)}]] )
+												</h6>
+												<h6 class="mb-3" th:if="${Food.active eq false}">
+													<del>
+														Rs.[[${Food.price}]] <br>( USD
+														[[${#numbers.formatDecimal(Food.price / usd, 0, 2)}]] )
+													</del>
 												</h6>
 
 
