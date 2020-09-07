@@ -31,13 +31,9 @@ public class User {
 	private String email;
 	private int phone;
 	private String password;
-	@Transient
 	private String dateOfBirth;
-	@Transient
 	private String address;
-	@Transient
 	private Boolean notLocked;
-	@Transient
 	private Boolean enabled;
 	@ManyToMany(mappedBy = "users", cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
 	private Set<Role> roles;
