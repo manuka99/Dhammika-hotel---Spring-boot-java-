@@ -9,7 +9,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Menu</title>
+<title>Cart</title>
 <link th:href="@{'/Design/mdPro/css/custom-Progress.css'}"
 	rel="stylesheet">
 </head>
@@ -79,7 +79,6 @@
 																			th:text="${cartProduct.product.category.name}"></span></strong>
 																	</h6>
 																	<p class="mb-3 text-muted text-uppercase small">[[${cartProduct.product.portion}]]</p>
-																	<p class="mb-2 text-muted text-uppercase small">[[${cartProduct.product.description}]]</p>
 																</div>
 																<div>
 																	<div
@@ -148,9 +147,6 @@
 																	</h6>
 																	<p class="mb-3 text-muted text-uppercase small">
 																		<del>[[${cartProduct.product.portion}]]</del>
-																	</p>
-																	<p class="mb-2 text-muted text-uppercase small">
-																		<del>[[${cartProduct.product.description}]]</del>
 																	</p>
 																</div>
 																<div>

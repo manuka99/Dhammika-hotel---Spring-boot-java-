@@ -6,7 +6,7 @@
 	layout:decorator="~{layouts/panel/layout.html}">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>User Details</title>
 </head>
 
 <body class="fixed-sn white-skin" id="body">
@@ -484,7 +484,7 @@
 												<tr th:each="order, status : ${user.orders}">
 
 													<td>[[${status.index + 1}]]</td>
-													<th class="th-sm"><strong><a href=""
+													<th class="th-sm"><strong><a th:href="@{'/panel/orders/order?orderID=' + ${order.orderID}}"
 															target="_blank"><span
 																class="text-nowrap text-primary text-uppercase">[[${order.orderID}]]</span></a></strong></th>
 													<td>[[${order.orderType}]]</td>
@@ -563,7 +563,7 @@
 												<tr th:each="complain, stat : ${user.complains}">
 
 													<td>[[${stat.index + 1}]]</td>
-													<th class="th-sm"><strong><a href=""
+													<th class="th-sm"><strong><a th:href="@{'/panel/complains/complain?ComplainID=' + ${complain.id}}"
 															target="_blank"><span
 																class="text-nowrap text-primary text-uppercase">[[${complain.id}]]</span></a></strong></th>
 													<td>[[${complain.subject}]]</td>

@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.hotel.management.controller.OrderController;
 import com.hotel.management.model.Complain;
 import com.hotel.management.model.FeedBack;
 import com.hotel.management.model.NotificationDB;
@@ -18,6 +17,7 @@ import com.hotel.management.model.OrderDB;
 import com.hotel.management.model.Response_Complain;
 import com.hotel.management.model.User;
 import com.hotel.management.repository.NotificationRepository;
+import com.hotel.management.util.CommonConstants;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -97,7 +97,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setUser(order.getUser());
 		notification.setHeader("You have successfully placed the order( " + order.getOrderID() + " )");
 		notification.setBody(order.getUser().getUsername() + ", thank you very much for using our services.");
-		notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+		notification.setUrl(CommonConstants.ORDER_URI_MEMBER + order.getOrderID());
 
 		saveNotificationToDB(notification);
 		/*
@@ -117,7 +117,7 @@ public class NotificationServiceImpl implements NotificationService {
 				.setHeader("You have successfully " + order.getStatus() + " your order(" + order.getOrderID() + " )");
 		notification.setBody(
 				"The order you placed on " + order.getPlacedDate() + " has been " + order.getStatus() + " by you.");
-		notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+		notification.setUrl(CommonConstants.ORDER_URI_MEMBER + order.getOrderID());
 
 		saveNotificationToDB(notification);
 		/*
@@ -136,7 +136,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setHeader("Your Order has been " + order.getStatus());
 		notification
 				.setBody(order.getUser().getUsername() + " you order has been updated. click to view more details..");
-		notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+		notification.setUrl(CommonConstants.ORDER_URI_MEMBER + order.getOrderID());
 
 		saveNotificationToDB(notification);
 		// return saveNotificationToDB(notification);
@@ -150,7 +150,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setUser(complain.getUser());
 		notification.setHeader("Your Complain has been placed successfully");
 		notification.setBody("Complain reference ID: " + complain.getId() + " , click to view more details..");
-		notification.setUrl("RetrieveInquiryUser?inquiryID=" + complain.getId());
+		notification.setUrl(CommonConstants.COMPLAIN_URI_MEMBER + complain.getId());
 		saveNotificationToDB(notification);
 		/*
 		 * notify panel
@@ -169,7 +169,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setHeader("Your Response has been placed successfully");
 		notification.setBody(
 				"Complain reference ID: " + response.getComplain().getId() + " , click to view more details..");
-		notification.setUrl("RetrieveInquiryUser?inquiryID=" + response.getComplain().getId());
+		notification.setUrl(CommonConstants.COMPLAIN_URI_MEMBER + response.getComplain().getId());
 		saveNotificationToDB(notification);
 		/*
 		 * notify panel
@@ -187,7 +187,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setHeader("Our team has responded to your complain");
 		notification.setBody(
 				"Complain reference ID: " + response.getComplain().getId() + " , click to view more details..");
-		notification.setUrl("RetrieveInquiryUser?inquiryID=" + response.getComplain().getId());
+		notification.setUrl(CommonConstants.COMPLAIN_URI_MEMBER + response.getComplain().getId());
 
 		saveNotificationToDB(notification);
 		// return saveNotificationToDB(notification);
@@ -210,7 +210,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notification.setUser(user);
 				notification.setHeader("New Order: by " + order.getUser().getUsername());
 				notification.setBody("There is a new order of order ID " + order.getOrderID());
-				notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+				notification.setUrl(CommonConstants.ORDER_URI_ADMIN + order.getOrderID());
 				saveNotificationToDB(notification);
 
 			} catch (Exception e) {
@@ -238,7 +238,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notification.setHeader("Order(" + order.getOrderID() + "): " + order.getStatus() + " (By User "
 						+ order.getUser().getUsername() + " )");
 				notification.setBody("User who placed the order has decided to " + order.getStatus() + " the order.");
-				notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+				notification.setUrl(CommonConstants.ORDER_URI_ADMIN + order.getOrderID());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -266,7 +266,7 @@ public class NotificationServiceImpl implements NotificationService {
 						+ admin.getUsername() + " )");
 				notification.setBody(
 						"This order was updated by the system administrator with ID " + admin.getUserID() + " .");
-				notification.setUrl("GetMyOrders?orderID=" + order.getOrderID());
+				notification.setUrl(CommonConstants.ORDER_URI_ADMIN + order.getOrderID());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -296,7 +296,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notification.setUser(user);
 				notification.setHeader("New Complain: by " + complain.getUser().getUsername());
 				notification.setBody("There is a new complain of complain ID " + complain.getId());
-				notification.setUrl("GetMyOrders?orderID=" + complain.getId());
+				notification.setUrl(CommonConstants.COMPLAIN_URI_ADMIN + complain.getId());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -322,7 +322,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notification.setHeader("Complain(" + response.getComplain().getId() + "): " + " (By User "
 						+ response.getComplain().getUser().getUsername() + " )");
 				notification.setBody("User who placed the complain has responded, view more.....");
-				notification.setUrl("GetMyOrders?orderID=" + response.getComplain().getId());
+				notification.setUrl(CommonConstants.COMPLAIN_URI_ADMIN + response.getComplain().getId());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -351,7 +351,7 @@ public class NotificationServiceImpl implements NotificationService {
 						+ response.getUser().getUsername() + " )");
 				notification.setBody("This complain was responded by the system administrator with ID "
 						+ response.getUser().getUserID() + " .");
-				notification.setUrl("GetMyOrders?orderID=" + response.getComplain().getId());
+				notification.setUrl(CommonConstants.COMPLAIN_URI_ADMIN  + response.getComplain().getId());
 				saveNotificationToDB(notification);
 
 			} catch (Exception e) {
@@ -376,7 +376,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setUser(feedback.getUser());
 		notification.setHeader("Your feedback was placed successfully");
 		notification.setBody(feedback.getUser().getUsername() + ", thank you very much for using our services.");
-		notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+		notification.setUrl(CommonConstants.FEEDBACK_URI_MEMBER  + feedback.getProduct().getProductID());
 		saveNotificationToDB(notification);
 		/*
 		 * notify the panel
@@ -393,7 +393,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setUser(feedback.getUser());
 		notification.setHeader("Your feedback was updated successfully");
 		notification.setBody(feedback.getUser().getUsername() + ", thank you very much for using our services.");
-		notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+		notification.setUrl(CommonConstants.FEEDBACK_URI_MEMBER + feedback.getProduct().getProductID());
 		saveNotificationToDB(notification);
 		/*
 		 * notify the panel
@@ -410,7 +410,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setUser(feedback.getUser());
 		notification.setHeader("Your feedback was deleted successfully");
 		notification.setBody(feedback.getUser().getUsername() + ", thank you very much for using our services.");
-		notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+		notification.setUrl(CommonConstants.FEEDBACK_URI_MEMBER + feedback.getProduct().getProductID());
 		saveNotificationToDB(notification);
 		/*
 		 * notify the panel
@@ -436,7 +436,7 @@ public class NotificationServiceImpl implements NotificationService {
 				notification.setHeader(
 						"Feedback of product " + feedback.getProduct().getName() + "was deleted by administrator");
 				notification.setBody(feedback.getUser().getUsername() + " : feedback :" + feedback.getMessage());
-				notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+				notification.setUrl(CommonConstants.FEEDBACK_URI_ADMIN + feedback.getProduct().getProductID());
 				saveNotificationToDB(notification);
 
 			} catch (Exception e) {
@@ -460,7 +460,7 @@ public class NotificationServiceImpl implements NotificationService {
 		notification.setHeader("Your feedback was deleted by the administration");
 		notification.setBody(
 				feedback.getUser().getUsername() + ", we had to remove your feedback as it was violating our rules.");
-		notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+		notification.setUrl(CommonConstants.FEEDBACK_URI_ADMIN + feedback.getProduct().getProductID());
 		saveNotificationToDB(notification);
 	}
 
@@ -480,7 +480,7 @@ public class NotificationServiceImpl implements NotificationService {
 						+ feedback.getUser().getUsername() + " )");
 				notification.setBody(
 						"New feedback was added to the " + feedback.getProduct().getName() + ", view more.....");
-				notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+				notification.setUrl(CommonConstants.FEEDBACK_URI_ADMIN + feedback.getProduct().getProductID());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -508,7 +508,7 @@ public class NotificationServiceImpl implements NotificationService {
 						+ feedback.getUser().getUsername() + " )");
 				notification.setBody(
 						"Feedback was updated on the product " + feedback.getProduct().getName() + ", view more.....");
-				notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+				notification.setUrl(CommonConstants.FEEDBACK_URI_ADMIN + feedback.getProduct().getProductID());
 				saveNotificationToDB(notification);
 			} catch (Exception e) {
 				logger.info("error saving noificatuion");
@@ -537,7 +537,7 @@ public class NotificationServiceImpl implements NotificationService {
 						+ feedback.getUser().getUsername() + " )");
 				notification.setBody("This Feedback on the product " + feedback.getProduct().getName()
 						+ " was deleted by the customer, view more.....");
-				notification.setUrl("product?productID=" + feedback.getProduct().getProductID());
+				notification.setUrl(CommonConstants.FEEDBACK_URI_ADMIN + feedback.getProduct().getProductID());
 				saveNotificationToDB(notification);
 
 			} catch (Exception e) {

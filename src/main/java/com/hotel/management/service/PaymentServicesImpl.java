@@ -161,9 +161,9 @@ public class PaymentServicesImpl implements PaymentServices {
 
 		map.put(payhereProperties.getMode(), "true");
 		map.put("merchant_id", payhereProperties.getClientId());
-		map.put("return_url", applicationUrl.getUrl() + "/user/orders/order?orderID=" + orderDetail.getOrderID());
-		map.put("cancel_url", applicationUrl.getUrl() + "/public/payhereCancelUrl");
-		map.put("notify_url", applicationUrl.getUrl() + "/public/payhereNotifyUrl");
+		map.put("return_url", applicationUrl.getUrl2() + "/user/orders/order?orderID=" + orderDetail.getOrderID());
+		map.put("cancel_url", applicationUrl.getUrl2() + "/public/payhereCancelUrl");
+		map.put("notify_url", applicationUrl.getUrl2() + "/public/payhereNotifyUrl");
 		map.put("order_id", orderDetail.getOrderID());
 		map.put("items", orderDetail.getOrderID());
 		map.put("amount", String.valueOf(orderDetail.getPayment().getTotal()));
