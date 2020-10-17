@@ -198,9 +198,8 @@ public class NotificationServiceImpl implements NotificationService {
 	public void NewOrderPanel(OrderDB order) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
-		role_names.add("ORDER_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -227,8 +226,8 @@ public class NotificationServiceImpl implements NotificationService {
 
 		List<String> role_names = new ArrayList<>();
 		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
-		role_names.add("ORDER_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -254,8 +253,8 @@ public class NotificationServiceImpl implements NotificationService {
 
 		List<String> role_names = new ArrayList<>();
 		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
-		role_names.add("ORDER_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -286,8 +285,8 @@ public class NotificationServiceImpl implements NotificationService {
 	public void UserComplainToPanel(Complain complain) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_COMPLAIN_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -311,8 +310,8 @@ public class NotificationServiceImpl implements NotificationService {
 	public void ResponsePlacedByUserToAdmin(Response_Complain response) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_COMPLAIN_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -338,8 +337,8 @@ public class NotificationServiceImpl implements NotificationService {
 	public void ResponsePlacedByAdminToAdmin(Response_Complain response) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_COMPLAIN_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -424,8 +423,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public void deleteFeedbackFromPanel(FeedBack feedback) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_FOOD_MANAGER);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -468,8 +468,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public void newFeedbackUserToPanel(FeedBack feedback) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_FOOD_MANAGER);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 		
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -496,8 +497,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public void updateFeedbackFromUserToPanel(FeedBack feedback) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_FOOD_MANAGER);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 
@@ -524,8 +526,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public void deleteFeedbackFromUserToPanel(FeedBack feedback) {
 
 		List<String> role_names = new ArrayList<>();
-		role_names.add("ADMIN");
-		role_names.add("FOOD_MANAGER");
+		role_names.add(CommonConstants.ROLE_ADMIN);
+		role_names.add(CommonConstants.ROLE_FOOD_MANAGER);
+		role_names.add(CommonConstants.ROLE_ORDER_MANAGER);
 
 		for (User user : roleService.getUsersByRoleName(role_names)) {
 

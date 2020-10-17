@@ -429,7 +429,7 @@ public class OrderController {
 		} catch (Exception ex) {
 			model.addAttribute("errorMessage", ex.getMessage());
 			ex.printStackTrace();
-			url = "error.jsp";
+			url = "error";
 		}
 
 		return url;

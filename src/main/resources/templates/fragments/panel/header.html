@@ -59,84 +59,113 @@
 								class="collapsible-header waves-effect"><i
 									class="w-fa fas fa-user"></i>Profile</a></li>
 
-							<li><a th:href="@{/panel/orders-analysis}"
-								class="collapsible-header waves-effect"><i
-									class="fab fa-jedi-order"></i>Orders Summary</a></li>
 
-							<li><a th:href="@{/panel/product-analysis}"
-								class="collapsible-header waves-effect"><i
-									class="fas fa-chart-line"></i>Product Analysis</a></li>
+							<th:block sec:authorize="hasAuthority('ADMIN')">
 
-							<li><a th:href="@{/panel/purchase-analysis}"
-								class="collapsible-header waves-effect"><i
-									class="far fa-credit-card"></i>Purchases Analysis</a></li>
+								<li><a th:href="@{/panel/roles}"
+									class="collapsible-header waves-effect"><i
+										class="fas fa-lock"></i>System Role Management</a></li>
 
-							<li><a th:href="@{/panel/roles}"
-								class="collapsible-header waves-effect"><i
-									class="fas fa-lock"></i>System Role Management</a></li>
+								<li><a class="collapsible-header waves-effect arrow-r">
+										<i class="w-fa fas fa-users-cog"></i>User Management<i
+										class="fas fa-angle-down rotate-icon"></i>
+								</a>
+									<div class="collapsible-body">
+										<ul>
 
-							<li><a th:href="@{/panel/currency}"
-								class="collapsible-header waves-effect"><i
-									class="fas fa-hand-holding-usd"></i>Currency Bot api</a></li>
-
-							<li><a th:href="@{/panel/products/categories}"
-								class="collapsible-header waves-effect"><i
-									class="fas fa-certificate"></i>Category Management</a></li>
-
-							<li><a class="collapsible-header waves-effect arrow-r">
-									<i class="w-fa fas fa-th"></i>Product Management<i
-									class="fas fa-angle-down rotate-icon"></i>
-							</a>
-								<div class="collapsible-body">
-									<ul>
-
-										<li><a th:href="@{/panel/products}" class="waves-effect">All
-												Products</a></li>
-
-										<li th:each="category : ${categories}"><a
-											th:href="@{'/panel/products?categoryID=' + ${category.categoryID}}"
-											class="waves-effect">[[${category.name}]]</a></li>
-
-									</ul>
-								</div></li>
-
-							<li><a class="collapsible-header waves-effect arrow-r">
-									<i class="w-fa fas fa-users-cog"></i>User Management<i
-									class="fas fa-angle-down rotate-icon"></i>
-							</a>
-								<div class="collapsible-body">
-									<ul>
-
-										<li th:each="role : ${roles}"><a
-											th:href="@{'/panel/accounts?roleID=' + ${role.roleID}}"
-											class="waves-effect">[[${role.name}]]</a></li>
+											<li th:each="role : ${roles}"><a
+												th:href="@{'/panel/accounts?roleID=' + ${role.roleID}}"
+												class="waves-effect">[[${role.name}]]</a></li>
 
 
-									</ul>
-								</div></li>
-							<!-- Simple link -->
-							<li><a th:href="@{/panel/delivery/fees}"
-								class="collapsible-header waves-effect"><i
-									class="w-fa fas fa-shuttle-van"></i>Delivery Fee Calculator</a></li>
-							<li><a th:href="@{/panel/orders}"
-								class="collapsible-header waves-effect"><i
-									class="w-fa fas fa-utensils"></i>Order Management</a></li>
+										</ul>
+									</div></li>
 
-							<li><a th:href="@{/panel/feedbacks}"
+							</th:block>
+
+							<th:block
+								sec:authorize="hasAnyAuthority('ADMIN', 'ORDER_MANAGER')">
+
+								<li><a th:href="@{/panel/orders-analysis}"
+									class="collapsible-header waves-effect"><i
+										class="fab fa-jedi-order"></i>Orders Summary</a></li>
+
+								<li><a th:href="@{/panel/product-analysis}"
+									class="collapsible-header waves-effect"><i
+										class="fas fa-chart-line"></i>Product Analysis</a></li>
+
+								<li><a th:href="@{/panel/purchase-analysis}"
+									class="collapsible-header waves-effect"><i
+										class="far fa-credit-card"></i>Purchases Analysis</a></li>
+
+								<li><a th:href="@{/panel/currency}"
+									class="collapsible-header waves-effect"><i
+										class="fas fa-hand-holding-usd"></i>Currency Bot api</a></li>
+
+							</th:block>
+
+							<th:block
+								sec:authorize="hasAnyAuthority('ADMIN', 'FOOD_MANAGER')">
+
+								<li><a th:href="@{/panel/products/categories}"
+									class="collapsible-header waves-effect"><i
+										class="fas fa-certificate"></i>Category Management</a></li>
+
+								<li><a class="collapsible-header waves-effect arrow-r">
+										<i class="w-fa fas fa-th"></i>Product Management<i
+										class="fas fa-angle-down rotate-icon"></i>
+								</a>
+									<div class="collapsible-body">
+										<ul>
+
+											<li><a th:href="@{/panel/products}" class="waves-effect">All
+													Products</a></li>
+
+											<li th:each="category : ${categories}"><a
+												th:href="@{'/panel/products?categoryID=' + ${category.categoryID}}"
+												class="waves-effect">[[${category.name}]]</a></li>
+
+										</ul>
+									</div></li>
+
+							</th:block>
+
+
+							<li
+								sec:authorize="hasAnyAuthority('ADMIN', 'ORDER_MANAGER', 'FOOD_MANAGER')"><a
+								th:href="@{/panel/feedbacks}"
 								class="collapsible-header waves-effect"><i
 									class="fas fa-comments"></i>Feedbacks Management</a></li>
 
-							<li><a th:href="@{/panel/contacts}"
-								class="collapsible-header waves-effect"><i
-									class="w-fa fas fa-comment-alt"></i>Support Management</a></li>
 
-							<li><a th:href="@{/panel/complains}"
-								class="collapsible-header waves-effect"><i
-									class="w-fa fas fa-envelope-open"></i>Complains Management</a></li>
+							<th:block
+								sec:authorize="hasAnyAuthority('ADMIN', 'ORDER_MANAGER')">
 
-							<li><a th:href="@{/panel/mails}"
-								class="collapsible-header waves-effect"><i class="fas fa-at"></i>MailBox
-									Management</a></li>
+								<li><a th:href="@{/panel/delivery/fees}"
+									class="collapsible-header waves-effect"><i
+										class="w-fa fas fa-shuttle-van"></i>Delivery Fee Calculator</a></li>
+								<li><a th:href="@{/panel/orders}"
+									class="collapsible-header waves-effect"><i
+										class="w-fa fas fa-utensils"></i>Order Management</a></li>
+
+							</th:block>
+
+							<th:block
+								sec:authorize="hasAnyAuthority('ADMIN', 'COMPLAIN_MANAGER')">
+
+								<li><a th:href="@{/panel/contacts}"
+									class="collapsible-header waves-effect"><i
+										class="w-fa fas fa-comment-alt"></i>Support Management</a></li>
+
+								<li><a th:href="@{/panel/complains}"
+									class="collapsible-header waves-effect"><i
+										class="w-fa fas fa-envelope-open"></i>Complains Management</a></li>
+
+								<li><a th:href="@{/panel/mails}"
+									class="collapsible-header waves-effect"><i
+										class="fas fa-at"></i>MailBox Management</a></li>
+
+							</th:block>
 
 						</ul>
 					</li>
