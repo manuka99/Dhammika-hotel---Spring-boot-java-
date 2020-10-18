@@ -31,12 +31,12 @@ public class BookController {
 	@GetMapping("/booking/deleteBook")
 	public String deleteBookById(Model model, @RequestParam("id") Long id) throws Exception{
 		service.deleteBookById(id);
-		return "redirect:/booking";
+		return "redirect:/booking/Booking-list";
 	}
 	
 	@RequestMapping(path= "/booking/createBook", method = RequestMethod.POST)
 	public String createOrUpdateBook(BookEntity book) {
 		service.createOrUpdateBook(book);
-		return "redirect:/booking";
+		return "redirect:/booking/Booking-list";
 	}
 }

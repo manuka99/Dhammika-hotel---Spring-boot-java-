@@ -70,42 +70,49 @@ public class ProfileController {
 		/*
 		 * in db
 		 */
+		User userEmail = userService.findByEmail(user.getEmail());
 
-		User existingUser = userService.getUserById(user.getUserID());
-		existingUser.setFname(saveUser.getFname());
-		existingUser.setLname(saveUser.getLname());
-		existingUser.setAddress(saveUser.getAddress());
-		existingUser.setEmail(saveUser.getEmail());
-		existingUser.setPhone(saveUser.getPhone());
-		existingUser.setDateOfBirth(saveUser.getDateOfBirth());
+		if (userEmail == null || userEmail.getUserID().equals(user.getUserID())) {
 
-		if (user.getEmail().equals(existingUser.getEmail()) == false)
-			existingUser.setEnabled(false);
+			User existingUser = userService.getUserById(user.getUserID());
+			existingUser.setFname(saveUser.getFname());
+			existingUser.setLname(saveUser.getLname());
+			existingUser.setAddress(saveUser.getAddress());
+			existingUser.setEmail(saveUser.getEmail());
+			existingUser.setPhone(saveUser.getPhone());
+			existingUser.setDateOfBirth(saveUser.getDateOfBirth());
 
-		boolean result = userService.updateUser(existingUser);
+			if (user.getEmail().equals(existingUser.getEmail()) == false)
+				existingUser.setEnabled(false);
 
-		if (result && user.getEmail().equals(existingUser.getEmail())) {
-			model.addAttribute("message", "updated");
-			currentUser.setUser(existingUser);
-			Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
-					currentUser.getPassword(), currentUser.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			mailService.profileUpdateEmail(existingUser, null);
-		}
+			boolean result = userService.updateUser(existingUser);
 
-		else if (result) {
-			model.addAttribute("message", "emailChanged");
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			if (auth != null) {
-				new SecurityContextLogoutHandler().logout(request, response, auth);
+			if (result && user.getEmail().equals(existingUser.getEmail())) {
+				model.addAttribute("message", "updated");
+				currentUser.setUser(existingUser);
+				Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
+						currentUser.getPassword(), currentUser.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+				mailService.profileUpdateEmail(existingUser, null);
 			}
-			mailService.profileUpdateEmail(existingUser, user.getEmail());
-		}
 
-		else
+			else if (result) {
+				model.addAttribute("message", "emailChanged");
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				if (auth != null) {
+					new SecurityContextLogoutHandler().logout(request, response, auth);
+				}
+				mailService.profileUpdateEmail(existingUser, user.getEmail());
+			}
+
+			else
+				model.addAttribute("message", "error");
+
+		} else
 			model.addAttribute("message", "error");
 
 		return "panel/profile/profile";
+
 	}
 
 	@PostMapping("/panel/user/passwordUpdate")

@@ -84,20 +84,20 @@ public class UserController {
 
 	@PostMapping("/register/saveUser")
 	public String RegisterUser(@ModelAttribute("user") User user, RedirectAttributes ra) throws Exception {
-		
+
 		boolean result = false;
-		
+
 		try {
 
 			User userEmail = userService.findByEmail(user.getEmail());
 
 			if (userEmail == null) {
 				logger.info("no email");
-				
+
 				/*
 				 * set user role as member
 				 */
-				
+
 				Set<Role> roles = new HashSet<>();
 				Role role = roleService.getRoleByName("MEMBER");
 				role.getUsers().add(user);
@@ -175,36 +175,45 @@ public class UserController {
 		 */
 
 		User existingUser = userService.getUserById(user.getUserID());
-		existingUser.setFname(saveUser.getFname());
-		existingUser.setLname(saveUser.getLname());
-		existingUser.setAddress(saveUser.getAddress());
-		existingUser.setEmail(saveUser.getEmail());
-		existingUser.setPhone(saveUser.getPhone());
-		existingUser.setDateOfBirth(saveUser.getDateOfBirth());
 
-		if (user.getEmail().equals(existingUser.getEmail()) == false)
-			existingUser.setEnabled(false);
+		User userEmail = userService.findByEmail(user.getEmail());
 
-		result = userService.updateUser(existingUser);
+		if (userEmail == null || userEmail.getUserID().equals(user.getUserID())) {
 
-		if (result) {
-			if (user.getEmail().equals(existingUser.getEmail())) {
-				currentUser.setUser(existingUser);
-				Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
-						currentUser.getPassword(), currentUser.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-				mailService.profileUpdateEmail(existingUser, null);
-			}
+			existingUser.setFname(saveUser.getFname());
+			existingUser.setLname(saveUser.getLname());
+			existingUser.setAddress(saveUser.getAddress());
+			existingUser.setEmail(saveUser.getEmail());
+			existingUser.setPhone(saveUser.getPhone());
+			existingUser.setDateOfBirth(saveUser.getDateOfBirth());
 
-			else {
-				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-				if (auth != null) {
-					new SecurityContextLogoutHandler().logout(request, response, auth);
+			if (user.getEmail().equals(existingUser.getEmail()) == false)
+				existingUser.setEnabled(false);
+
+			result = userService.updateUser(existingUser);
+
+			if (result) {
+				if (user.getEmail().equals(existingUser.getEmail())) {
+					currentUser.setUser(existingUser);
+					Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser,
+							currentUser.getPassword(), currentUser.getAuthorities());
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+					mailService.profileUpdateEmail(existingUser, null);
 				}
-				mailService.profileUpdateEmail(existingUser, user.getEmail());
+
+				else {
+					Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+					if (auth != null) {
+						new SecurityContextLogoutHandler().logout(request, response, auth);
+					}
+					mailService.profileUpdateEmail(existingUser, user.getEmail());
+				}
 			}
+			return result;
 		}
-		return result;
+
+		else
+			return false;
 	}
 
 	@GetMapping("/user/security")

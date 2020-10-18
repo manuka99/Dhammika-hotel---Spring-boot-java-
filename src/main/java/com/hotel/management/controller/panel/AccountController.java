@@ -67,59 +67,66 @@ public class AccountController {
 
 		boolean result = false;
 
-		try {
+		User userEmail = userService.findByEmail(email);
 
-			User user = new User();
+		if (userEmail == null) {
 
-			user.setAddress(address);
-			user.setEmail(email);
-			user.setPhone(Integer.parseInt(phone));
-			user.setFname(fname);
-			user.setLname(lname);
-			user.setPassword(passwordEncorder.encode(password));
+			try {
 
-			for (String role : request.getParameterValues("roles[]")) {
+				User user = new User();
 
-				try {
+				user.setAddress(address);
+				user.setEmail(email);
+				user.setPhone(Integer.parseInt(phone));
+				user.setFname(fname);
+				user.setLname(lname);
+				user.setPassword(passwordEncorder.encode(password));
 
-					Role roleUser = roleService.getRoleById(role);
+				for (String role : request.getParameterValues("roles[]")) {
 
-					if (roleUser != null) {
+					try {
 
-						roleUser.getUsers().add(user);
-						user.getRoles().add(roleUser);
+						Role roleUser = roleService.getRoleById(role);
+
+						if (roleUser != null) {
+
+							roleUser.getUsers().add(user);
+							user.getRoles().add(roleUser);
+						}
+
+					} catch (Exception e) {
+
+						e.printStackTrace();
+
 					}
-
-				} catch (Exception e) {
-
-					e.printStackTrace();
 
 				}
 
-			}
+				/*
+				 * finally add member
+				 */
 
-			/*
-			 * finally add member
-			 */
+				try {
+					Role roleAdd = roleService.getRoleByName("MEMBER");
+					roleAdd.getUsers().add(user);
+					user.getRoles().add(roleAdd);
+					user.getCart().setUser(user);
+					userService.saveUser(user);
+					result = true;
+				} catch (Exception e) {
+					result = false;
+				}
 
-			try {
-				Role roleAdd = roleService.getRoleByName("MEMBER");
-				roleAdd.getUsers().add(user);
-				user.getRoles().add(roleAdd);
-				user.getCart().setUser(user);
-				userService.saveUser(user);
-				result = true;
 			} catch (Exception e) {
+
 				result = false;
+
 			}
 
-		} catch (Exception e) {
+			return result;
 
-			result = false;
-
-		}
-
-		return result;
+		} else
+			return false;
 	}
 
 	@PostMapping("/panel/accounts/deleteAccounts")
@@ -198,32 +205,38 @@ public class AccountController {
 
 		boolean result = false;
 
-		try {
+		User userEmail = userService.findByEmail(email);
 
-			User user = userService.getUserById(userID);
+		if (userEmail == null || userEmail.getUserID().equals(userID)) {
 
-			if (user.getUserID() != null) {
+			try {
 
-				user.setAddress(dateOfBirth);
-				user.setAddress(address);
-				user.setEmail(email);
-				user.setPhone(Integer.parseInt(phone));
-				user.setFname(fname);
-				user.setLname(lname);
+				User user = userService.getUserById(userID);
 
-				result = userService.saveUser(user);
+				if (user.getUserID() != null) {
 
-				if (result)
-					mailService.panelUserProfileUpdate(user);
+					user.setAddress(dateOfBirth);
+					user.setAddress(address);
+					user.setEmail(email);
+					user.setPhone(Integer.parseInt(phone));
+					user.setFname(fname);
+					user.setLname(lname);
+
+					result = userService.saveUser(user);
+
+					if (result)
+						mailService.panelUserProfileUpdate(user);
+
+				}
+			} catch (Exception e) {
+
+				result = false;
 
 			}
-		} catch (Exception e) {
 
-			result = false;
-
-		}
-
-		return result;
+			return result;
+		} else
+			return false;
 	}
 
 	@PostMapping("/panel/accounts/updateRole")

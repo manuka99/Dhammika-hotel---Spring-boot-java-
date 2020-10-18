@@ -15,11 +15,17 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	public User findByEmail(String email) {
-		return userRepository.findByEmail(email);
+		User user = null;
+		try {
+			user = userRepository.findByEmail(email);
+		} catch (Exception e) {
+			user = null;
+		}
+		return user;
 	}
 
 	@Override
@@ -72,13 +78,17 @@ public class UserServiceImpl implements UserService {
 
 		boolean result = false;
 
-		try {
-			userRepository.save(user);
-			result = true;
-		} catch (Exception e) {
-			// TODO: handle exception
+		User userEmail = findByEmail(user.getEmail());
 
-			result = false;
+		if (userEmail == null || userEmail.getUserID().equals(user.getUserID())) {
+			try {
+				userRepository.save(user);
+				result = true;
+			} catch (Exception e) {
+				// TODO: handle exception
+
+				result = false;
+			}
 		}
 
 		return result;

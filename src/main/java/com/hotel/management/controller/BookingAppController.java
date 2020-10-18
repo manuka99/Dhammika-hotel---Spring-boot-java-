@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hotel.management.model.BookEntity;
 import com.hotel.management.model.RoomEntity;
+import com.hotel.management.service.BookService;
 import com.hotel.management.service.RoomService;
 
 @Controller
@@ -18,6 +20,9 @@ public class BookingAppController {
 
 	@Autowired
 	RoomService service;
+	
+	@Autowired
+	BookService book_service;
 	
 	@GetMapping("/booking")
 	public String getAllRooms(Model model) {
@@ -58,8 +63,10 @@ public class BookingAppController {
 	    }
 	  
 	  @GetMapping("/booking/Booking-list")
-	    public String Bookinglist()
+	    public String Bookinglist(Model model)
 	    {
-	        return "redirect:/booking";
+			List<BookEntity> list = book_service.getAllBooks();
+			model.addAttribute("books", list);
+	        return "booking/Booking-list";
 	    }
 }
