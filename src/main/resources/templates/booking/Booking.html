@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<style>
+h3{
+text-align:center;
+font-weight:bolt;
+font-style:italic;
+font-size:12px;}
+
+</style>
+<meta charset="ISO-8859-1">
+<meta equiv="x-ua-compatible" content="ie=edge">
+<title>Add Reservation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+	<!-- Google Fonts -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+	<!-- Bootstrap core CSS -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Material Design Bootstrap -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+	<!-- JQuery -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+</head>
+<body>
+    <!--Main layout-->
+    <main>
+
+      <div class="container-fluid text-center">
+
+        <!--Card-->
+          <!--Card content-->
+          <div class="card card-cascade wider reverse my-4 pb-5">
+          <div class="card-body card-body-cascade text-center wow fadeIn" data-wow-delay="0.2s">
+            <!--Title-->
+            <img class="img-responsive mx-auto d-block" th:src="@{'/Design/booking/logo.png'}" width="400" height="130" alt="logo">
+
+
+            <a href="#" th:href = "@{/booking/list-room}" class="btn btn-primary btn-lg">Rooms</a> 
+            <a href="#" th:href = "@{/booking/Booking-list}" class="btn btn-secondary btn-lg">Reservation</a>
+            <a href="#" th:href = "@{/booking/report}" class="btn btn-default btn-lg">Report</a>
+            
+
+          </div>
+          <!--/.Card content-->
+
+        </div>
+        <!--/.Card-->
+
+      </div>
+
+    </main>
+    <!--/Main layout-->
+
+
+
+  </body>
+	<div class="container my-5">
+		<h3>Add New Reservation</h3>
+		<div class="card">
+			<div class="card-body">
+				<div class="col-md-10">
+					<form action="#" th:action="@{/booking/createBook}" th:object="${book}" method="post">
+						<div class="row">
+							<div class="form-group col-md-8">
+								<label for="name" class="col-form-label"> Customer Name </label>
+								<input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Customer Name">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="checkin" class="col-form-label"> Check-In Date </label>
+								<input type="date" th:field="*{checkin}" class="form-control" id="checkin" placeholder="Check-in Date">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="checkout" class="col-form-label"> Check-Out Date </label>
+								<input type="date" th:field="*{checkout}" class="form-control" id="checkout" placeholder="Check-out Date">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="roomType" class="col-form-label"> Room Type (Double Dulex, Double, Family) </label>
+								<input type="text" th:field="*{roomType}" class="form-control" id="roomType" placeholder="Room Type">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="email" class="col-form-label"> E-mail </label>
+								<input type="email" th:field="*{email}" class="form-control" id="email" placeholder="E-maiil">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="time" class="col-form-label"> Arrival Time </label>
+								<input type="time" th:field="*{time}" class="form-control" id="time" placeholder="Arrival Time">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="number" class="col-form-label"> Phone Number </label>
+								<input type="text" th:field="*{number}" class="form-control" id="number" placeholder="Phone Number">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="person" class="col-form-label"> Number of Person </label>
+								<input type="text" th:field="*{person}" class="form-control" id="person" placeholder="Number of Person">
+							</div>
+							<div class="form-group col-md-8">
+								<label for="request" class="col-form-label"> Special Request </label>
+								<input type="text" th:field="*{request}" class="form-control" id="request" placeholder="Special Request">
+							</div>							
+							<div class="col-md-6">
+								<input type="submit" class="btn btn-primary" value="Submit">
+							</div>
+							
+							<input type="hidden" id="id" th:field="*{id}">
+						</div>								
+					</form>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	    <!--Footer-->
+    <footer class="page-footer text-center text-md-left pt-4 bg-dark">
+
+      <!--Copyright-->
+      <div class="footer-copyright py-3 text-center">
+        <div class="container-fluid">
+          © 2020 Copyright: <a href="#"> Dhamikahotel.com </a>
+
+        </div>
+      </div>
+      <!--/.Copyright-->
+
+    </footer>
+    <!--/.Footer-->
+</body>
+</html>

@@ -25,7 +25,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().headers().frameOptions().sameOrigin().and().authorizeRequests()
 				.antMatchers("/resources/**", "/webjars/**", "/assets/**", "/Design/**").permitAll().antMatchers("/")
 				.permitAll()
-				.antMatchers("/menu/**", "/reviewPaypalPayment/**", "/executePaypalPayemnt", "/newFood", "/login/**", "/register/**", "/product/**", "/confirm-email/**" , "/public/**",
+				.antMatchers("/booking/**", "/menu/**", "/reviewPaypalPayment/**", "/executePaypalPayemnt", "/newFood", "/login/**", "/register/**", "/product/**", "/confirm-email/**" , "/public/**",
 						"/forgot-password", "/contact", "/saveContactUs")
 				.permitAll().antMatchers().permitAll()
 				.antMatchers("/user/**", "/payment/**").hasAuthority(CommonConstants.ROLE_MEMBER)
