@@ -2,6 +2,11 @@
 
 ### FULL STACK JAVA WEB APPLICATION 
 
+##### Youtube video url: 
+
+##### Web host url: https://dhammika-hotel.herokuapp.com/
+Note:- Most of the features are not working in this environment
+
 ## Technologies
 
 1. Spring boot framework
