@@ -1,5 +1,13 @@
 # Dhammika hotel - External management
 
+###FULL STACK WEB APPLICATION 
+
+##Contributers
+
+1. Manuka yasas
+2. Nethmi Divya 
+
+
 ##Technologies
 
 1. Spring boot framework
@@ -9,6 +17,7 @@
 5. Thymeleaf
 6. JQUERY
 7. AJAX
+8. Bootstrap
 8. Payment gateways
 
 
@@ -23,4 +32,8 @@
 7. Complains management
 8. Administration panel that support both LIGHT MODE and DARK MODE
 9. DUAl currency management LKR and USD
-10. Responsive
+10. Place bookings, reservations
+11. Display analytics through graphs and charts
+12. Responsive
+
+
