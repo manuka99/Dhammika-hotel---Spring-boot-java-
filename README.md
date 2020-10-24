@@ -5,7 +5,7 @@
 ##### Youtube video url: 
 
 ##### Web host url: https://dhammika-hotel.herokuapp.com/
-Note:- Most of the features are not working in this environment
+Note:- Most of the features are not working in this web url as it is running on a basic plan.
 
 ## Technologies
 
