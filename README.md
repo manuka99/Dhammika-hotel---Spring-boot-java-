@@ -1,6 +1,6 @@
 # Dhammika hotel - External management
 
-### FULL STACK WEB APPLICATION 
+### FULL STACK JAVA WEB APPLICATION 
 
 ## Contributers
 
@@ -12,15 +12,16 @@
 
 1. Spring boot framework
 2. Spring security
-3. Mysql
-4. ORM - Hibernate
-5. Thymeleaf
-6. JQUERY
-7. AJAX
-8. Bootstrap
-9. Currency layer API
-10. Payment gateways(Paypal and Payhere)
-11. IMAP Server of GOOGLE
+3. Configuration processors 
+4. Mysql
+5. ORM - Hibernate
+6. Thymeleaf
+7. JQUERY
+8. AJAX
+9. Bootstrap
+10. Currency layer API
+11. Payment gateways(Paypal and Payhere)
+12. IMAP Server of GOOGLE
 
 ## Features
 
