@@ -62,5 +62,7 @@
 
 # Screenshots
 
+<img src="https://firebasestorage.googleapis.com/v0/b/ad-easy.appspot.com/o/dhammika_hotel%2Fhotel%2Fmenu.png?alt=media&token=18ace1c9-bc75-4edf-b14f-a84937f1f848" >
 
+<img src="https://firebasestorage.googleapis.com/v0/b/ad-easy.appspot.com/o/dhammika_hotel%2Fhotel%2Ffeedbacks.png?alt=media&token=6ea9bff2-2f06-444f-9ed6-00948151df1c">
 
