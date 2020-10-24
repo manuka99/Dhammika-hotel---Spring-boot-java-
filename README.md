@@ -19,7 +19,7 @@
 
 ## Features
 
-1. User registration/login
+1. User registration, login, password recovery and email verification.
 2. Sort and filter products
 3. User cart management
 4. Buy products via CASH ON DELIVERY, PAYHERE and PAYPAL payment gateways
@@ -39,17 +39,18 @@
 ### Manuka yasas
 
 1. Maintaining user levels with spring security
-2. Product management with sorting, filtering and its administration
-3. Feedbacks and complains management
-4. Implementing Payment gateways such as PAYHERE and PAYPAL
-5. DUAl currency management LKR and USD
-6. Orders and payment management
-7. Cart management
-8. Designing and developing the administration panel that support both LIGHT MODE and DARK MODE
-9. Analytics using Graphs and charts
-10. Developing a mailbox with IMAP Server of GOOGLE
-11. In-app notifications and mails for all user actions.
-12. Delivery fee calculator algorithms.
+2. User registration, login, password recovery and email verification.
+3. Product management with sorting, filtering and its administration
+4. Feedbacks and complains management
+5. Implementing Payment gateways such as PAYHERE and PAYPAL
+6. DUAl currency management LKR and USD
+7. Orders and payment management
+8. Cart management
+9. Designing and developing the administration panel that support both LIGHT MODE and DARK MODE
+10. Analytics using Graphs and charts
+11. Developing a mailbox with IMAP Server of GOOGLE
+12. In-app notifications and mails for all user actions.
+13. Delivery fee calculator algorithms.
 
 
 ### Nethmi Divya
