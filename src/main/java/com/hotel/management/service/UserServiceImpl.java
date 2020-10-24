@@ -1,4 +1,9 @@
 package com.hotel.management.service;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import java.util.List;
 
@@ -52,7 +57,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(String id) {
-		return userRepository.findById(id).get();
+		User user = null;
+		try {
+			user = userRepository.findById(id).get();
+		} catch (Exception e) {
+			user = null;
+		}
+		return user;
 	}
 
 	@Override

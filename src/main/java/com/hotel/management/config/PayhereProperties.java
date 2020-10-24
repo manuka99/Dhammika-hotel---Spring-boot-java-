@@ -2,6 +2,11 @@ package com.hotel.management.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 @Component
 @ConfigurationProperties("payhere")

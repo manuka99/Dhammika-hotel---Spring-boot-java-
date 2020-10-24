@@ -1,5 +1,11 @@
 package com.hotel.management.config;
 
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

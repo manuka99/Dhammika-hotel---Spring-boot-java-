@@ -1,4 +1,9 @@
 package com.hotel.management.service;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +16,7 @@ import com.hotel.management.model.Cart_Items;
 import com.hotel.management.model.User;
 import com.hotel.management.repository.CartItemsRepository;
 import com.hotel.management.repository.CartRepository;
+import com.hotel.management.repository.UserRepository;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -25,6 +31,9 @@ public class CartServiceImpl implements CartService {
 	
 	@Autowired
 	private DeliveryFeeService deliveryFeeService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public boolean saveCart(Cart cart) {
@@ -49,7 +58,23 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public Cart getCartByUserId(User user) {
-		return cartRepository.findByUser(user);
+		Cart cart = new Cart();
+		try {
+			cart = cartRepository.findByUser(user);
+			if(cart == null)
+				throw new NullPointerException();
+		} catch (Exception e) {
+			if(userService.getUserById(user.getUserID()) != null) {
+				Cart cartNew = new Cart();
+				cartNew.setUser(user);
+				user.setCart(cartNew);
+				if(userService.saveUser(user)) {
+					cart = cartNew;
+				}
+			}
+		}
+
+		return cart;
 	}
 
 	@Override

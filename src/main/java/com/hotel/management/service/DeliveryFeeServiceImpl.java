@@ -1,4 +1,9 @@
 package com.hotel.management.service;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import java.util.List;
 import java.util.Map;
@@ -89,6 +94,9 @@ public class DeliveryFeeServiceImpl implements DeliveryFeeService {
 
 				if (total >= dbTotal)
 					fee = fees.get(dbTotal);
+				
+				if(dbTotal > total)
+					break;
 
 			}
 		}

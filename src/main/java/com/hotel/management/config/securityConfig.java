@@ -1,4 +1,9 @@
 package com.hotel.management.config;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,7 +44,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/panel/complains/**", "/panel/contacts/**", "/panel/mails/**").hasAnyAuthority(CommonConstants.ROLE_ADMIN, CommonConstants.ROLE_COMPLAIN_MANAGER)
 				
 				//panel order manager
-				.antMatchers("/panel/currency/**", "/panel/delivery/**", "/panel/feedbacks/**", "/panel/orders/**", "/panel/product-analysis/**", "/panel/purchase-analysis/**", "/panel/orders-analysis/**").hasAnyAuthority(CommonConstants.ROLE_ADMIN, CommonConstants.ROLE_ORDER_MANAGER)
+				.antMatchers("/panel/charts/**", "/panel/currency/**", "/panel/delivery/**", "/panel/feedbacks/**", "/panel/orders/**", "/panel/product-analysis/**", "/panel/purchase-analysis/**", "/panel/orders-analysis/**").hasAnyAuthority(CommonConstants.ROLE_ADMIN, CommonConstants.ROLE_ORDER_MANAGER)
 				
 				//panel food manager
 				.antMatchers("/panel/products/**", "/panel/feedbacks/**").hasAnyAuthority(CommonConstants.ROLE_ADMIN, CommonConstants.ROLE_FOOD_MANAGER)

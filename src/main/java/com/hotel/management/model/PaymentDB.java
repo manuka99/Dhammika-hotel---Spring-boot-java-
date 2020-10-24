@@ -1,4 +1,9 @@
 package com.hotel.management.model;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

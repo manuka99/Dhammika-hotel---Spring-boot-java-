@@ -1,4 +1,9 @@
 package com.hotel.management.util;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 public class CommonConstants {
 	public static final String ORDER_URI_MEMBER = "user/order?orderID=";

@@ -1,4 +1,9 @@
 package com.hotel.management.repository;
+/*
+ * created by Manuka Yasas
+ * manukayasas99@gmail.com
+ * Dhammika-hotel external management
+ */
 
 import java.util.List;
 
@@ -18,5 +23,4 @@ public interface OrderRepository extends JpaRepository<OrderDB, String> {
 	OrderDB findByOrderIDAndTemp(String id, boolean temp);
 
 	OrderDB findByOrderIDAndTempAndUser(String id, boolean temp, User user);
-
 }
