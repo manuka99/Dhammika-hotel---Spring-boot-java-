@@ -2,12 +2,6 @@
 
 ### FULL STACK JAVA WEB APPLICATION 
 
-## Contributers
-
-1. Manuka yasas
-2. Nethmi Divya 
-
-
 ## Technologies
 
 1. Spring boot framework
@@ -21,7 +15,7 @@
 9. Bootstrap
 10. Currency layer API
 11. Payment gateways(Paypal and Payhere)
-12. IMAP Server of GOOGLE
+12. IMAP and SMTP Servers of GOOGLE
 
 ## Features
 
@@ -37,6 +31,8 @@
 10. Place bookings, reservations
 11. Display analytics through graphs and charts
 12. Developing a mailbox with IMAP Server of GOOGLE
+13. In-app notifications and mails for all user actions.
+14. Delivery fee calculator algorithms.
 
 # Individual Contribution
 
@@ -52,6 +48,8 @@
 8. Designing and developing the administration panel that support both LIGHT MODE and DARK MODE
 9. Analytics using Graphs and charts
 10. Developing a mailbox with IMAP Server of GOOGLE
+11. In-app notifications and mails for all user actions.
+12. Delivery fee calculator algorithms.
 
 
 ### Nethmi Divya
@@ -59,4 +57,9 @@
 1. Booking management
 2. Reservation and room management
 3. Report generation and Analytics.
+4. In-app notifications and mails for all user actions.
+
+# Screenshots
+
+
 
