@@ -2,7 +2,7 @@
 
 ### FULL STACK JAVA WEB APPLICATION 
 
-##### Youtube video url: 
+### :gift_heart: Youtube video url: https://www.youtube.com/watch?v=5YMXpwZVsU4&t=58s
 
 ##### Web host url: https://dhammika-hotel.herokuapp.com/
 Note:- Most of the features are not working in this web url as it is running on a basic plan.
