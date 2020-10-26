@@ -32,7 +32,7 @@ Note:- Most of the features are not working in this web url as it is running on 
 6. Product feedback management
 7. Complains management
 8. Administration panel that support both LIGHT MODE and DARK MODE
-9. DUAl currency management LKR and USD
+9. DUAL currency management LKR and USD
 10. Place bookings, reservations
 11. Display analytics through graphs and charts
 12. Developing a mailbox with IMAP Server of GOOGLE
@@ -48,7 +48,7 @@ Note:- Most of the features are not working in this web url as it is running on 
 3. Product management with sorting, filtering and its administration
 4. Feedbacks and complains management
 5. Implementing Payment gateways such as PAYHERE and PAYPAL
-6. DUAl currency management LKR and USD
+6. DUAL currency management LKR and USD
 7. Orders and payment management
 8. Cart management
 9. Designing and developing the administration panel that support both LIGHT MODE and DARK MODE
